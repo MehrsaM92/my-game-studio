@@ -342,7 +342,7 @@ Welcome to My Game Studio
 </h1>
 
 <p>
-Download my games and play!
+Download my games and play!The games are for computer only
 </p>
 
 <a
