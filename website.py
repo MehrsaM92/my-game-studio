@@ -1,10 +1,15 @@
-from flask import Flask, render_template_string, send_file
+from flask import Flask, render_template_string, send_file, request, jsonify
 import os
+import json
 
 app = Flask(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+LEADERBOARD_FILE = os.path.join(
+    BASE_DIR,
+    "leaderboard.json"
+)
 
 HTML = """
 <!DOCTYPE html>
@@ -14,13 +19,9 @@ HTML = """
 
 <meta charset="UTF-8">
 
-<meta name="google-site-verification" content="ULKlsCJLxKZPZcj4H5NkXbxu0p8OkCf2ioaLwIFockY" />
+<meta name="google-site-verification" content="ULKlsCJLxKZPZcj4H5NkXbxu0p8OkCf2ioaLwIFockY">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>My Game Studio</title>
 
@@ -45,16 +46,12 @@ body {
 header {
     background: #0f172a;
     padding: 20px 50px;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     border-bottom: 1px solid #334155;
-
     position: sticky;
     top: 0;
-
     z-index: 1000;
 }
 
@@ -77,13 +74,10 @@ nav a:hover {
 
 .hero {
     min-height: 500px;
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     text-align: center;
-
     padding: 50px 20px;
 
     background:
@@ -113,23 +107,14 @@ nav a:hover {
 
 .button {
     display: inline-block;
-
     padding: 14px 30px;
-
     background: #0ea5e9;
-
     color: white;
-
     text-decoration: none;
-
     border-radius: 8px;
-
     font-weight: bold;
-
     border: none;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
 
@@ -166,13 +151,9 @@ nav a:hover {
 
 .game-card {
     background: #1e293b;
-
     border-radius: 12px;
-
     padding: 30px;
-
     border: 1px solid #334155;
-
     transition: 0.3s;
 }
 
@@ -197,37 +178,95 @@ nav a:hover {
     margin-bottom: 20px;
 }
 
+.download-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.platform-title {
+    font-size: 14px;
+    color: #94a3b8;
+    margin-top: 5px;
+}
+
 .download-button {
     background: #f59e0b;
-    margin-top: 10px;
+    width: 100%;
 }
 
 .download-button:hover {
     background: #d97706;
 }
 
+.mobile-button {
+    background: #22c55e;
+}
+
+.mobile-button:hover {
+    background: #16a34a;
+}
+
 .leaderboard {
     padding: 70px 30px;
-
     text-align: center;
-
     background: #0f172a;
 }
 
 .leaderboard h2 {
     font-size: 36px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
-.leaderboard p {
+.leaderboard-box {
+    max-width: 700px;
+    margin: auto;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.leaderboard-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 100px;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #0f172a;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.leaderboard-rank {
+    color: #38bdf8;
+    font-weight: bold;
+    text-align: center;
+}
+
+.leaderboard-name {
+    color: white;
+    font-weight: bold;
+}
+
+.leaderboard-score {
+    color: #f59e0b;
+    font-weight: bold;
+    text-align: right;
+}
+
+.loading {
     color: #94a3b8;
+}
+
+.error {
+    color: #ef4444;
 }
 
 .about {
     padding: 70px 30px;
-
     background: #111827;
-
     text-align: center;
 }
 
@@ -238,21 +277,15 @@ nav a:hover {
 
 .about p {
     max-width: 700px;
-
     margin: auto;
-
     color: #cbd5e1;
-
     line-height: 1.8;
 }
 
 footer {
     padding: 25px;
-
     text-align: center;
-
     color: #94a3b8;
-
     background: #020617;
 }
 
@@ -260,19 +293,14 @@ footer {
 
     header {
         padding: 20px;
-
         flex-direction: column;
-
         gap: 15px;
     }
 
     nav {
         display: flex;
-
         flex-wrap: wrap;
-
         justify-content: center;
-
         gap: 10px;
     }
 
@@ -296,15 +324,17 @@ footer {
         grid-template-columns: 1fr;
     }
 
+    .leaderboard-row {
+        grid-template-columns: 50px 1fr 80px;
+    }
+
 }
 
 </style>
 
 </head>
 
-
 <body>
-
 
 <header>
 
@@ -347,7 +377,7 @@ Welcome to My Game Studio
 </h1>
 
 <p>
-Download my games and play!The games are for computer only
+Download my games and play on PC or mobile!
 </p>
 
 <a
@@ -371,7 +401,6 @@ id="games"
 My Games
 </h2>
 
-
 <div class="game-grid">
 
 
@@ -392,16 +421,33 @@ and try to achieve
 the highest score.
 </p>
 
+<div class="download-buttons">
+
+<div class="platform-title">
+PC Version
+</div>
 
 <a
 href="/download/flappy"
 class="button download-button"
 >
-Download Flappy Bird
+Download Flappy Bird PC
+</a>
+
+<div class="platform-title">
+Mobile Version
+</div>
+
+<a
+href="/download/flappy-mobile"
+class="button download-button mobile-button"
+>
+Download Flappy Bird Mobile
 </a>
 
 </div>
 
+</div>
 
 
 <div class="game-card">
@@ -421,13 +467,31 @@ and survive as long
 as possible.
 </p>
 
+<div class="download-buttons">
+
+<div class="platform-title">
+PC Version
+</div>
 
 <a
 href="/download/car"
 class="button download-button"
 >
-Download Car Game
+Download Car Game PC
 </a>
+
+<div class="platform-title">
+Mobile Version
+</div>
+
+<a
+href="/download/car-mobile"
+class="button download-button mobile-button"
+>
+Download Car Game Mobile
+</a>
+
+</div>
 
 </div>
 
@@ -443,12 +507,20 @@ id="leaderboard"
 >
 
 <h2>
-Flappy Leaderboard
+🌎 Flappy Bird Global Leaderboard
 </h2>
 
-<p>
-Leaderboard will be available here.
+<div class="leaderboard-box">
+
+<div id="leaderboard-content">
+
+<p class="loading">
+Loading leaderboard...
 </p>
+
+</div>
+
+</div>
 
 </section>
 
@@ -488,6 +560,139 @@ All rights reserved.
 </footer>
 
 
+<script>
+
+async function loadLeaderboard() {
+
+    const container =
+        document.getElementById(
+            "leaderboard-content"
+        );
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/leaderboard"
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Server error"
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        container.innerHTML = "";
+
+        if (
+            !Array.isArray(data)
+            || data.length === 0
+        ) {
+
+            container.innerHTML =
+                '<p class="loading">No scores yet.</p>';
+
+            return;
+
+        }
+
+        data
+            .sort(
+                (a, b) =>
+                    Number(b.score || 0)
+                    -
+                    Number(a.score || 0)
+            )
+            .slice(0, 10)
+            .forEach(
+                (player, index) => {
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+                    row.className =
+                        "leaderboard-row";
+
+                    const rank =
+                        document.createElement(
+                            "div"
+                        );
+
+                    rank.className =
+                        "leaderboard-rank";
+
+                    rank.textContent =
+                        "#" + (index + 1);
+
+                    const name =
+                        document.createElement(
+                            "div"
+                        );
+
+                    name.className =
+                        "leaderboard-name";
+
+                    name.textContent =
+                        player.name ||
+                        "Player";
+
+                    const score =
+                        document.createElement(
+                            "div"
+                        );
+
+                    score.className =
+                        "leaderboard-score";
+
+                    score.textContent =
+                        player.score || 0;
+
+                    row.appendChild(
+                        rank
+                    );
+
+                    row.appendChild(
+                        name
+                    );
+
+                    row.appendChild(
+                        score
+                    );
+
+                    container.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+    }
+
+    catch (error) {
+
+        container.innerHTML =
+            '<p class="error">Unable to load leaderboard.</p>';
+
+    }
+
+}
+
+loadLeaderboard();
+
+setInterval(
+    loadLeaderboard,
+    30000
+);
+
+</script>
+
 </body>
 
 </html>
@@ -502,6 +707,263 @@ def home():
     )
 
 
+@app.route("/api/leaderboard")
+def get_leaderboard():
+
+    if not os.path.exists(
+        LEADERBOARD_FILE
+    ):
+
+        return jsonify([])
+
+    try:
+
+        with open(
+            LEADERBOARD_FILE,
+            "r",
+            encoding="utf-8"
+        ) as file:
+
+            data = json.load(
+                file
+            )
+
+        if not isinstance(
+            data,
+            list
+        ):
+
+            return jsonify([])
+
+        clean_data = []
+
+        for player in data:
+
+            if not isinstance(
+                player,
+                dict
+            ):
+
+                continue
+
+            name = str(
+                player.get(
+                    "name",
+                    "Player"
+                )
+            ).strip()
+
+            try:
+
+                score = int(
+                    player.get(
+                        "score",
+                        0
+                    )
+                )
+
+            except Exception:
+
+                score = 0
+
+            clean_data.append(
+                {
+                    "name": name,
+                    "score": score
+                }
+            )
+
+        clean_data.sort(
+            key=lambda x: x["score"],
+            reverse=True
+        )
+
+        return jsonify(
+            clean_data[:100]
+        )
+
+    except Exception:
+
+        return jsonify([])
+
+
+@app.route(
+    "/api/score",
+    methods=["POST"]
+)
+def submit_score():
+
+    data = request.get_json(
+        silent=True
+    )
+
+    if not data:
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Invalid data"
+            }
+        ), 400
+
+    name = str(
+        data.get(
+            "name",
+            ""
+        )
+    ).strip()
+
+    try:
+
+        score = int(
+            data.get(
+                "score",
+                0
+            )
+        )
+
+    except Exception:
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Invalid score"
+            }
+        ), 400
+
+    if not name:
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Name is required"
+            }
+        ), 400
+
+    if len(name) > 15:
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Name is too long"
+            }
+        ), 400
+
+    if score < 0:
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Invalid score"
+            }
+        ), 400
+
+    if not os.path.exists(
+        LEADERBOARD_FILE
+    ):
+
+        users = []
+
+    else:
+
+        try:
+
+            with open(
+                LEADERBOARD_FILE,
+                "r",
+                encoding="utf-8"
+            ) as file:
+
+                users = json.load(
+                    file
+                )
+
+            if not isinstance(
+                users,
+                list
+            ):
+
+                users = []
+
+        except Exception:
+
+            users = []
+
+    found = False
+
+    for user in users:
+
+        if str(
+            user.get(
+                "name",
+                ""
+            )
+        ).strip().lower() == name.lower():
+
+            try:
+
+                old_score = int(
+                    user.get(
+                        "score",
+                        0
+                    )
+                )
+
+            except Exception:
+
+                old_score = 0
+
+            if score > old_score:
+
+                user["score"] = score
+
+            found = True
+
+            break
+
+    if not found:
+
+        users.append(
+            {
+                "name": name,
+                "score": score
+            }
+        )
+
+    users.sort(
+        key=lambda x: int(
+            x.get(
+                "score",
+                0
+            )
+        ),
+        reverse=True
+    )
+
+    with open(
+        LEADERBOARD_FILE,
+        "w",
+        encoding="utf-8"
+    ) as file:
+
+        json.dump(
+            users,
+            file,
+            indent=4,
+            ensure_ascii=False
+        )
+
+    return jsonify(
+        {
+            "success": True
+        }
+    )
+
+
+# ============================================================
+# FLAPPY BIRD PC
+# ============================================================
+
 @app.route("/download/flappy")
 def download_flappy():
 
@@ -510,11 +972,12 @@ def download_flappy():
         "FlappyBird.exe"
     )
 
-    if not os.path.isfile(file_path):
+    if not os.path.isfile(
+        file_path
+    ):
 
         return (
-            "FlappyBird.exe was not found "
-            "next to website.py.",
+            "FlappyBird.exe was not found next to website.py.",
             404
         )
 
@@ -525,6 +988,38 @@ def download_flappy():
     )
 
 
+# ============================================================
+# FLAPPY BIRD MOBILE
+# ============================================================
+
+@app.route("/download/flappy-mobile")
+def download_flappy_mobile():
+
+    file_path = os.path.join(
+        BASE_DIR,
+        "FlappyBird.apk"
+    )
+
+    if not os.path.isfile(
+        file_path
+    ):
+
+        return (
+            "FlappyBird.apk was not found next to website.py.",
+            404
+        )
+
+    return send_file(
+        file_path,
+        as_attachment=True,
+        download_name="FlappyBird.apk"
+    )
+
+
+# ============================================================
+# CAR GAME PC
+# ============================================================
+
 @app.route("/download/car")
 def download_car():
 
@@ -533,11 +1028,12 @@ def download_car():
         "CarGame.exe"
     )
 
-    if not os.path.isfile(file_path):
+    if not os.path.isfile(
+        file_path
+    ):
 
         return (
-            "CarGame.exe was not found "
-            "next to website.py.",
+            "CarGame.exe was not found next to website.py.",
             404
         )
 
@@ -548,5 +1044,48 @@ def download_car():
     )
 
 
+# ============================================================
+# CAR GAME MOBILE
+# ============================================================
+
+@app.route("/download/car-mobile")
+def download_car_mobile():
+
+    file_path = os.path.join(
+        BASE_DIR,
+        "CarGame.apk"
+    )
+
+    if not os.path.isfile(
+        file_path
+    ):
+
+        return (
+            "CarGame.apk was not found next to website.py.",
+            404
+        )
+
+    return send_file(
+        file_path,
+        as_attachment=True,
+        download_name="CarGame.apk"
+    )
+
+
+# ============================================================
+# RUN SERVER
+# ============================================================
+
 if __name__ == "__main__":
-    app.run()
+
+    port = int(
+        os.environ.get(
+            "PORT",
+            5000
+        )
+    )
+
+    app.run(
+        host="0.0.0.0",
+        port=port
+    )
