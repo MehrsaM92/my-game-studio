@@ -2,9 +2,7 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>My Game Studio</title>
@@ -62,9 +60,7 @@
             align-items: center;
             text-align: center;
             padding: 50px 20px;
-
-            background:
-                linear-gradient(135deg,
+            background: linear-gradient(135deg,
                     #0f172a,
                     #1e293b,
                     #0c4a6e);
@@ -116,14 +112,10 @@
 
         .game-grid {
             display: grid;
-            grid-template-columns:
-                repeat(auto-fit,
+            grid-template-columns: repeat(auto-fit,
                     minmax(280px, 1fr));
-
             gap: 30px;
-
             max-width: 1000px;
-
             margin: auto;
         }
 
@@ -218,6 +210,9 @@
         .leaderboard-name {
             color: white;
             font-weight: bold;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .leaderboard-score {
@@ -228,6 +223,29 @@
 
         .loading {
             color: #94a3b8;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+
+        .empty {
+            color: #94a3b8;
+        }
+
+        .refresh-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #334155;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .refresh-button:hover {
+            background: #475569;
         }
 
         .about {
@@ -293,15 +311,12 @@
             .leaderboard-row {
                 grid-template-columns: 50px 1fr 80px;
             }
-
         }
     </style>
 
 </head>
 
-
 <body>
-
 
     <header>
 
@@ -439,9 +454,17 @@
 
         <div class="leaderboard-box">
 
-            <p class="loading">
-                Leaderboard is currently unavailable.
-            </p>
+            <div id="leaderboard-content">
+
+                <p class="loading">
+                    Loading global leaderboard...
+                </p>
+
+            </div>
+
+            <button class="refresh-button" onclick="loadLeaderboard()">
+                Refresh Leaderboard
+            </button>
 
         </div>
 
@@ -455,7 +478,6 @@
         </h2>
 
         <p>
-
             I'm an independent game developer
             creating games and experimenting
             with new ideas.
@@ -464,7 +486,6 @@
             my games and future projects.
 
             I'm Mehrsam Ahmadbeigi.
-
         </p>
 
     </section>
@@ -479,6 +500,184 @@
 
     </footer>
 
+
+    <script>
+
+        const API_URL =
+            "https://my-game-studio-backend.onrender.com";
+
+
+        async function loadLeaderboard() {
+
+            const container =
+                document.getElementById(
+                    "leaderboard-content"
+                );
+
+
+            container.innerHTML =
+                '<p class="loading">Loading global leaderboard...</p>';
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/api/leaderboard",
+                        {
+                            method: "GET",
+                            cache: "no-cache"
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Server returned status " +
+                        response.status
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                container.innerHTML = "";
+
+
+                if (
+                    !Array.isArray(data)
+                    ||
+                    data.length === 0
+                ) {
+
+                    container.innerHTML =
+                        '<p class="empty">No scores yet. Be the first player!</p>';
+
+                    return;
+
+                }
+
+
+                const topPlayers =
+                    data.slice(
+                        0,
+                        10
+                    );
+
+
+                topPlayers.forEach(
+                    (
+                        player,
+                        index
+                    ) => {
+
+                        const row =
+                            document.createElement(
+                                "div"
+                            );
+
+                        row.className =
+                            "leaderboard-row";
+
+
+                        const rank =
+                            document.createElement(
+                                "div"
+                            );
+
+                        rank.className =
+                            "leaderboard-rank";
+
+                        rank.textContent =
+                            "#" +
+                            (
+                                index +
+                                1
+                            );
+
+
+                        const name =
+                            document.createElement(
+                                "div"
+                            );
+
+                        name.className =
+                            "leaderboard-name";
+
+                        name.textContent =
+                            player.name ||
+                            "Player";
+
+
+                        const score =
+                            document.createElement(
+                                "div"
+                            );
+
+                        score.className =
+                            "leaderboard-score";
+
+                        score.textContent =
+                            (
+                                player.score ||
+                                0
+                            ) +
+                            " pts";
+
+
+                        row.appendChild(
+                            rank
+                        );
+
+                        row.appendChild(
+                            name
+                        );
+
+                        row.appendChild(
+                            score
+                        );
+
+
+                        container.appendChild(
+                            row
+                        );
+
+                    }
+                );
+
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Leaderboard error:",
+                    error
+                );
+
+
+                container.innerHTML =
+                    '<p class="error">Unable to load global leaderboard right now.</p>';
+
+            }
+
+        }
+
+
+        loadLeaderboard();
+
+
+        setInterval(
+            loadLeaderboard,
+            30000
+        );
+
+    </script>
 
 </body>
 
