@@ -1,132 +1,384 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask import Flask, render_template_string, send_file, request, jsonify
 import os
-import sqlite3
+import json
+import hashlib
 import secrets
 
 app = Flask(__name__)
 
-CORS(
-    app,
-    resources={
-        r"/api/*": {
-            "origins": "*"
-        }
-    }
-)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-BASE_DIR = os.path.dirname(
-    os.path.abspath(__file__)
-)
-
-DATABASE = os.path.join(
+LEADERBOARD_FILE = os.path.join(
     BASE_DIR,
-    "leaderboard.db"
+    "leaderboard.json"
 )
 
-ADMIN_SECRET = os.environ.get(
-    "ADMIN_SECRET",
-    ""
-)
+# CHANGE THIS PASSWORD
+ADMIN_PASSWORD = "YOUR_ADMIN_PASSWORD_HERE"
 
+ADMIN_PASSWORD_HASH = hashlib.sha256(
+    ADMIN_PASSWORD.encode("utf-8")
+).hexdigest()
 
-def get_connection():
-    connection = sqlite3.connect(
-        DATABASE
-    )
+ADMIN_SESSIONS = set()
 
-    connection.row_factory = sqlite3.Row
+HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="google-site-verification" content="ULKlsCJLxKZPZcj4H5NkXbxu0p8OkCf2ioaLwIFockY">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Game Studio</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:Arial,sans-serif;background:#111827;color:white}
+header{background:#0f172a;padding:20px 50px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #334155;position:sticky;top:0;z-index:1000}
+.logo{font-size:26px;font-weight:bold;color:#38bdf8}
+nav a{color:white;text-decoration:none;margin-left:25px;font-size:16px}
+nav a:hover{color:#38bdf8}
+.hero{min-height:500px;display:flex;justify-content:center;align-items:center;text-align:center;padding:50px 20px;background:linear-gradient(135deg,#0f172a,#1e293b,#0c4a6e)}
+.hero-content{max-width:800px}
+.hero h1{font-size:60px;margin-bottom:20px}
+.hero p{font-size:20px;color:#cbd5e1;line-height:1.6;margin-bottom:30px}
+.button{display:inline-block;padding:14px 30px;background:#0ea5e9;color:white;text-decoration:none;border-radius:8px;font-weight:bold;border:none;cursor:pointer;transition:.3s}
+.button:hover{background:#0284c7;transform:translateY(-2px)}
+.games{padding:70px 30px;text-align:center}
+.games h2{font-size:40px;margin-bottom:40px}
+.game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;max-width:1000px;margin:auto}
+.game-card{background:#1e293b;border-radius:12px;padding:30px;border:1px solid #334155;transition:.3s}
+.game-card:hover{transform:translateY(-5px);border-color:#38bdf8}
+.game-card h3{font-size:28px;margin-bottom:15px}
+.game-card p{color:#cbd5e1;line-height:1.6;margin-bottom:25px}
+.game-icon{font-size:60px;margin-bottom:20px}
+.download-buttons{display:flex;flex-direction:column;gap:12px}
+.platform-title{font-size:14px;color:#94a3b8;margin-top:5px}
+.download-button{background:#f59e0b;width:100%}
+.download-button:hover{background:#d97706}
+.leaderboard{padding:70px 30px;text-align:center;background:#0f172a}
+.leaderboard h2{font-size:36px;margin-bottom:30px}
+.leaderboard-box{max-width:700px;margin:auto;background:#1e293b;border:1px solid #334155;border-radius:12px;padding:25px}
+.leaderboard-row{display:grid;grid-template-columns:70px 1fr 100px;align-items:center;gap:10px;padding:15px;margin-bottom:10px;background:#0f172a;border-radius:8px;text-align:left}
+.leaderboard-rank{color:#38bdf8;font-weight:bold;text-align:center}
+.leaderboard-name{color:white;font-weight:bold}
+.leaderboard-score{color:#f59e0b;font-weight:bold;text-align:right}
+.loading{color:#94a3b8}
+.error{color:#ef4444}
+.about{padding:70px 30px;background:#111827;text-align:center}
+.about h2{font-size:36px;margin-bottom:20px}
+.about p{max-width:700px;margin:auto;color:#cbd5e1;line-height:1.8}
+footer{padding:25px;text-align:center;color:#94a3b8;background:#020617}
+@media(max-width:700px){
+header{padding:20px;flex-direction:column;gap:15px}
+nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+nav a{margin:0 8px}
+.hero h1{font-size:40px}
+.hero p{font-size:17px}
+.games{padding:50px 20px}
+.game-grid{grid-template-columns:1fr}
+.leaderboard-row{grid-template-columns:50px 1fr 80px}
+}
+</style>
+</head>
 
-    return connection
+<body>
 
+<header>
+<div class="logo">My Game Studio</div>
+<nav>
+<a href="#home">Home</a>
+<a href="#games">Games</a>
+<a href="#leaderboard">Leaderboard</a>
+<a href="#about">About</a>
+</nav>
+</header>
 
-def init_database():
-    connection = get_connection()
+<section class="hero" id="home">
+<div class="hero-content">
+<h1>Welcome to My Game Studio</h1>
+<p>Download my games and play on PC!</p>
+<a href="#games" class="button">Explore Games</a>
+</div>
+</section>
 
-    connection.execute(
-        """
-        CREATE TABLE IF NOT EXISTS leaderboard (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL UNIQUE,
-            score INTEGER NOT NULL DEFAULT 0
+<section class="games" id="games">
+<h2>My Games</h2>
+
+<div class="game-grid">
+
+<div class="game-card">
+<div class="game-icon">🐦</div>
+<h3>Flappy Bird</h3>
+<p>Fly through the pipes, avoid obstacles, and try to achieve the highest score.</p>
+<div class="download-buttons">
+<div class="platform-title">PC Version</div>
+<a href="/download/flappy" class="button download-button">
+Download Flappy Bird PC
+</a>
+</div>
+</div>
+
+<div class="game-card">
+<div class="game-icon">🚗</div>
+<h3>Car Game</h3>
+<p>Drive your car, avoid obstacles, and survive as long as possible.</p>
+<div class="download-buttons">
+<div class="platform-title">PC Version</div>
+<a href="/download/car" class="button download-button">
+Download Car Game PC
+</a>
+</div>
+</div>
+
+</div>
+</section>
+
+<section class="leaderboard" id="leaderboard">
+<h2>🌎 Flappy Bird Global Leaderboard</h2>
+
+<div class="leaderboard-box">
+<div id="leaderboard-content">
+<p class="loading">Loading leaderboard...</p>
+</div>
+</div>
+</section>
+
+<section class="about" id="about">
+<h2>About Me</h2>
+<p>
+I'm an independent game developer creating games and experimenting with new ideas.
+This website is where I publish my games and future projects.
+I'm Mehrsam Ahmadbeigi.
+</p>
+</section>
+
+<footer>
+<p>© 2026 My Game Studio. All rights reserved.</p>
+</footer>
+
+<script>
+async function loadLeaderboard(){
+
+    const container =
+        document.getElementById("leaderboard-content");
+
+    container.innerHTML =
+        '<p class="loading">Loading leaderboard...</p>';
+
+    try{
+
+        const response =
+            await fetch("/api/leaderboard", {
+                cache:"no-cache"
+            });
+
+        if(!response.ok){
+            throw new Error("Server error");
+        }
+
+        const data =
+            await response.json();
+
+        container.innerHTML = "";
+
+        if(!Array.isArray(data) || data.length === 0){
+
+            container.innerHTML =
+                '<p class="loading">No scores yet.</p>';
+
+            return;
+        }
+
+        data
+        .sort(
+            (a,b) =>
+                Number(b.score || 0) -
+                Number(a.score || 0)
         )
-        """
-    )
+        .slice(0,10)
+        .forEach((player,index)=>{
 
-    connection.commit()
+            const row =
+                document.createElement("div");
 
-    connection.close()
+            row.className =
+                "leaderboard-row";
+
+            const rank =
+                document.createElement("div");
+
+            rank.className =
+                "leaderboard-rank";
+
+            rank.textContent =
+                "#" + (index + 1);
+
+            const name =
+                document.createElement("div");
+
+            name.className =
+                "leaderboard-name";
+
+            name.textContent =
+                player.name || "Player";
+
+            const score =
+                document.createElement("div");
+
+            score.className =
+                "leaderboard-score";
+
+            score.textContent =
+                (player.score || 0) + " pts";
+
+            row.appendChild(rank);
+            row.appendChild(name);
+            row.appendChild(score);
+
+            container.appendChild(row);
+
+        });
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        container.innerHTML =
+            '<p class="error">Unable to load leaderboard.</p>';
+
+    }
+
+}
+
+loadLeaderboard();
+
+setInterval(
+    loadLeaderboard,
+    30000
+);
+</script>
+
+</body>
+</html>
+"""
 
 
-def check_admin():
-    provided_secret = request.headers.get(
-        "X-Admin-Secret",
+def load_users():
+
+    if not os.path.exists(LEADERBOARD_FILE):
+        return []
+
+    try:
+
+        with open(
+            LEADERBOARD_FILE,
+            "r",
+            encoding="utf-8"
+        ) as file:
+
+            data = json.load(file)
+
+        if isinstance(data, list):
+            return data
+
+    except Exception:
+        pass
+
+    return []
+
+
+def save_users(users):
+
+    with open(
+        LEADERBOARD_FILE,
+        "w",
+        encoding="utf-8"
+    ) as file:
+
+        json.dump(
+            users,
+            file,
+            indent=4,
+            ensure_ascii=False
+        )
+
+
+def admin_required():
+
+    token = request.headers.get(
+        "X-Admin-Token",
         ""
     )
 
-    if not ADMIN_SECRET:
-        return False
-
-    return secrets.compare_digest(
-        provided_secret,
-        ADMIN_SECRET
+    return (
+        token
+        and token in ADMIN_SESSIONS
     )
 
 
 @app.route("/")
 def home():
-    return jsonify(
-        {
-            "success": True,
-            "message": "My Game Studio Leaderboard API is running."
-        }
+
+    return render_template_string(
+        HTML
     )
 
 
-@app.route(
-    "/api/leaderboard",
-    methods=["GET"]
-)
+@app.route("/api/leaderboard")
 def get_leaderboard():
-    try:
-        connection = get_connection()
 
-        rows = connection.execute(
-            """
-            SELECT id, name, score
-            FROM leaderboard
-            ORDER BY score DESC, id ASC
-            LIMIT 100
-            """
-        ).fetchall()
+    users = load_users()
 
-        connection.close()
+    clean_data = []
 
-        result = []
+    for player in users:
 
-        for row in rows:
-            result.append(
-                {
-                    "id": row["id"],
-                    "name": row["name"],
-                    "score": row["score"]
-                }
+        if not isinstance(
+            player,
+            dict
+        ):
+            continue
+
+        name = str(
+            player.get(
+                "name",
+                "Player"
+            )
+        ).strip()
+
+        if not name:
+            continue
+
+        try:
+
+            score = int(
+                player.get(
+                    "score",
+                    0
+                )
             )
 
-        return jsonify(result)
+        except Exception:
 
-    except Exception as error:
-        print(
-            "Leaderboard error:",
-            error
+            score = 0
+
+        clean_data.append(
+            {
+                "name": name,
+                "score": score
+            }
         )
 
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unable to load leaderboard."
-            }
-        ), 500
+    clean_data.sort(
+        key=lambda x: x["score"],
+        reverse=True
+    )
+
+    return jsonify(
+        clean_data[:100]
+    )
 
 
 @app.route(
@@ -134,6 +386,7 @@ def get_leaderboard():
     methods=["POST"]
 )
 def submit_score():
+
     data = request.get_json(
         silent=True
     )
@@ -142,7 +395,7 @@ def submit_score():
         return jsonify(
             {
                 "success": False,
-                "message": "Invalid data."
+                "message": "Invalid data"
             }
         ), 400
 
@@ -154,6 +407,7 @@ def submit_score():
     ).strip()
 
     try:
+
         score = int(
             data.get(
                 "score",
@@ -162,10 +416,11 @@ def submit_score():
         )
 
     except Exception:
+
         return jsonify(
             {
                 "success": False,
-                "message": "Invalid score."
+                "message": "Invalid score"
             }
         ), 400
 
@@ -173,7 +428,15 @@ def submit_score():
         return jsonify(
             {
                 "success": False,
-                "message": "Name is required."
+                "message": "Name is required"
+            }
+        ), 400
+
+    if name.lower() == "admin":
+        return jsonify(
+            {
+                "success": False,
+                "message": "Invalid player name"
             }
         ), 400
 
@@ -181,7 +444,7 @@ def submit_score():
         return jsonify(
             {
                 "success": False,
-                "message": "Name is too long."
+                "message": "Name is too long"
             }
         ), 400
 
@@ -189,84 +452,70 @@ def submit_score():
         return jsonify(
             {
                 "success": False,
-                "message": "Invalid score."
+                "message": "Invalid score"
             }
         ), 400
 
-    try:
-        connection = get_connection()
+    users = load_users()
 
-        existing = connection.execute(
-            """
-            SELECT id, name, score
-            FROM leaderboard
-            WHERE LOWER(name) = LOWER(?)
-            """,
-            (
-                name,
+    found = False
+
+    for user in users:
+
+        if str(
+            user.get(
+                "name",
+                ""
             )
-        ).fetchone()
+        ).strip().lower() == name.lower():
 
-        if existing:
-            old_score = int(
-                existing["score"]
-            )
+            try:
 
-            if score > old_score:
-                connection.execute(
-                    """
-                    UPDATE leaderboard
-                    SET score = ?
-                    WHERE id = ?
-                    """,
-                    (
-                        score,
-                        existing["id"]
+                old_score = int(
+                    user.get(
+                        "score",
+                        0
                     )
                 )
 
-        else:
-            connection.execute(
-                """
-                INSERT INTO leaderboard
-                (
-                    name,
-                    score
-                )
-                VALUES
-                (
-                    ?,
-                    ?
-                )
-                """,
-                (
-                    name,
-                    score
-                )
+            except Exception:
+
+                old_score = 0
+
+            if score > old_score:
+
+                user["score"] = score
+
+            found = True
+
+            break
+
+    if not found:
+
+        users.append(
+            {
+                "name": name,
+                "score": score
+            }
+        )
+
+    users.sort(
+        key=lambda x: int(
+            x.get(
+                "score",
+                0
             )
+        ),
+        reverse=True
+    )
 
-        connection.commit()
+    save_users(users)
 
-        connection.close()
-
-        return jsonify(
-            {
-                "success": True
-            }
-        )
-
-    except Exception as error:
-        print(
-            "Score error:",
-            error
-        )
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unable to save score."
-            }
-        ), 500
+    return jsonify(
+        {
+            "success": True
+        }
+    )
 
 
 @app.route(
@@ -274,17 +523,26 @@ def submit_score():
     methods=["POST"]
 )
 def admin_login():
+
     data = request.get_json(
         silent=True
     )
 
     if not data:
+
         return jsonify(
             {
                 "success": False,
-                "message": "Invalid data."
+                "message": "Invalid data"
             }
         ), 400
+
+    username = str(
+        data.get(
+            "username",
+            ""
+        )
+    ).strip()
 
     password = str(
         data.get(
@@ -293,154 +551,114 @@ def admin_login():
         )
     )
 
-    if not ADMIN_SECRET:
+    if username.lower() != "admin":
+
         return jsonify(
             {
                 "success": False,
-                "message": "Admin password is not configured on the server."
+                "message": "Invalid admin login"
             }
-        ), 500
+        ), 401
 
-    if secrets.compare_digest(
-        password,
-        ADMIN_SECRET
+    password_hash = hashlib.sha256(
+        password.encode(
+            "utf-8"
+        )
+    ).hexdigest()
+
+    if not secrets.compare_digest(
+        password_hash,
+        ADMIN_PASSWORD_HASH
     ):
+
         return jsonify(
             {
-                "success": True,
-                "message": "Login successful."
+                "success": False,
+                "message": "Wrong password"
             }
-        )
+        ), 401
+
+    token = secrets.token_urlsafe(
+        32
+    )
+
+    ADMIN_SESSIONS.add(
+        token
+    )
 
     return jsonify(
         {
-            "success": False,
-            "message": "Wrong password."
+            "success": True,
+            "token": token
         }
-    ), 401
+    )
 
 
 @app.route(
     "/api/admin/players",
     methods=["GET"]
 )
-def admin_get_players():
-    if not check_admin():
+def admin_players():
+
+    if not admin_required():
+
         return jsonify(
             {
                 "success": False,
-                "message": "Unauthorized."
+                "message": "Unauthorized"
             }
         ), 401
 
-    try:
-        connection = get_connection()
+    users = load_users()
 
-        rows = connection.execute(
-            """
-            SELECT id, name, score
-            FROM leaderboard
-            ORDER BY score DESC, id ASC
-            """
-        ).fetchall()
+    result = []
 
-        connection.close()
+    for index, user in enumerate(users):
 
-        players = []
-
-        for row in rows:
-            players.append(
-                {
-                    "id": row["id"],
-                    "name": row["name"],
-                    "score": row["score"]
-                }
+        if str(
+            user.get(
+                "name",
+                ""
             )
+        ).lower() == "admin":
 
-        return jsonify(players)
+            continue
 
-    except Exception as error:
-        print(
-            "Admin players error:",
-            error
-        )
-
-        return jsonify(
+        result.append(
             {
-                "success": False,
-                "message": "Unable to load admin players."
-            }
-        ), 500
-
-
-@app.route(
-    "/api/admin/leaderboard",
-    methods=["GET"]
-)
-def admin_get_leaderboard():
-    if not check_admin():
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unauthorized."
-            }
-        ), 401
-
-    try:
-        connection = get_connection()
-
-        rows = connection.execute(
-            """
-            SELECT id, name, score
-            FROM leaderboard
-            ORDER BY score DESC, id ASC
-            """
-        ).fetchall()
-
-        connection.close()
-
-        result = []
-
-        for row in rows:
-            result.append(
-                {
-                    "id": row["id"],
-                    "name": row["name"],
-                    "score": row["score"]
-                }
-            )
-
-        return jsonify(
-            {
-                "success": True,
-                "players": result
+                "id": index,
+                "name": user.get(
+                    "name",
+                    "Player"
+                ),
+                "score": int(
+                    user.get(
+                        "score",
+                        0
+                    )
+                )
             }
         )
 
-    except Exception as error:
-        print(
-            "Admin leaderboard error:",
-            error
-        )
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unable to load admin leaderboard."
-            }
-        ), 500
+    return jsonify(
+        result
+    )
 
 
 @app.route(
     "/api/admin/player/<int:player_id>",
     methods=["PUT"]
 )
-def admin_update_player(player_id):
-    if not check_admin():
+def update_player(
+    player_id
+):
+
+    if not admin_required():
+
         return jsonify(
             {
                 "success": False,
-                "message": "Unauthorized."
+                "message": "Unauthorized"
             }
         ), 401
 
@@ -449,220 +667,225 @@ def admin_update_player(player_id):
     )
 
     if not data:
+
         return jsonify(
             {
                 "success": False,
-                "message": "Invalid data."
+                "message": "Invalid data"
             }
         ), 400
 
     try:
-        score = int(
+
+        new_score = int(
             data.get(
-                "score"
+                "score",
+                0
             )
         )
 
     except Exception:
+
         return jsonify(
             {
                 "success": False,
-                "message": "Invalid score."
+                "message": "Invalid score"
             }
         ), 400
 
-    if score < 0:
+    if new_score < 0:
+
         return jsonify(
             {
                 "success": False,
-                "message": "Invalid score."
+                "message": "Invalid score"
             }
         ), 400
 
-    try:
-        connection = get_connection()
+    users = load_users()
 
-        existing = connection.execute(
-            """
-            SELECT id
-            FROM leaderboard
-            WHERE id = ?
-            """,
-            (
-                player_id,
-            )
-        ).fetchone()
-
-        if not existing:
-            connection.close()
-
-            return jsonify(
-                {
-                    "success": False,
-                    "message": "Player not found."
-                }
-            ), 404
-
-        connection.execute(
-            """
-            UPDATE leaderboard
-            SET score = ?
-            WHERE id = ?
-            """,
-            (
-                score,
-                player_id
-            )
-        )
-
-        connection.commit()
-
-        connection.close()
-
-        return jsonify(
-            {
-                "success": True,
-                "message": "Score updated."
-            }
-        )
-
-    except Exception as error:
-        print(
-            "Admin update error:",
-            error
-        )
+    if (
+        player_id < 0
+        or player_id >= len(users)
+    ):
 
         return jsonify(
             {
                 "success": False,
-                "message": "Unable to update score."
+                "message": "Player not found"
             }
-        ), 500
+        ), 404
+
+    if str(
+        users[player_id].get(
+            "name",
+            ""
+        )
+    ).lower() == "admin":
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Cannot edit admin"
+            }
+        ), 403
+
+    users[player_id]["score"] = new_score
+
+    save_users(users)
+
+    return jsonify(
+        {
+            "success": True
+        }
+    )
 
 
 @app.route(
     "/api/admin/player/<int:player_id>",
     methods=["DELETE"]
 )
-def admin_delete_player(player_id):
-    if not check_admin():
+def delete_player(
+    player_id
+):
+
+    if not admin_required():
+
         return jsonify(
             {
                 "success": False,
-                "message": "Unauthorized."
+                "message": "Unauthorized"
             }
         ), 401
 
-    try:
-        connection = get_connection()
+    users = load_users()
 
-        existing = connection.execute(
-            """
-            SELECT id
-            FROM leaderboard
-            WHERE id = ?
-            """,
-            (
-                player_id,
-            )
-        ).fetchone()
-
-        if not existing:
-            connection.close()
-
-            return jsonify(
-                {
-                    "success": False,
-                    "message": "Player not found."
-                }
-            ), 404
-
-        connection.execute(
-            """
-            DELETE FROM leaderboard
-            WHERE id = ?
-            """,
-            (
-                player_id,
-            )
-        )
-
-        connection.commit()
-
-        connection.close()
-
-        return jsonify(
-            {
-                "success": True,
-                "message": "Player deleted."
-            }
-        )
-
-    except Exception as error:
-        print(
-            "Admin delete error:",
-            error
-        )
+    if (
+        player_id < 0
+        or player_id >= len(users)
+    ):
 
         return jsonify(
             {
                 "success": False,
-                "message": "Unable to delete player."
+                "message": "Player not found"
             }
-        ), 500
+        ), 404
+
+    if str(
+        users[player_id].get(
+            "name",
+            ""
+        )
+    ).lower() == "admin":
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Cannot delete admin"
+            }
+        ), 403
+
+    users.pop(
+        player_id
+    )
+
+    save_users(users)
+
+    return jsonify(
+        {
+            "success": True
+        }
+    )
 
 
 @app.route(
     "/api/admin/leaderboard/clear",
     methods=["DELETE"]
 )
-def admin_clear_leaderboard():
-    if not check_admin():
+def clear_leaderboard():
+
+    if not admin_required():
+
         return jsonify(
             {
                 "success": False,
-                "message": "Unauthorized."
+                "message": "Unauthorized"
             }
         ), 401
 
-    try:
-        connection = get_connection()
+    users = load_users()
 
-        connection.execute(
-            """
-            DELETE FROM leaderboard
-            """
+    users = [
+        user
+        for user in users
+        if str(
+            user.get(
+                "name",
+                ""
+            )
+        ).lower() == "admin"
+    ]
+
+    save_users(users)
+
+    return jsonify(
+        {
+            "success": True
+        }
+    )
+
+
+@app.route("/download/flappy")
+def download_flappy():
+
+    file_path = os.path.join(
+        BASE_DIR,
+        "FlappyBird.exe"
+    )
+
+    if not os.path.isfile(
+        file_path
+    ):
+
+        return (
+            "FlappyBird.exe was not found.",
+            404
         )
 
-        connection.commit()
+    return send_file(
+        file_path,
+        as_attachment=True,
+        download_name="FlappyBird.exe"
+    )
 
-        connection.close()
 
-        return jsonify(
-            {
-                "success": True,
-                "message": "Leaderboard cleared."
-            }
+@app.route("/download/car")
+def download_car():
+
+    file_path = os.path.join(
+        BASE_DIR,
+        "CarGame.exe"
+    )
+
+    if not os.path.isfile(
+        file_path
+    ):
+
+        return (
+            "CarGame.exe was not found.",
+            404
         )
 
-    except Exception as error:
-        print(
-            "Admin clear error:",
-            error
-        )
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unable to clear leaderboard."
-            }
-        ), 500
-
-
-init_database()
+    return send_file(
+        file_path,
+        as_attachment=True,
+        download_name="CarGame.exe"
+    )
 
 
 if __name__ == "__main__":
+
     port = int(
         os.environ.get(
             "PORT",
