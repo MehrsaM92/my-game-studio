@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 import sqlite3
-import hashlib
 import secrets
 
 app = Flask(__name__)
@@ -25,12 +24,10 @@ DATABASE = os.path.join(
     "leaderboard.db"
 )
 
-ADMIN_PASSWORD = os.environ.get(
-    "ADMIN_PASSWORD",
+ADMIN_SECRET = os.environ.get(
+    "ADMIN_SECRET",
     ""
 )
-
-ADMIN_SESSIONS = set()
 
 
 def get_connection():
@@ -57,28 +54,22 @@ def init_database():
     )
 
     connection.commit()
+
     connection.close()
 
 
-def create_admin_token():
-    token = secrets.token_urlsafe(32)
-
-    ADMIN_SESSIONS.add(
-        token
-    )
-
-    return token
-
-
-def is_admin():
-    token = request.headers.get(
-        "X-Admin-Token",
+def check_admin():
+    provided_secret = request.headers.get(
+        "X-Admin-Secret",
         ""
     )
 
-    return (
-        token
-        and token in ADMIN_SESSIONS
+    if not ADMIN_SECRET:
+        return False
+
+    return secrets.compare_digest(
+        provided_secret,
+        ADMIN_SECRET
     )
 
 
@@ -93,87 +84,11 @@ def home():
 
 
 @app.route(
-    "/api/admin/login",
-    methods=["POST"]
-)
-def admin_login():
-
-    data = request.get_json(
-        silent=True
-    )
-
-    if not data:
-        return jsonify(
-            {
-                "success": False,
-                "message": "Invalid data."
-            }
-        ), 400
-
-    password = str(
-        data.get(
-            "password",
-            ""
-        )
-    )
-
-    if not ADMIN_PASSWORD:
-        return jsonify(
-            {
-                "success": False,
-                "message": "Admin password is not configured."
-            }
-        ), 500
-
-    if password != ADMIN_PASSWORD:
-        return jsonify(
-            {
-                "success": False,
-                "message": "Wrong password."
-            }
-        ), 401
-
-    token = create_admin_token()
-
-    return jsonify(
-        {
-            "success": True,
-            "token": token
-        }
-    )
-
-
-@app.route(
-    "/api/admin/logout",
-    methods=["POST"]
-)
-def admin_logout():
-
-    token = request.headers.get(
-        "X-Admin-Token",
-        ""
-    )
-
-    if token in ADMIN_SESSIONS:
-        ADMIN_SESSIONS.remove(
-            token
-        )
-
-    return jsonify(
-        {
-            "success": True
-        }
-    )
-
-
-@app.route(
     "/api/leaderboard",
     methods=["GET"]
 )
 def get_leaderboard():
-
     try:
-
         connection = get_connection()
 
         rows = connection.execute(
@@ -190,7 +105,6 @@ def get_leaderboard():
         result = []
 
         for row in rows:
-
             result.append(
                 {
                     "id": row["id"],
@@ -199,12 +113,9 @@ def get_leaderboard():
                 }
             )
 
-        return jsonify(
-            result
-        )
+        return jsonify(result)
 
     except Exception as error:
-
         print(
             "Leaderboard error:",
             error
@@ -223,13 +134,11 @@ def get_leaderboard():
     methods=["POST"]
 )
 def submit_score():
-
     data = request.get_json(
         silent=True
     )
 
     if not data:
-
         return jsonify(
             {
                 "success": False,
@@ -245,7 +154,6 @@ def submit_score():
     ).strip()
 
     try:
-
         score = int(
             data.get(
                 "score",
@@ -254,7 +162,6 @@ def submit_score():
         )
 
     except Exception:
-
         return jsonify(
             {
                 "success": False,
@@ -263,7 +170,6 @@ def submit_score():
         ), 400
 
     if not name:
-
         return jsonify(
             {
                 "success": False,
@@ -272,7 +178,6 @@ def submit_score():
         ), 400
 
     if len(name) > 15:
-
         return jsonify(
             {
                 "success": False,
@@ -281,7 +186,6 @@ def submit_score():
         ), 400
 
     if score < 0:
-
         return jsonify(
             {
                 "success": False,
@@ -290,7 +194,6 @@ def submit_score():
         ), 400
 
     try:
-
         connection = get_connection()
 
         existing = connection.execute(
@@ -305,13 +208,11 @@ def submit_score():
         ).fetchone()
 
         if existing:
-
             old_score = int(
                 existing["score"]
             )
 
             if score > old_score:
-
                 connection.execute(
                     """
                     UPDATE leaderboard
@@ -325,7 +226,6 @@ def submit_score():
                 )
 
         else:
-
             connection.execute(
                 """
                 INSERT INTO leaderboard
@@ -346,6 +246,7 @@ def submit_score():
             )
 
         connection.commit()
+
         connection.close()
 
         return jsonify(
@@ -355,7 +256,6 @@ def submit_score():
         )
 
     except Exception as error:
-
         print(
             "Score error:",
             error
@@ -374,9 +274,7 @@ def submit_score():
     methods=["GET"]
 )
 def admin_get_leaderboard():
-
-    if not is_admin():
-
+    if not check_admin():
         return jsonify(
             {
                 "success": False,
@@ -385,7 +283,6 @@ def admin_get_leaderboard():
         ), 401
 
     try:
-
         connection = get_connection()
 
         rows = connection.execute(
@@ -401,7 +298,6 @@ def admin_get_leaderboard():
         result = []
 
         for row in rows:
-
             result.append(
                 {
                     "id": row["id"],
@@ -411,11 +307,13 @@ def admin_get_leaderboard():
             )
 
         return jsonify(
-            result
+            {
+                "success": True,
+                "players": result
+            }
         )
 
     except Exception as error:
-
         print(
             "Admin leaderboard error:",
             error
@@ -424,21 +322,17 @@ def admin_get_leaderboard():
         return jsonify(
             {
                 "success": False,
-                "message": "Unable to load leaderboard."
+                "message": "Unable to load admin leaderboard."
             }
         ), 500
 
 
 @app.route(
-    "/api/admin/leaderboard/<int:player_id>",
+    "/api/admin/player/<int:player_id>",
     methods=["PUT"]
 )
-def admin_update_score(
-    player_id
-):
-
-    if not is_admin():
-
+def admin_update_player(player_id):
+    if not check_admin():
         return jsonify(
             {
                 "success": False,
@@ -451,7 +345,6 @@ def admin_update_score(
     )
 
     if not data:
-
         return jsonify(
             {
                 "success": False,
@@ -460,16 +353,13 @@ def admin_update_score(
         ), 400
 
     try:
-
         score = int(
             data.get(
-                "score",
-                0
+                "score"
             )
         )
 
     except Exception:
-
         return jsonify(
             {
                 "success": False,
@@ -478,7 +368,6 @@ def admin_update_score(
         ), 400
 
     if score < 0:
-
         return jsonify(
             {
                 "success": False,
@@ -487,10 +376,30 @@ def admin_update_score(
         ), 400
 
     try:
-
         connection = get_connection()
 
-        cursor = connection.execute(
+        existing = connection.execute(
+            """
+            SELECT id
+            FROM leaderboard
+            WHERE id = ?
+            """,
+            (
+                player_id,
+            )
+        ).fetchone()
+
+        if not existing:
+            connection.close()
+
+            return jsonify(
+                {
+                    "success": False,
+                    "message": "Player not found."
+                }
+            ), 404
+
+        connection.execute(
             """
             UPDATE leaderboard
             SET score = ?
@@ -504,29 +413,16 @@ def admin_update_score(
 
         connection.commit()
 
-        changed = (
-            cursor.rowcount > 0
-        )
-
         connection.close()
-
-        if not changed:
-
-            return jsonify(
-                {
-                    "success": False,
-                    "message": "Player not found."
-                }
-            ), 404
 
         return jsonify(
             {
-                "success": True
+                "success": True,
+                "message": "Score updated."
             }
         )
 
     except Exception as error:
-
         print(
             "Admin update error:",
             error
@@ -541,15 +437,11 @@ def admin_update_score(
 
 
 @app.route(
-    "/api/admin/leaderboard/<int:player_id>",
+    "/api/admin/player/<int:player_id>",
     methods=["DELETE"]
 )
-def admin_delete_player(
-    player_id
-):
-
-    if not is_admin():
-
+def admin_delete_player(player_id):
+    if not check_admin():
         return jsonify(
             {
                 "success": False,
@@ -558,10 +450,30 @@ def admin_delete_player(
         ), 401
 
     try:
-
         connection = get_connection()
 
-        cursor = connection.execute(
+        existing = connection.execute(
+            """
+            SELECT id
+            FROM leaderboard
+            WHERE id = ?
+            """,
+            (
+                player_id,
+            )
+        ).fetchone()
+
+        if not existing:
+            connection.close()
+
+            return jsonify(
+                {
+                    "success": False,
+                    "message": "Player not found."
+                }
+            ), 404
+
+        connection.execute(
             """
             DELETE FROM leaderboard
             WHERE id = ?
@@ -573,29 +485,16 @@ def admin_delete_player(
 
         connection.commit()
 
-        deleted = (
-            cursor.rowcount > 0
-        )
-
         connection.close()
-
-        if not deleted:
-
-            return jsonify(
-                {
-                    "success": False,
-                    "message": "Player not found."
-                }
-            ), 404
 
         return jsonify(
             {
-                "success": True
+                "success": True,
+                "message": "Player deleted."
             }
         )
 
     except Exception as error:
-
         print(
             "Admin delete error:",
             error
@@ -610,13 +509,11 @@ def admin_delete_player(
 
 
 @app.route(
-    "/api/admin/leaderboard",
+    "/api/admin/leaderboard/clear",
     methods=["DELETE"]
 )
 def admin_clear_leaderboard():
-
-    if not is_admin():
-
+    if not check_admin():
         return jsonify(
             {
                 "success": False,
@@ -625,7 +522,6 @@ def admin_clear_leaderboard():
         ), 401
 
     try:
-
         connection = get_connection()
 
         connection.execute(
@@ -635,6 +531,7 @@ def admin_clear_leaderboard():
         )
 
         connection.commit()
+
         connection.close()
 
         return jsonify(
@@ -645,7 +542,6 @@ def admin_clear_leaderboard():
         )
 
     except Exception as error:
-
         print(
             "Admin clear error:",
             error
@@ -663,7 +559,6 @@ init_database()
 
 
 if __name__ == "__main__":
-
     port = int(
         os.environ.get(
             "PORT",
