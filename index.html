@@ -679,7 +679,7 @@
 
         let adminToken =
             sessionStorage.getItem(
-                "adminToken"
+                "adminSecret"
             );
 
 
@@ -689,8 +689,7 @@
                 "Content-Type":
                     "application/json",
 
-                "Authorization":
-                    "Bearer " +
+                "X-Admin-Secret":
                     adminToken
             };
 
@@ -930,16 +929,13 @@
                     response.ok
                     &&
                     data.success
-                    &&
-                    data.token
                 ) {
 
                     adminToken =
-                        data.token;
-
+                        password;
 
                     sessionStorage.setItem(
-                        "adminToken",
+                        "adminSecret",
                         adminToken
                     );
 
@@ -1562,7 +1558,7 @@
 
 
             sessionStorage.removeItem(
-                "adminToken"
+                "adminSecret"
             );
 
 
@@ -1667,11 +1663,6 @@
             30000
         );
 
-    </script>
-
-</body>
-
-</html>
     </script>
 
 </body>
