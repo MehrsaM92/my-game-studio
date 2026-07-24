@@ -1,6 +1,7 @@
 from flask import Flask, render_template_string, send_file, request, jsonify
 import os
 import json
+import secrets
 
 app = Flask(__name__)
 
@@ -11,6 +12,24 @@ LEADERBOARD_FILE = os.path.join(
     "leaderboard.json"
 )
 
+FLAPPY_FILE = os.path.join(
+    BASE_DIR,
+    "FlappyBird.exe"
+)
+
+CAR_GAME_FILE = os.path.join(
+    BASE_DIR,
+    "CarGame.exe"
+)
+
+ADMIN_PASSWORD = os.environ.get(
+    "ADMIN_PASSWORD",
+    "CHANGE_THIS_ADMIN_PASSWORD"
+)
+
+ADMIN_SESSIONS = set()
+
+
 HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -19,9 +38,11 @@ HTML = """
 
 <meta charset="UTF-8">
 
-<meta name="google-site-verification" content="ULKlsCJLxKZPZcj4H5NkXbxu0p8OkCf2ioaLwIFockY">
+<meta name="google-site-verification"
+content="ULKlsCJLxKZPZcj4H5NkXbxu0p8OkCf2ioaLwIFockY">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>My Game Studio</title>
 
@@ -263,21 +284,6 @@ nav a:hover {
     color: #94a3b8;
 }
 
-.refresh-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background: #334155;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.refresh-button:hover {
-    background: #475569;
-}
-
 .about {
     padding: 70px 30px;
     background: #111827;
@@ -378,7 +384,6 @@ About
 
 </header>
 
-
 <section
 class="hero"
 id="home"
@@ -405,7 +410,6 @@ Explore Games
 
 </section>
 
-
 <section
 class="games"
 id="games"
@@ -416,7 +420,6 @@ My Games
 </h2>
 
 <div class="game-grid">
-
 
 <div class="game-card">
 
@@ -452,7 +455,6 @@ Download Flappy Bird PC
 
 </div>
 
-
 <div class="game-card">
 
 <div class="game-icon">
@@ -487,11 +489,9 @@ Download Car Game PC
 
 </div>
 
-
 </div>
 
 </section>
-
 
 <section
 class="leaderboard"
@@ -512,17 +512,9 @@ Loading leaderboard...
 
 </div>
 
-<button
-class="refresh-button"
-onclick="loadLeaderboard()"
->
-Refresh Leaderboard
-</button>
-
 </div>
 
 </section>
-
 
 <section
 class="about"
@@ -548,7 +540,6 @@ I'm Mehrsam Ahmadbeigi.
 
 </section>
 
-
 <footer>
 
 <p>
@@ -557,7 +548,6 @@ All rights reserved.
 </p>
 
 </footer>
-
 
 <script>
 
@@ -578,15 +568,14 @@ async function loadLeaderboard() {
                 "/api/leaderboard",
                 {
                     method: "GET",
-                    cache: "no-store"
+                    cache: "no-cache"
                 }
             );
 
         if (!response.ok) {
 
             throw new Error(
-                "Server returned HTTP " +
-                response.status
+                "Server error"
             );
 
         }
@@ -594,7 +583,8 @@ async function loadLeaderboard() {
         const data =
             await response.json();
 
-        container.innerHTML = "";
+        container.innerHTML =
+            "";
 
         if (
             !Array.isArray(data)
@@ -610,9 +600,15 @@ async function loadLeaderboard() {
         }
 
         data
-            .slice(0, 10)
+            .slice(
+                0,
+                10
+            )
             .forEach(
-                (player, index) => {
+                (
+                    player,
+                    index
+                ) => {
 
                     const row =
                         document.createElement(
@@ -633,7 +629,8 @@ async function loadLeaderboard() {
                     rank.textContent =
                         "#" +
                         (
-                            index + 1
+                            index +
+                            1
                         );
 
                     const name =
@@ -658,9 +655,8 @@ async function loadLeaderboard() {
 
                     score.textContent =
                         (
-                            Number(
-                                player.score
-                            ) || 0
+                            player.score ||
+                            0
                         ) +
                         " pts";
 
@@ -693,7 +689,7 @@ async function loadLeaderboard() {
         );
 
         container.innerHTML =
-            '<p class="error">Unable to load global leaderboard right now.</p>';
+            '<p class="error">Unable to load leaderboard.</p>';
 
     }
 
@@ -712,8 +708,6 @@ setInterval(
 
 </html>
 """
-
-
 @app.route("/")
 def home():
 
@@ -771,10 +765,6 @@ def get_leaderboard():
                 )
             ).strip()
 
-            if not name:
-
-                name = "Player"
-
             try:
 
                 score = int(
@@ -785,10 +775,6 @@ def get_leaderboard():
                 )
 
             except Exception:
-
-                score = 0
-
-            if score < 0:
 
                 score = 0
 
@@ -828,10 +814,7 @@ def submit_score():
         silent=True
     )
 
-    if not isinstance(
-        data,
-        dict
-    ):
+    if not data:
 
         return jsonify(
             {
@@ -892,8 +875,6 @@ def submit_score():
             }
         ), 400
 
-    users = []
-
     if os.path.exists(
         LEADERBOARD_FILE
     ):
@@ -917,14 +898,13 @@ def submit_score():
 
                 users = []
 
-        except Exception as error:
-
-            print(
-                "Leaderboard load error:",
-                error
-            )
+        except Exception:
 
             users = []
+
+    else:
+
+        users = []
 
     found = False
 
@@ -980,50 +960,13 @@ def submit_score():
             }
         )
 
-    clean_users = []
-
-    for user in users:
-
-        if not isinstance(
-            user,
-            dict
-        ):
-
-            continue
-
-        player_name = str(
-            user.get(
-                "name",
-                "Player"
+    users.sort(
+        key=lambda x: int(
+            x.get(
+                "score",
+                0
             )
-        ).strip()
-
-        try:
-
-            player_score = int(
-                user.get(
-                    "score",
-                    0
-                )
-            )
-
-        except Exception:
-
-            player_score = 0
-
-        if player_score < 0:
-
-            player_score = 0
-
-        clean_users.append(
-            {
-                "name": player_name,
-                "score": player_score
-            }
-        )
-
-    clean_users.sort(
-        key=lambda x: x["score"],
+        ),
         reverse=True
     )
 
@@ -1036,7 +979,7 @@ def submit_score():
         ) as file:
 
             json.dump(
-                clean_users,
+                users,
                 file,
                 indent=4,
                 ensure_ascii=False
@@ -1045,7 +988,7 @@ def submit_score():
     except Exception as error:
 
         print(
-            "Leaderboard save error:",
+            "Leaderboard write error:",
             error
         )
 
@@ -1064,7 +1007,7 @@ def submit_score():
 
 
 # ============================================================
-# FLAPPY BIRD PC
+# DOWNLOAD FLAPPY BIRD
 # ============================================================
 
 @app.route(
@@ -1072,29 +1015,24 @@ def submit_score():
 )
 def download_flappy():
 
-    file_path = os.path.join(
-        BASE_DIR,
-        "FlappyBird.exe"
-    )
-
     if not os.path.isfile(
-        file_path
+        FLAPPY_FILE
     ):
 
         return (
-            "FlappyBird.exe was not found next to website.py.",
+            "FlappyBird.exe was not found on the server.",
             404
         )
 
     return send_file(
-        file_path,
+        FLAPPY_FILE,
         as_attachment=True,
         download_name="FlappyBird.exe"
     )
 
 
 # ============================================================
-# CAR GAME PC
+# DOWNLOAD CAR GAME
 # ============================================================
 
 @app.route(
@@ -1102,24 +1040,561 @@ def download_flappy():
 )
 def download_car():
 
-    file_path = os.path.join(
-        BASE_DIR,
-        "CarGame.exe"
-    )
-
     if not os.path.isfile(
-        file_path
+        CAR_GAME_FILE
     ):
 
         return (
-            "CarGame.exe was not found next to website.py.",
+            "CarGame.exe was not found on the server.",
             404
         )
 
     return send_file(
-        file_path,
+        CAR_GAME_FILE,
         as_attachment=True,
         download_name="CarGame.exe"
+    )
+
+
+# ============================================================
+# ADMIN LOGIN
+# ============================================================
+
+@app.route(
+    "/api/admin/login",
+    methods=["POST"]
+)
+def admin_login():
+
+    data = request.get_json(
+        silent=True
+    )
+
+    if not data:
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Invalid request"
+            }
+        ), 400
+
+    password = str(
+        data.get(
+            "password",
+            ""
+        )
+    )
+
+    if not password:
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Password is required"
+            }
+        ), 400
+
+    if password != ADMIN_PASSWORD:
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Wrong password"
+            }
+        ), 401
+
+    token = secrets.token_urlsafe(
+        32
+    )
+
+    ADMIN_SESSIONS.add(
+        token
+    )
+
+    return jsonify(
+        {
+            "success": True,
+            "token": token
+        }
+    )
+
+
+# ============================================================
+# ADMIN AUTHENTICATION
+# ============================================================
+
+def is_admin_authenticated():
+
+    token = request.headers.get(
+        "X-Admin-Token"
+    )
+
+    if not token:
+
+        return False
+
+    return token in ADMIN_SESSIONS
+
+
+# ============================================================
+# ADMIN LEADERBOARD
+# ============================================================
+
+@app.route(
+    "/api/admin/leaderboard",
+    methods=["GET"]
+)
+def admin_get_leaderboard():
+
+    if not is_admin_authenticated():
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Unauthorized"
+            }
+        ), 401
+
+    if not os.path.exists(
+        LEADERBOARD_FILE
+    ):
+
+        return jsonify(
+            {
+                "success": True,
+                "players": []
+            }
+        )
+
+    try:
+
+        with open(
+            LEADERBOARD_FILE,
+            "r",
+            encoding="utf-8"
+        ) as file:
+
+            data = json.load(
+                file
+            )
+
+        if not isinstance(
+            data,
+            list
+        ):
+
+            data = []
+
+        players = []
+
+        for index, player in enumerate(
+            data
+        ):
+
+            if not isinstance(
+                player,
+                dict
+            ):
+
+                continue
+
+            name = str(
+                player.get(
+                    "name",
+                    "Player"
+                )
+            ).strip()
+
+            try:
+
+                score = int(
+                    player.get(
+                        "score",
+                        0
+                    )
+                )
+
+            except Exception:
+
+                score = 0
+
+            players.append(
+                {
+                    "id": index,
+                    "name": name,
+                    "score": score
+                }
+            )
+
+        players.sort(
+            key=lambda x: x["score"],
+            reverse=True
+        )
+
+        return jsonify(
+            {
+                "success": True,
+                "players": players
+            }
+        )
+
+    except Exception as error:
+
+        print(
+            "Admin leaderboard error:",
+            error
+        )
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Unable to load leaderboard"
+            }
+        ), 500
+
+
+# ============================================================
+# ADMIN UPDATE PLAYER SCORE
+# ============================================================
+
+@app.route(
+    "/api/admin/player/<int:player_id>",
+    methods=["PUT"]
+)
+def admin_update_player(
+    player_id
+):
+
+    if not is_admin_authenticated():
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Unauthorized"
+            }
+        ), 401
+
+    data = request.get_json(
+        silent=True
+    )
+
+    if not data:
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Invalid request"
+            }
+        ), 400
+
+    try:
+
+        new_score = int(
+            data.get(
+                "score"
+            )
+        )
+
+    except Exception:
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Invalid score"
+            }
+        ), 400
+
+    if new_score < 0:
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Invalid score"
+            }
+        ), 400
+
+    if not os.path.exists(
+        LEADERBOARD_FILE
+    ):
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Leaderboard is empty"
+            }
+        ), 404
+
+    try:
+
+        with open(
+            LEADERBOARD_FILE,
+            "r",
+            encoding="utf-8"
+        ) as file:
+
+            users = json.load(
+                file
+            )
+
+        if not isinstance(
+            users,
+            list
+        ):
+
+            users = []
+
+    except Exception:
+
+        users = []
+
+    if (
+        player_id < 0
+        or
+        player_id >= len(users)
+    ):
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Player not found"
+            }
+        ), 404
+
+    users[player_id]["score"] = new_score
+
+    users.sort(
+        key=lambda x: int(
+            x.get(
+                "score",
+                0
+            )
+        ),
+        reverse=True
+    )
+
+    try:
+
+        with open(
+            LEADERBOARD_FILE,
+            "w",
+            encoding="utf-8"
+        ) as file:
+
+            json.dump(
+                users,
+                file,
+                indent=4,
+                ensure_ascii=False
+            )
+
+    except Exception as error:
+
+        print(
+            "Admin score update error:",
+            error
+        )
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Unable to save changes"
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "success": True
+        }
+    )
+# ============================================================
+# ADMIN DELETE PLAYER
+# ============================================================
+
+@app.route(
+    "/api/admin/player/<int:player_id>",
+    methods=["DELETE"]
+)
+def admin_delete_player(
+    player_id
+):
+
+    if not is_admin_authenticated():
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Unauthorized"
+            }
+        ), 401
+
+    if not os.path.exists(
+        LEADERBOARD_FILE
+    ):
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Leaderboard is empty"
+            }
+        ), 404
+
+    try:
+
+        with open(
+            LEADERBOARD_FILE,
+            "r",
+            encoding="utf-8"
+        ) as file:
+
+            users = json.load(
+                file
+            )
+
+        if not isinstance(
+            users,
+            list
+        ):
+
+            users = []
+
+    except Exception:
+
+        users = []
+
+    if (
+        player_id < 0
+        or
+        player_id >= len(users)
+    ):
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Player not found"
+            }
+        ), 404
+
+    deleted_player = users.pop(
+        player_id
+    )
+
+    try:
+
+        with open(
+            LEADERBOARD_FILE,
+            "w",
+            encoding="utf-8"
+        ) as file:
+
+            json.dump(
+                users,
+                file,
+                indent=4,
+                ensure_ascii=False
+            )
+
+    except Exception as error:
+
+        print(
+            "Admin delete error:",
+            error
+        )
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Unable to save changes"
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "success": True,
+            "deleted": deleted_player
+        }
+    )
+
+
+# ============================================================
+# ADMIN CLEAR ENTIRE LEADERBOARD
+# ============================================================
+
+@app.route(
+    "/api/admin/leaderboard/clear",
+    methods=["DELETE"]
+)
+def admin_clear_leaderboard():
+
+    if not is_admin_authenticated():
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Unauthorized"
+            }
+        ), 401
+
+    try:
+
+        with open(
+            LEADERBOARD_FILE,
+            "w",
+            encoding="utf-8"
+        ) as file:
+
+            json.dump(
+                [],
+                file,
+                indent=4,
+                ensure_ascii=False
+            )
+
+    except Exception as error:
+
+        print(
+            "Admin clear error:",
+            error
+        )
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Unable to clear leaderboard"
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "success": True
+        }
+    )
+
+
+# ============================================================
+# ADMIN LOGOUT
+# ============================================================
+
+@app.route(
+    "/api/admin/logout",
+    methods=["POST"]
+)
+def admin_logout():
+
+    token = request.headers.get(
+        "X-Admin-Token"
+    )
+
+    if token:
+
+        ADMIN_SESSIONS.discard(
+            token
+        )
+
+    return jsonify(
+        {
+            "success": True
+        }
     )
 
 
@@ -1128,16 +1603,14 @@ def download_car():
 # ============================================================
 
 @app.route(
-    "/health"
+    "/health",
+    methods=["GET"]
 )
-def health():
+def health_check():
 
     return jsonify(
         {
-            "status": "ok",
-            "leaderboard_file": os.path.exists(
-                LEADERBOARD_FILE
-            )
+            "status": "ok"
         }
     )
 
