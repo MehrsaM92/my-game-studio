@@ -199,14 +199,6 @@ nav a:hover {
     background: #d97706;
 }
 
-.mobile-button {
-    background: #22c55e;
-}
-
-.mobile-button:hover {
-    background: #16a34a;
-}
-
 .leaderboard {
     padding: 70px 30px;
     text-align: center;
@@ -377,7 +369,7 @@ Welcome to My Game Studio
 </h1>
 
 <p>
-Download my games and play on PC or mobile!
+Download my games and play on PC!
 </p>
 
 <a
@@ -434,17 +426,6 @@ class="button download-button"
 Download Flappy Bird PC
 </a>
 
-<div class="platform-title">
-Mobile Version
-</div>
-
-<a
-href="/download/flappy-mobile"
-class="button download-button mobile-button"
->
-Download Flappy Bird Mobile
-</a>
-
 </div>
 
 </div>
@@ -478,17 +459,6 @@ href="/download/car"
 class="button download-button"
 >
 Download Car Game PC
-</a>
-
-<div class="platform-title">
-Mobile Version
-</div>
-
-<a
-href="/download/car-mobile"
-class="button download-button mobile-button"
->
-Download Car Game Mobile
 </a>
 
 </div>
@@ -989,34 +959,6 @@ def download_flappy():
 
 
 # ============================================================
-# FLAPPY BIRD MOBILE
-# ============================================================
-
-@app.route("/download/flappy-mobile")
-def download_flappy_mobile():
-
-    file_path = os.path.join(
-        BASE_DIR,
-        "FlappyBird.apk"
-    )
-
-    if not os.path.isfile(
-        file_path
-    ):
-
-        return (
-            "FlappyBird.apk was not found next to website.py.",
-            404
-        )
-
-    return send_file(
-        file_path,
-        as_attachment=True,
-        download_name="FlappyBird.apk"
-    )
-
-
-# ============================================================
 # CAR GAME PC
 # ============================================================
 
@@ -1045,34 +987,6 @@ def download_car():
 
 
 # ============================================================
-# CAR GAME MOBILE
-# ============================================================
-
-@app.route("/download/car-mobile")
-def download_car_mobile():
-
-    file_path = os.path.join(
-        BASE_DIR,
-        "CarGame.apk"
-    )
-
-    if not os.path.isfile(
-        file_path
-    ):
-
-        return (
-            "CarGame.apk was not found next to website.py.",
-            404
-        )
-
-    return send_file(
-        file_path,
-        as_attachment=True,
-        download_name="CarGame.apk"
-    )
-
-
-# ============================================================
 # RUN SERVER
 # ============================================================
 
@@ -1083,6 +997,11 @@ if __name__ == "__main__":
             "PORT",
             5000
         )
+    )
+
+    app.run(
+        host="0.0.0.0",
+        port=port
     )
 
     app.run(
