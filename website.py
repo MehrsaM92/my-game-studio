@@ -240,6 +240,9 @@ nav a:hover {
 .leaderboard-name {
     color: white;
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .leaderboard-score {
@@ -254,6 +257,25 @@ nav a:hover {
 
 .error {
     color: #ef4444;
+}
+
+.empty {
+    color: #94a3b8;
+}
+
+.refresh-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #334155;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.refresh-button:hover {
+    background: #475569;
 }
 
 .about {
@@ -490,6 +512,13 @@ Loading leaderboard...
 
 </div>
 
+<button
+class="refresh-button"
+onclick="loadLeaderboard()"
+>
+Refresh Leaderboard
+</button>
+
 </div>
 
 </section>
@@ -539,17 +568,25 @@ async function loadLeaderboard() {
             "leaderboard-content"
         );
 
+    container.innerHTML =
+        '<p class="loading">Loading leaderboard...</p>';
+
     try {
 
         const response =
             await fetch(
-                "/api/leaderboard"
+                "/api/leaderboard",
+                {
+                    method: "GET",
+                    cache: "no-store"
+                }
             );
 
         if (!response.ok) {
 
             throw new Error(
-                "Server error"
+                "Server returned HTTP " +
+                response.status
             );
 
         }
@@ -561,23 +598,18 @@ async function loadLeaderboard() {
 
         if (
             !Array.isArray(data)
-            || data.length === 0
+            ||
+            data.length === 0
         ) {
 
             container.innerHTML =
-                '<p class="loading">No scores yet.</p>';
+                '<p class="empty">No scores yet. Be the first player!</p>';
 
             return;
 
         }
 
         data
-            .sort(
-                (a, b) =>
-                    Number(b.score || 0)
-                    -
-                    Number(a.score || 0)
-            )
             .slice(0, 10)
             .forEach(
                 (player, index) => {
@@ -599,7 +631,10 @@ async function loadLeaderboard() {
                         "leaderboard-rank";
 
                     rank.textContent =
-                        "#" + (index + 1);
+                        "#" +
+                        (
+                            index + 1
+                        );
 
                     const name =
                         document.createElement(
@@ -622,7 +657,12 @@ async function loadLeaderboard() {
                         "leaderboard-score";
 
                     score.textContent =
-                        player.score || 0;
+                        (
+                            Number(
+                                player.score
+                            ) || 0
+                        ) +
+                        " pts";
 
                     row.appendChild(
                         rank
@@ -647,8 +687,13 @@ async function loadLeaderboard() {
 
     catch (error) {
 
+        console.error(
+            "Leaderboard error:",
+            error
+        );
+
         container.innerHTML =
-            '<p class="error">Unable to load leaderboard.</p>';
+            '<p class="error">Unable to load global leaderboard right now.</p>';
 
     }
 
@@ -677,7 +722,10 @@ def home():
     )
 
 
-@app.route("/api/leaderboard")
+@app.route(
+    "/api/leaderboard",
+    methods=["GET"]
+)
 def get_leaderboard():
 
     if not os.path.exists(
@@ -723,6 +771,10 @@ def get_leaderboard():
                 )
             ).strip()
 
+            if not name:
+
+                name = "Player"
+
             try:
 
                 score = int(
@@ -733,6 +785,10 @@ def get_leaderboard():
                 )
 
             except Exception:
+
+                score = 0
+
+            if score < 0:
 
                 score = 0
 
@@ -752,7 +808,12 @@ def get_leaderboard():
             clean_data[:100]
         )
 
-    except Exception:
+    except Exception as error:
+
+        print(
+            "Leaderboard read error:",
+            error
+        )
 
         return jsonify([])
 
@@ -767,7 +828,10 @@ def submit_score():
         silent=True
     )
 
-    if not data:
+    if not isinstance(
+        data,
+        dict
+    ):
 
         return jsonify(
             {
@@ -828,13 +892,11 @@ def submit_score():
             }
         ), 400
 
-    if not os.path.exists(
+    users = []
+
+    if os.path.exists(
         LEADERBOARD_FILE
     ):
-
-        users = []
-
-    else:
 
         try:
 
@@ -855,7 +917,12 @@ def submit_score():
 
                 users = []
 
-        except Exception:
+        except Exception as error:
+
+            print(
+                "Leaderboard load error:",
+                error
+            )
 
             users = []
 
@@ -863,12 +930,25 @@ def submit_score():
 
     for user in users:
 
-        if str(
+        if not isinstance(
+            user,
+            dict
+        ):
+
+            continue
+
+        existing_name = str(
             user.get(
                 "name",
                 ""
             )
-        ).strip().lower() == name.lower():
+        ).strip()
+
+        if (
+            existing_name.lower()
+            ==
+            name.lower()
+        ):
 
             try:
 
@@ -900,28 +980,81 @@ def submit_score():
             }
         )
 
-    users.sort(
-        key=lambda x: int(
-            x.get(
-                "score",
-                0
+    clean_users = []
+
+    for user in users:
+
+        if not isinstance(
+            user,
+            dict
+        ):
+
+            continue
+
+        player_name = str(
+            user.get(
+                "name",
+                "Player"
             )
-        ),
+        ).strip()
+
+        try:
+
+            player_score = int(
+                user.get(
+                    "score",
+                    0
+                )
+            )
+
+        except Exception:
+
+            player_score = 0
+
+        if player_score < 0:
+
+            player_score = 0
+
+        clean_users.append(
+            {
+                "name": player_name,
+                "score": player_score
+            }
+        )
+
+    clean_users.sort(
+        key=lambda x: x["score"],
         reverse=True
     )
 
-    with open(
-        LEADERBOARD_FILE,
-        "w",
-        encoding="utf-8"
-    ) as file:
+    try:
 
-        json.dump(
-            users,
-            file,
-            indent=4,
-            ensure_ascii=False
+        with open(
+            LEADERBOARD_FILE,
+            "w",
+            encoding="utf-8"
+        ) as file:
+
+            json.dump(
+                clean_users,
+                file,
+                indent=4,
+                ensure_ascii=False
+            )
+
+    except Exception as error:
+
+        print(
+            "Leaderboard save error:",
+            error
         )
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Unable to save score"
+            }
+        ), 500
 
     return jsonify(
         {
@@ -934,7 +1067,9 @@ def submit_score():
 # FLAPPY BIRD PC
 # ============================================================
 
-@app.route("/download/flappy")
+@app.route(
+    "/download/flappy"
+)
 def download_flappy():
 
     file_path = os.path.join(
@@ -962,7 +1097,9 @@ def download_flappy():
 # CAR GAME PC
 # ============================================================
 
-@app.route("/download/car")
+@app.route(
+    "/download/car"
+)
 def download_car():
 
     file_path = os.path.join(
@@ -983,6 +1120,25 @@ def download_car():
         file_path,
         as_attachment=True,
         download_name="CarGame.exe"
+    )
+
+
+# ============================================================
+# HEALTH CHECK
+# ============================================================
+
+@app.route(
+    "/health"
+)
+def health():
+
+    return jsonify(
+        {
+            "status": "ok",
+            "leaderboard_file": os.path.exists(
+                LEADERBOARD_FILE
+            )
+        }
     )
 
 
