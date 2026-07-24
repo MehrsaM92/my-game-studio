@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 import sqlite3
 import secrets
+import time
 
 app = Flask(__name__)
 
@@ -24,10 +25,14 @@ DATABASE = os.path.join(
     "leaderboard.db"
 )
 
-ADMIN_SECRET = os.environ.get(
-    "ADMIN_SECRET",
+ADMIN_PASSWORD = os.environ.get(
+    "ADMIN_PASSWORD",
     ""
 )
+
+ADMIN_SESSIONS = {}
+
+SESSION_DURATION = 60 * 60 * 6
 
 
 def get_connection():
@@ -58,19 +63,49 @@ def init_database():
     connection.close()
 
 
+def create_admin_session():
+    token = secrets.token_urlsafe(32)
+
+    ADMIN_SESSIONS[token] = (
+        time.time() +
+        SESSION_DURATION
+    )
+
+    return token
+
+
 def check_admin():
-    provided_secret = request.headers.get(
-        "X-Admin-Secret",
+    authorization = request.headers.get(
+        "Authorization",
         ""
     )
 
-    if not ADMIN_SECRET:
+    if not authorization.startswith(
+        "Bearer "
+    ):
         return False
 
-    return secrets.compare_digest(
-        provided_secret,
-        ADMIN_SECRET
+    token = authorization[7:].strip()
+
+    if not token:
+        return False
+
+    expiration = ADMIN_SESSIONS.get(
+        token
     )
+
+    if not expiration:
+        return False
+
+    if time.time() > expiration:
+        ADMIN_SESSIONS.pop(
+            token,
+            None
+        )
+
+        return False
+
+    return True
 
 
 @app.route("/")
@@ -267,6 +302,86 @@ def submit_score():
                 "message": "Unable to save score."
             }
         ), 500
+
+
+@app.route(
+    "/api/admin/login",
+    methods=["POST"]
+)
+def admin_login():
+    if not ADMIN_PASSWORD:
+        return jsonify(
+            {
+                "success": False,
+                "message": "Admin password is not configured on the server."
+            }
+        ), 500
+
+    data = request.get_json(
+        silent=True
+    )
+
+    if not data:
+        return jsonify(
+            {
+                "success": False,
+                "message": "Invalid data."
+            }
+        ), 400
+
+    password = str(
+        data.get(
+            "password",
+            ""
+        )
+    )
+
+    if not secrets.compare_digest(
+        password,
+        ADMIN_PASSWORD
+    ):
+        return jsonify(
+            {
+                "success": False,
+                "message": "Wrong admin password."
+            }
+        ), 401
+
+    token = create_admin_session()
+
+    return jsonify(
+        {
+            "success": True,
+            "token": token
+        }
+    )
+
+
+@app.route(
+    "/api/admin/logout",
+    methods=["POST"]
+)
+def admin_logout():
+    authorization = request.headers.get(
+        "Authorization",
+        ""
+    )
+
+    if authorization.startswith(
+        "Bearer "
+    ):
+        token = authorization[7:].strip()
+
+        ADMIN_SESSIONS.pop(
+            token,
+            None
+        )
+
+    return jsonify(
+        {
+            "success": True
+        }
+    )
 
 
 @app.route(
