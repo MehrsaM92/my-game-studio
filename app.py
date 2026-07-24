@@ -3,7 +3,6 @@ from flask_cors import CORS
 import os
 import sqlite3
 import secrets
-import time
 
 app = Flask(__name__)
 
@@ -25,14 +24,10 @@ DATABASE = os.path.join(
     "leaderboard.db"
 )
 
-ADMIN_PASSWORD = os.environ.get(
-    "ADMIN_PASSWORD",
+ADMIN_SECRET = os.environ.get(
+    "ADMIN_SECRET",
     ""
 )
-
-ADMIN_SESSIONS = {}
-
-SESSION_DURATION = 60 * 60 * 6
 
 
 def get_connection():
@@ -63,49 +58,19 @@ def init_database():
     connection.close()
 
 
-def create_admin_session():
-    token = secrets.token_urlsafe(32)
-
-    ADMIN_SESSIONS[token] = (
-        time.time() +
-        SESSION_DURATION
-    )
-
-    return token
-
-
 def check_admin():
-    authorization = request.headers.get(
-        "Authorization",
+    provided_secret = request.headers.get(
+        "X-Admin-Secret",
         ""
     )
 
-    if not authorization.startswith(
-        "Bearer "
-    ):
+    if not ADMIN_SECRET:
         return False
 
-    token = authorization[7:].strip()
-
-    if not token:
-        return False
-
-    expiration = ADMIN_SESSIONS.get(
-        token
+    return secrets.compare_digest(
+        provided_secret,
+        ADMIN_SECRET
     )
-
-    if not expiration:
-        return False
-
-    if time.time() > expiration:
-        ADMIN_SESSIONS.pop(
-            token,
-            None
-        )
-
-        return False
-
-    return True
 
 
 @app.route("/")
@@ -233,7 +198,7 @@ def submit_score():
 
         existing = connection.execute(
             """
-            SELECT id, score
+            SELECT id, name, score
             FROM leaderboard
             WHERE LOWER(name) = LOWER(?)
             """,
@@ -309,14 +274,6 @@ def submit_score():
     methods=["POST"]
 )
 def admin_login():
-    if not ADMIN_PASSWORD:
-        return jsonify(
-            {
-                "success": False,
-                "message": "Admin password is not configured on the server."
-            }
-        ), 500
-
     data = request.get_json(
         silent=True
     )
@@ -336,52 +293,84 @@ def admin_login():
         )
     )
 
-    if not secrets.compare_digest(
-        password,
-        ADMIN_PASSWORD
-    ):
+    if not ADMIN_SECRET:
         return jsonify(
             {
                 "success": False,
-                "message": "Wrong admin password."
+                "message": "Admin password is not configured on the server."
             }
-        ), 401
+        ), 500
 
-    token = create_admin_session()
-
-    return jsonify(
-        {
-            "success": True,
-            "token": token
-        }
-    )
-
-
-@app.route(
-    "/api/admin/logout",
-    methods=["POST"]
-)
-def admin_logout():
-    authorization = request.headers.get(
-        "Authorization",
-        ""
-    )
-
-    if authorization.startswith(
-        "Bearer "
+    if secrets.compare_digest(
+        password,
+        ADMIN_SECRET
     ):
-        token = authorization[7:].strip()
-
-        ADMIN_SESSIONS.pop(
-            token,
-            None
+        return jsonify(
+            {
+                "success": True,
+                "message": "Login successful."
+            }
         )
 
     return jsonify(
         {
-            "success": True
+            "success": False,
+            "message": "Wrong password."
         }
-    )
+    ), 401
+
+
+@app.route(
+    "/api/admin/players",
+    methods=["GET"]
+)
+def admin_get_players():
+    if not check_admin():
+        return jsonify(
+            {
+                "success": False,
+                "message": "Unauthorized."
+            }
+        ), 401
+
+    try:
+        connection = get_connection()
+
+        rows = connection.execute(
+            """
+            SELECT id, name, score
+            FROM leaderboard
+            ORDER BY score DESC, id ASC
+            """
+        ).fetchall()
+
+        connection.close()
+
+        players = []
+
+        for row in rows:
+            players.append(
+                {
+                    "id": row["id"],
+                    "name": row["name"],
+                    "score": row["score"]
+                }
+            )
+
+        return jsonify(players)
+
+    except Exception as error:
+        print(
+            "Admin players error:",
+            error
+        )
+
+        return jsonify(
+            {
+                "success": False,
+                "message": "Unable to load admin players."
+            }
+        ), 500
 
 
 @app.route(
