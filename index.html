@@ -2,7 +2,9 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>My Game Studio</title>
@@ -266,6 +268,112 @@
             line-height: 1.8;
         }
 
+        .admin {
+            padding: 70px 30px;
+            background: #020617;
+            text-align: center;
+        }
+
+        .admin h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .admin-box {
+            max-width: 800px;
+            margin: auto;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 30px;
+        }
+
+        .admin-input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .admin-input:focus {
+            border-color: #38bdf8;
+        }
+
+        .admin-message {
+            margin-top: 15px;
+            color: #f87171;
+        }
+
+        .admin-panel {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .admin-player {
+            display: grid;
+            grid-template-columns: 1fr 120px 100px 100px;
+            gap: 10px;
+            align-items: center;
+            background: #0f172a;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .admin-player-name {
+            text-align: left;
+            font-weight: bold;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .admin-score-input {
+            width: 100%;
+            padding: 8px;
+            background: #1e293b;
+            color: white;
+            border: 1px solid #475569;
+            border-radius: 5px;
+        }
+
+        .admin-save {
+            background: #16a34a;
+            padding: 8px 12px;
+        }
+
+        .admin-save:hover {
+            background: #15803d;
+        }
+
+        .admin-delete {
+            background: #dc2626;
+            padding: 8px 12px;
+        }
+
+        .admin-delete:hover {
+            background: #b91c1c;
+        }
+
+        .admin-clear {
+            margin-top: 20px;
+            background: #dc2626;
+        }
+
+        .admin-clear:hover {
+            background: #b91c1c;
+        }
+
+        .logout-button {
+            margin-top: 15px;
+            background: #475569;
+        }
+
         footer {
             padding: 25px;
             text-align: center;
@@ -311,6 +419,15 @@
             .leaderboard-row {
                 grid-template-columns: 50px 1fr 80px;
             }
+
+            .admin-player {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-player-name {
+                text-align: center;
+            }
+
         }
     </style>
 
@@ -336,6 +453,10 @@
 
             <a href="#leaderboard">
                 Leaderboard
+            </a>
+
+            <a href="#admin">
+                Admin
             </a>
 
             <a href="#about">
@@ -471,6 +592,53 @@
     </section>
 
 
+    <section class="admin" id="admin">
+
+        <h2>
+            🔐 Admin Panel
+        </h2>
+
+        <div class="admin-box">
+
+            <div id="admin-login">
+
+                <input type="password" id="admin-password" class="admin-input" placeholder="Enter admin password">
+
+                <button class="button" onclick="adminLogin()">
+                    Login as Admin
+                </button>
+
+                <p id="admin-message" class="admin-message"></p>
+
+            </div>
+
+
+            <div id="admin-panel" class="admin-panel">
+
+                <h3>
+                    Manage Global Leaderboard
+                </h3>
+
+                <div id="admin-players" style="margin-top: 25px;">
+                </div>
+
+                <button class="button admin-clear" onclick="clearLeaderboard()">
+                    Clear Entire Leaderboard
+                </button>
+
+                <br>
+
+                <button class="button logout-button" onclick="adminLogout()">
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
     <section class="about" id="about">
 
         <h2>
@@ -505,6 +673,9 @@
 
         const API_URL =
             "https://my-game-studio-backend.onrender.com";
+
+
+        let adminLoggedIn = false;
 
 
         async function loadLeaderboard() {
@@ -563,93 +734,90 @@
                 }
 
 
-                const topPlayers =
-                    data.slice(
+                data
+                    .slice(
                         0,
                         10
+                    )
+                    .forEach(
+                        (
+                            player,
+                            index
+                        ) => {
+
+                            const row =
+                                document.createElement(
+                                    "div"
+                                );
+
+                            row.className =
+                                "leaderboard-row";
+
+
+                            const rank =
+                                document.createElement(
+                                    "div"
+                                );
+
+                            rank.className =
+                                "leaderboard-rank";
+
+                            rank.textContent =
+                                "#" +
+                                (
+                                    index +
+                                    1
+                                );
+
+
+                            const name =
+                                document.createElement(
+                                    "div"
+                                );
+
+                            name.className =
+                                "leaderboard-name";
+
+                            name.textContent =
+                                player.name ||
+                                "Player";
+
+
+                            const score =
+                                document.createElement(
+                                    "div"
+                                );
+
+                            score.className =
+                                "leaderboard-score";
+
+                            score.textContent =
+                                (
+                                    player.score ||
+                                    0
+                                ) +
+                                " pts";
+
+
+                            row.appendChild(
+                                rank
+                            );
+
+                            row.appendChild(
+                                name
+                            );
+
+                            row.appendChild(
+                                score
+                            );
+
+
+                            container.appendChild(
+                                row
+                            );
+
+                        }
                     );
-
-
-                topPlayers.forEach(
-                    (
-                        player,
-                        index
-                    ) => {
-
-                        const row =
-                            document.createElement(
-                                "div"
-                            );
-
-                        row.className =
-                            "leaderboard-row";
-
-
-                        const rank =
-                            document.createElement(
-                                "div"
-                            );
-
-                        rank.className =
-                            "leaderboard-rank";
-
-                        rank.textContent =
-                            "#" +
-                            (
-                                index +
-                                1
-                            );
-
-
-                        const name =
-                            document.createElement(
-                                "div"
-                            );
-
-                        name.className =
-                            "leaderboard-name";
-
-                        name.textContent =
-                            player.name ||
-                            "Player";
-
-
-                        const score =
-                            document.createElement(
-                                "div"
-                            );
-
-                        score.className =
-                            "leaderboard-score";
-
-                        score.textContent =
-                            (
-                                player.score ||
-                                0
-                            ) +
-                            " pts";
-
-
-                        row.appendChild(
-                            rank
-                        );
-
-                        row.appendChild(
-                            name
-                        );
-
-                        row.appendChild(
-                            score
-                        );
-
-
-                        container.appendChild(
-                            row
-                        );
-
-                    }
-                );
-
 
             }
 
@@ -665,6 +833,576 @@
                     '<p class="error">Unable to load global leaderboard right now.</p>';
 
             }
+
+        }
+
+
+        async function adminLogin() {
+
+            const passwordInput =
+                document.getElementById(
+                    "admin-password"
+                );
+
+            const message =
+                document.getElementById(
+                    "admin-message"
+                );
+
+            const password =
+                passwordInput.value;
+
+
+            if (!password) {
+
+                message.textContent =
+                    "Enter your admin password.";
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/api/admin/login",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify(
+                                {
+                                    password:
+                                        password
+                                }
+                            )
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    response.ok
+                    &&
+                    data.success
+                ) {
+
+                    adminLoggedIn = true;
+
+                    document.getElementById(
+                        "admin-login"
+                    ).style.display =
+                        "none";
+
+
+                    document.getElementById(
+                        "admin-panel"
+                    ).style.display =
+                        "block";
+
+
+                    message.textContent =
+                        "";
+
+                    loadAdminPlayers();
+
+                }
+
+                else {
+
+                    message.textContent =
+                        data.message ||
+                        "Wrong password.";
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Admin login error:",
+                    error
+                );
+
+                message.textContent =
+                    "Unable to connect to server.";
+
+            }
+
+        }
+
+
+        async function loadAdminPlayers() {
+
+            if (!adminLoggedIn) {
+
+                return;
+
+            }
+
+
+            const container =
+                document.getElementById(
+                    "admin-players"
+                );
+
+
+            container.innerHTML =
+                '<p class="loading">Loading players...</p>';
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/api/admin/players",
+                        {
+                            method: "GET",
+                            cache: "no-cache"
+                        }
+                    );
+
+
+                const players =
+                    await response.json();
+
+
+                container.innerHTML = "";
+
+
+                if (
+                    !Array.isArray(players)
+                    ||
+                    players.length === 0
+                ) {
+
+                    container.innerHTML =
+                        '<p class="empty">Leaderboard is empty.</p>';
+
+                    return;
+
+                }
+
+
+                players.forEach(
+                    player => {
+
+                        const playerBox =
+                            document.createElement(
+                                "div"
+                            );
+
+                        playerBox.className =
+                            "admin-player";
+
+
+                        const name =
+                            document.createElement(
+                                "div"
+                            );
+
+                        name.className =
+                            "admin-player-name";
+
+                        name.textContent =
+                            player.name;
+
+
+                        const scoreInput =
+                            document.createElement(
+                                "input"
+                            );
+
+                        scoreInput.type =
+                            "number";
+
+                        scoreInput.min =
+                            "0";
+
+                        scoreInput.value =
+                            player.score;
+
+                        scoreInput.className =
+                            "admin-score-input";
+
+
+                        const saveButton =
+                            document.createElement(
+                                "button"
+                            );
+
+                        saveButton.className =
+                            "button admin-save";
+
+                        saveButton.textContent =
+                            "Save";
+
+
+                        saveButton.onclick =
+                            function () {
+
+                                updatePlayerScore(
+                                    player.id,
+                                    scoreInput.value
+                                );
+
+                            };
+
+
+                        const deleteButton =
+                            document.createElement(
+                                "button"
+                            );
+
+                        deleteButton.className =
+                            "button admin-delete";
+
+                        deleteButton.textContent =
+                            "Delete";
+
+
+                        deleteButton.onclick =
+                            function () {
+
+                                deletePlayer(
+                                    player.id,
+                                    player.name
+                                );
+
+                            };
+
+
+                        playerBox.appendChild(
+                            name
+                        );
+
+                        playerBox.appendChild(
+                            scoreInput
+                        );
+
+                        playerBox.appendChild(
+                            saveButton
+                        );
+
+                        playerBox.appendChild(
+                            deleteButton
+                        );
+
+
+                        container.appendChild(
+                            playerBox
+                        );
+
+                    }
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Admin players error:",
+                    error
+                );
+
+                container.innerHTML =
+                    '<p class="error">Unable to load admin data.</p>';
+
+            }
+
+        }
+
+
+        async function updatePlayerScore(
+            playerId,
+            newScore
+        ) {
+
+            const score =
+                Number(
+                    newScore
+                );
+
+
+            if (
+                !Number.isInteger(
+                    score
+                )
+                ||
+                score < 0
+            ) {
+
+                alert(
+                    "Invalid score."
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/api/admin/player/" +
+                        playerId,
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify(
+                                {
+                                    score:
+                                        score
+                                }
+                            )
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    response.ok
+                    &&
+                    data.success
+                ) {
+
+                    alert(
+                        "Score updated successfully."
+                    );
+
+                    loadAdminPlayers();
+
+                    loadLeaderboard();
+
+                }
+
+                else {
+
+                    alert(
+                        data.message ||
+                        "Unable to update score."
+                    );
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Update score error:",
+                    error
+                );
+
+                alert(
+                    "Unable to connect to server."
+                );
+
+            }
+
+        }
+
+
+        async function deletePlayer(
+            playerId,
+            playerName
+        ) {
+
+            const confirmed =
+                confirm(
+                    "Delete player " +
+                    playerName +
+                    "?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/api/admin/player/" +
+                        playerId,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    response.ok
+                    &&
+                    data.success
+                ) {
+
+                    loadAdminPlayers();
+
+                    loadLeaderboard();
+
+                }
+
+                else {
+
+                    alert(
+                        data.message ||
+                        "Unable to delete player."
+                    );
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Delete player error:",
+                    error
+                );
+
+                alert(
+                    "Unable to connect to server."
+                );
+
+            }
+
+        }
+
+
+        async function clearLeaderboard() {
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to delete ALL leaderboard players?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/api/admin/leaderboard/clear",
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    response.ok
+                    &&
+                    data.success
+                ) {
+
+                    alert(
+                        "Leaderboard cleared successfully."
+                    );
+
+                    loadAdminPlayers();
+
+                    loadLeaderboard();
+
+                }
+
+                else {
+
+                    alert(
+                        data.message ||
+                        "Unable to clear leaderboard."
+                    );
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Clear leaderboard error:",
+                    error
+                );
+
+                alert(
+                    "Unable to connect to server."
+                );
+
+            }
+
+        }
+
+
+        function adminLogout() {
+
+            adminLoggedIn =
+                false;
+
+
+            document.getElementById(
+                "admin-login"
+            ).style.display =
+                "block";
+
+
+            document.getElementById(
+                "admin-panel"
+            ).style.display =
+                "none";
+
+
+            document.getElementById(
+                "admin-password"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "admin-message"
+            ).textContent =
+                "";
 
         }
 
