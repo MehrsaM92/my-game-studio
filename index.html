@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Game Studio</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #111827;
+    color: white;
+}
+
+header {
+    background: #0f172a;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #334155;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    color: #38bdf8;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 16px;
+}
+
+nav a:hover {
+    color: #38bdf8;
+}
+
+.hero {
+    min-height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px 20px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #0f172a,
+        #1e293b,
+        #0c4a6e
+    );
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.button {
+    display: inline-block;
+    padding: 14px 30px;
+    background: #0ea5e9;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.button:hover {
+    background: #0284c7;
+    transform: translateY(-2px);
+}
+
+.games {
+    padding: 70px 30px;
+    text-align: center;
+}
+
+.games h2 {
+    font-size: 40px;
+    margin-bottom: 40px;
+}
+
+.game-grid {
+    display: grid;
+    grid-template-columns:
+    repeat(
+        auto-fit,
+        minmax(280px, 1fr)
+    );
+
+    gap: 30px;
+
+    max-width: 1000px;
+
+    margin: auto;
+}
+
+.game-card {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 30px;
+    border: 1px solid #334155;
+    transition: 0.3s;
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+    border-color: #38bdf8;
+}
+
+.game-card h3 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.game-card p {
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.game-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.download-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.platform-title {
+    font-size: 14px;
+    color: #94a3b8;
+    margin-top: 5px;
+}
+
+.download-button {
+    background: #f59e0b;
+    width: 100%;
+}
+
+.download-button:hover {
+    background: #d97706;
+}
+
+.leaderboard {
+    padding: 70px 30px;
+    text-align: center;
+    background: #0f172a;
+}
+
+.leaderboard h2 {
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+.leaderboard-box {
+    max-width: 700px;
+    margin: auto;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.leaderboard-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 100px;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #0f172a;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.leaderboard-rank {
+    color: #38bdf8;
+    font-weight: bold;
+    text-align: center;
+}
+
+.leaderboard-name {
+    color: white;
+    font-weight: bold;
+}
+
+.leaderboard-score {
+    color: #f59e0b;
+    font-weight: bold;
+    text-align: right;
+}
+
+.loading {
+    color: #94a3b8;
+}
+
+.about {
+    padding: 70px 30px;
+    background: #111827;
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.about p {
+    max-width: 700px;
+    margin: auto;
+    color: #cbd5e1;
+    line-height: 1.8;
+}
+
+footer {
+    padding: 25px;
+    text-align: center;
+    color: #94a3b8;
+    background: #020617;
+}
+
+@media (max-width: 700px) {
+
+    header {
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    nav a {
+        margin: 0 8px;
+    }
+
+    .hero h1 {
+        font-size: 40px;
+    }
+
+    .hero p {
+        font-size: 17px;
+    }
+
+    .games {
+        padding: 50px 20px;
+    }
+
+    .game-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .leaderboard-row {
+        grid-template-columns: 50px 1fr 80px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<div class="logo">
+My Game Studio
+</div>
+
+<nav>
+
+<a href="#home">
+Home
+</a>
+
+<a href="#games">
+Games
+</a>
+
+<a href="#leaderboard">
+Leaderboard
+</a>
+
+<a href="#about">
+About
+</a>
+
+</nav>
+
+</header>
+
+
+<section
+class="hero"
+id="home"
+>
+
+<div class="hero-content">
+
+<h1>
+Welcome to My Game Studio
+</h1>
+
+<p>
+Download my games and play on PC!
+</p>
+
+<a
+href="#games"
+class="button"
+>
+Explore Games
+</a>
+
+</div>
+
+</section>
+
+
+<section
+class="games"
+id="games"
+>
+
+<h2>
+My Games
+</h2>
+
+<div class="game-grid">
+
+
+<div class="game-card">
+
+<div class="game-icon">
+🐦
+</div>
+
+<h3>
+Flappy Bird
+</h3>
+
+<p>
+Fly through the pipes,
+avoid obstacles,
+and try to achieve
+the highest score.
+</p>
+
+<div class="download-buttons">
+
+<div class="platform-title">
+PC Version
+</div>
+
+<a
+href="FlappyBird.exe"
+class="button download-button"
+download
+>
+Download Flappy Bird PC
+</a>
+
+</div>
+
+</div>
+
+
+<div class="game-card">
+
+<div class="game-icon">
+🚗
+</div>
+
+<h3>
+Car Game
+</h3>
+
+<p>
+Drive your car,
+avoid obstacles,
+and survive as long
+as possible.
+</p>
+
+<div class="download-buttons">
+
+<div class="platform-title">
+PC Version
+</div>
+
+<a
+href="CarGame.exe"
+class="button download-button"
+download
+>
+Download Car Game PC
+</a>
+
+</div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<section
+class="leaderboard"
+id="leaderboard"
+>
+
+<h2>
+🌎 Flappy Bird Global Leaderboard
+</h2>
+
+<div class="leaderboard-box">
+
+<p class="loading">
+Leaderboard is currently unavailable.
+</p>
+
+</div>
+
+</section>
+
+
+<section
+class="about"
+id="about"
+>
+
+<h2>
+About Me
+</h2>
+
+<p>
+
+I'm an independent game developer
+creating games and experimenting
+with new ideas.
+
+This website is where I publish
+my games and future projects.
+
+I'm Mehrsam Ahmadbeigi.
+
+</p>
+
+</section>
+
+
+<footer>
+
+<p>
+© 2026 My Game Studio.
+All rights reserved.
+</p>
+
+</footer>
+
+
+</body>
+
+</html>
