@@ -316,7 +316,8 @@
 
         .admin-player {
             display: grid;
-            grid-template-columns: 1fr 120px 100px 100px;
+            grid-template-columns:
+                1fr 120px 100px 100px;
             gap: 10px;
             align-items: center;
             background: #0f172a;
@@ -417,7 +418,8 @@
             }
 
             .leaderboard-row {
-                grid-template-columns: 50px 1fr 80px;
+                grid-template-columns:
+                    50px 1fr 80px;
             }
 
             .admin-player {
@@ -600,6 +602,7 @@
 
         <div class="admin-box">
 
+
             <div id="admin-login">
 
                 <input type="password" id="admin-password" class="admin-input" placeholder="Enter admin password">
@@ -619,8 +622,7 @@
                     Manage Global Leaderboard
                 </h3>
 
-                <div id="admin-players" style="margin-top: 25px;">
-                </div>
+                <div id="admin-players" style="margin-top: 25px;"></div>
 
                 <button class="button admin-clear" onclick="clearLeaderboard()">
                     Clear Entire Leaderboard
@@ -675,7 +677,24 @@
             "https://my-game-studio-backend.onrender.com";
 
 
-        let adminLoggedIn = false;
+        let adminToken =
+            sessionStorage.getItem(
+                "adminToken"
+            );
+
+
+        function getAdminHeaders() {
+
+            return {
+                "Content-Type":
+                    "application/json",
+
+                "Authorization":
+                    "Bearer " +
+                    adminToken
+            };
+
+        }
 
 
         async function loadLeaderboard() {
@@ -717,7 +736,8 @@
                     await response.json();
 
 
-                container.innerHTML = "";
+                container.innerHTML =
+                    "";
 
 
                 if (
@@ -750,6 +770,7 @@
                                     "div"
                                 );
 
+
                             row.className =
                                 "leaderboard-row";
 
@@ -759,8 +780,10 @@
                                     "div"
                                 );
 
+
                             rank.className =
                                 "leaderboard-rank";
+
 
                             rank.textContent =
                                 "#" +
@@ -775,8 +798,10 @@
                                     "div"
                                 );
 
+
                             name.className =
                                 "leaderboard-name";
+
 
                             name.textContent =
                                 player.name ||
@@ -788,8 +813,10 @@
                                     "div"
                                 );
 
+
                             score.className =
                                 "leaderboard-score";
+
 
                             score.textContent =
                                 (
@@ -803,9 +830,11 @@
                                 rank
                             );
 
+
                             row.appendChild(
                                 name
                             );
+
 
                             row.appendChild(
                                 score
@@ -844,10 +873,12 @@
                     "admin-password"
                 );
 
+
             const message =
                 document.getElementById(
                     "admin-message"
                 );
+
 
             const password =
                 passwordInput.value;
@@ -861,6 +892,10 @@
                 return;
 
             }
+
+
+            message.textContent =
+                "Logging in...";
 
 
             try {
@@ -895,9 +930,19 @@
                     response.ok
                     &&
                     data.success
+                    &&
+                    data.token
                 ) {
 
-                    adminLoggedIn = true;
+                    adminToken =
+                        data.token;
+
+
+                    sessionStorage.setItem(
+                        "adminToken",
+                        adminToken
+                    );
+
 
                     document.getElementById(
                         "admin-login"
@@ -914,7 +959,12 @@
                     message.textContent =
                         "";
 
-                    loadAdminPlayers();
+
+                    passwordInput.value =
+                        "";
+
+
+                    await loadAdminPlayers();
 
                 }
 
@@ -935,6 +985,7 @@
                     error
                 );
 
+
                 message.textContent =
                     "Unable to connect to server.";
 
@@ -945,7 +996,7 @@
 
         async function loadAdminPlayers() {
 
-            if (!adminLoggedIn) {
+            if (!adminToken) {
 
                 return;
 
@@ -967,19 +1018,55 @@
                 const response =
                     await fetch(
                         API_URL +
-                        "/api/admin/players",
+                        "/api/admin/leaderboard",
                         {
                             method: "GET",
-                            cache: "no-cache"
+
+                            headers:
+                                getAdminHeaders(),
+
+                            cache:
+                                "no-cache"
                         }
                     );
 
 
-                const players =
+                if (
+                    response.status ===
+                    401
+                ) {
+
+                    adminLogout();
+
+                    return;
+
+                }
+
+
+                const data =
                     await response.json();
 
 
-                container.innerHTML = "";
+                if (
+                    !response.ok
+                    ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load admin data."
+                    );
+
+                }
+
+
+                const players =
+                    data.players;
+
+
+                container.innerHTML =
+                    "";
 
 
                 if (
@@ -1004,6 +1091,7 @@
                                 "div"
                             );
 
+
                         playerBox.className =
                             "admin-player";
 
@@ -1013,8 +1101,10 @@
                                 "div"
                             );
 
+
                         name.className =
                             "admin-player-name";
+
 
                         name.textContent =
                             player.name;
@@ -1025,14 +1115,18 @@
                                 "input"
                             );
 
+
                         scoreInput.type =
                             "number";
+
 
                         scoreInput.min =
                             "0";
 
+
                         scoreInput.value =
                             player.score;
+
 
                         scoreInput.className =
                             "admin-score-input";
@@ -1043,8 +1137,10 @@
                                 "button"
                             );
 
+
                         saveButton.className =
                             "button admin-save";
+
 
                         saveButton.textContent =
                             "Save";
@@ -1066,8 +1162,10 @@
                                 "button"
                             );
 
+
                         deleteButton.className =
                             "button admin-delete";
+
 
                         deleteButton.textContent =
                             "Delete";
@@ -1088,13 +1186,16 @@
                             name
                         );
 
+
                         playerBox.appendChild(
                             scoreInput
                         );
 
+
                         playerBox.appendChild(
                             saveButton
                         );
+
 
                         playerBox.appendChild(
                             deleteButton
@@ -1116,6 +1217,7 @@
                     "Admin players error:",
                     error
                 );
+
 
                 container.innerHTML =
                     '<p class="error">Unable to load admin data.</p>';
@@ -1163,19 +1265,30 @@
                         {
                             method: "PUT",
 
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
+                            headers:
+                                getAdminHeaders(),
 
-                            body: JSON.stringify(
-                                {
-                                    score:
-                                        score
-                                }
-                            )
+                            body:
+                                JSON.stringify(
+                                    {
+                                        score:
+                                            score
+                                    }
+                                )
                         }
                     );
+
+
+                if (
+                    response.status ===
+                    401
+                ) {
+
+                    adminLogout();
+
+                    return;
+
+                }
 
 
                 const data =
@@ -1192,9 +1305,11 @@
                         "Score updated successfully."
                     );
 
-                    loadAdminPlayers();
 
-                    loadLeaderboard();
+                    await loadAdminPlayers();
+
+
+                    await loadLeaderboard();
 
                 }
 
@@ -1215,6 +1330,7 @@
                     "Update score error:",
                     error
                 );
+
 
                 alert(
                     "Unable to connect to server."
@@ -1253,9 +1369,24 @@
                         "/api/admin/player/" +
                         playerId,
                         {
-                            method: "DELETE"
+                            method: "DELETE",
+
+                            headers:
+                                getAdminHeaders()
                         }
                     );
+
+
+                if (
+                    response.status ===
+                    401
+                ) {
+
+                    adminLogout();
+
+                    return;
+
+                }
 
 
                 const data =
@@ -1268,9 +1399,10 @@
                     data.success
                 ) {
 
-                    loadAdminPlayers();
+                    await loadAdminPlayers();
 
-                    loadLeaderboard();
+
+                    await loadLeaderboard();
 
                 }
 
@@ -1291,6 +1423,7 @@
                     "Delete player error:",
                     error
                 );
+
 
                 alert(
                     "Unable to connect to server."
@@ -1323,9 +1456,24 @@
                         API_URL +
                         "/api/admin/leaderboard/clear",
                         {
-                            method: "DELETE"
+                            method: "DELETE",
+
+                            headers:
+                                getAdminHeaders()
                         }
                     );
+
+
+                if (
+                    response.status ===
+                    401
+                ) {
+
+                    adminLogout();
+
+                    return;
+
+                }
 
 
                 const data =
@@ -1342,9 +1490,11 @@
                         "Leaderboard cleared successfully."
                     );
 
-                    loadAdminPlayers();
 
-                    loadLeaderboard();
+                    await loadAdminPlayers();
+
+
+                    await loadLeaderboard();
 
                 }
 
@@ -1366,6 +1516,7 @@
                     error
                 );
 
+
                 alert(
                     "Unable to connect to server."
                 );
@@ -1375,10 +1526,44 @@
         }
 
 
-        function adminLogout() {
+        async function adminLogout() {
 
-            adminLoggedIn =
-                false;
+            if (adminToken) {
+
+                try {
+
+                    await fetch(
+                        API_URL +
+                        "/api/admin/logout",
+                        {
+                            method: "POST",
+
+                            headers:
+                                getAdminHeaders()
+                        }
+                    );
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
+
+                }
+
+            }
+
+
+            adminToken =
+                null;
+
+
+            sessionStorage.removeItem(
+                "adminToken"
+            );
 
 
             document.getElementById(
@@ -1407,7 +1592,74 @@
         }
 
 
+        async function restoreAdminSession() {
+
+            if (!adminToken) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/api/admin/leaderboard",
+                        {
+                            method: "GET",
+
+                            headers:
+                                getAdminHeaders()
+                        }
+                    );
+
+
+                if (
+                    response.ok
+                ) {
+
+                    document.getElementById(
+                        "admin-login"
+                    ).style.display =
+                        "none";
+
+
+                    document.getElementById(
+                        "admin-panel"
+                    ).style.display =
+                        "block";
+
+
+                    await loadAdminPlayers();
+
+                }
+
+                else {
+
+                    adminLogout();
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Restore admin session error:",
+                    error
+                );
+
+            }
+
+        }
+
+
         loadLeaderboard();
+
+
+        restoreAdminSession();
 
 
         setInterval(
@@ -1415,6 +1667,11 @@
             30000
         );
 
+    </script>
+
+</body>
+
+</html>
     </script>
 
 </body>
