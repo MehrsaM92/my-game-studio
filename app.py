@@ -34,14 +34,63 @@ GAMES = []
 # =========================
 # Call of Duty Data
 # =========================
-# فعلاً خالی است.
-# بعداً گان‌ها، Attachmentها و Loadoutها را اضافه می‌کنیم.
-
 CALL_OF_DUTY = {
-    "games": [],
-    "guns": [],
-    "attachments": [],
-    "loadouts": []
+
+    "games": [
+        "Call of Duty: Mobile"
+    ],
+
+    "guns": [
+        {
+            "name": "QQ9-Carmen",
+            "type": "SMG",
+            "description": "Close-range SMG setup."
+        }
+    ],
+
+    "attachments": [
+        {
+            "weapon": "QQ9-Carmen",
+            "name": "Monolithic Suppressor",
+            "type": "Muzzle"
+        },
+        {
+            "weapon": "QQ9-Carmen",
+            "name": "RTC Recon Tac Long",
+            "type": "Barrel"
+        },
+        {
+            "weapon": "QQ9-Carmen",
+            "name": "No Stock",
+            "type": "Stock"
+        },
+        {
+            "weapon": "QQ9-Carmen",
+            "name": "OWC Laser - Tactical",
+            "type": "Laser"
+        },
+        {
+            "weapon": "QQ9-Carmen",
+            "name": "45 Round Extended Mag",
+            "type": "Ammunition"
+        }
+    ],
+
+    "loadouts": [
+        {
+            "name": "QQ9-Carmen Close Range",
+            "weapon": "QQ9-Carmen",
+            "description": "Close-range setup.",
+            "attachments": [
+                "Monolithic Suppressor",
+                "RTC Recon Tac Long",
+                "No Stock",
+                "OWC Laser - Tactical",
+                "45 Round Extended Mag"
+            ]
+        }
+    ]
+
 }
 
 
