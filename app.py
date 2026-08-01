@@ -1,8 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify
 from flask_cors import CORS
 import os
-import sqlite3
-import secrets
 
 app = Flask(__name__)
 
@@ -15,645 +13,174 @@ CORS(
     }
 )
 
-BASE_DIR = os.path.dirname(
-    os.path.abspath(__file__)
-)
 
-DATABASE = os.path.join(
-    BASE_DIR,
-    "leaderboard.db"
-)
+# =========================
+# Basic Configuration
+# =========================
 
-ADMIN_SECRET = os.environ.get(
-    "ADMIN_SECRET",
-    ""
-)
+APP_NAME = "Game Download Hub"
+APP_VERSION = "1.0.0"
 
 
-def get_connection():
-    connection = sqlite3.connect(
-        DATABASE
-    )
+# =========================
+# Temporary Game Data
+# =========================
+# فعلاً خالی است.
+# بعداً بازی‌ها را اینجا اضافه می‌کنیم.
 
-    connection.row_factory = sqlite3.Row
-
-    return connection
-
-
-def init_database():
-    connection = get_connection()
-
-    connection.execute(
-        """
-        CREATE TABLE IF NOT EXISTS leaderboard (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL UNIQUE,
-            score INTEGER NOT NULL DEFAULT 0
-        )
-        """
-    )
-
-    connection.commit()
-    connection.close()
+GAMES = []
 
 
-def check_admin():
-    provided_secret = request.headers.get(
-        "X-Admin-Secret",
-        ""
-    )
+# =========================
+# Call of Duty Data
+# =========================
+# فعلاً خالی است.
+# بعداً گان‌ها، Attachmentها و Loadoutها را اضافه می‌کنیم.
 
-    if not ADMIN_SECRET:
-        return False
+CALL_OF_DUTY = {
+    "games": [],
+    "guns": [],
+    "attachments": [],
+    "loadouts": []
+}
 
-    return secrets.compare_digest(
-        provided_secret,
-        ADMIN_SECRET
-    )
 
+# =========================
+# Home
+# =========================
 
 @app.route("/")
 def home():
-    return jsonify(
-        {
-            "success": True,
-            "message": "My Game Studio Leaderboard API is running."
+    return jsonify({
+        "success": True,
+        "name": APP_NAME,
+        "version": APP_VERSION,
+        "message": "Game Download Hub API is running."
+    })
+
+
+# =========================
+# API Status
+# =========================
+
+@app.route("/api/status", methods=["GET"])
+def api_status():
+    return jsonify({
+        "success": True,
+        "online": True,
+        "service": APP_NAME
+    })
+
+
+# =========================
+# Games
+# =========================
+
+@app.route("/api/games", methods=["GET"])
+def get_games():
+    return jsonify({
+        "success": True,
+        "games": GAMES
+    })
+
+
+# =========================
+# Call of Duty
+# =========================
+
+@app.route("/api/call-of-duty", methods=["GET"])
+def get_call_of_duty():
+    return jsonify({
+        "success": True,
+        "data": CALL_OF_DUTY
+    })
+
+
+# =========================
+# Call of Duty Guns
+# =========================
+
+@app.route("/api/call-of-duty/guns", methods=["GET"])
+def get_guns():
+    return jsonify({
+        "success": True,
+        "guns": CALL_OF_DUTY["guns"]
+    })
+
+
+# =========================
+# Call of Duty Attachments
+# =========================
+
+@app.route("/api/call-of-duty/attachments", methods=["GET"])
+def get_attachments():
+    return jsonify({
+        "success": True,
+        "attachments": CALL_OF_DUTY["attachments"]
+    })
+
+
+# =========================
+# Call of Duty Loadouts
+# =========================
+
+@app.route("/api/call-of-duty/loadouts", methods=["GET"])
+def get_loadouts():
+    return jsonify({
+        "success": True,
+        "loadouts": CALL_OF_DUTY["loadouts"]
+    })
+
+
+# =========================
+# App Configuration
+# =========================
+
+@app.route("/api/config", methods=["GET"])
+def get_config():
+    return jsonify({
+        "success": True,
+        "app": {
+            "name": APP_NAME,
+            "version": APP_VERSION
+        },
+        "sections": {
+            "games": True,
+            "call_of_duty": True,
+            "guns": True,
+            "attachments": True,
+            "loadouts": True,
+            "leaderboard": False,
+            "flappy_bird": False
         }
-    )
+    })
 
 
-@app.route(
-    "/api/leaderboard",
-    methods=["GET"]
-)
-def get_leaderboard():
+# =========================
+# Error Handler
+# =========================
 
-    try:
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        "success": False,
+        "message": "Page not found."
+    }), 404
 
-        connection = get_connection()
 
-        rows = connection.execute(
-            """
-            SELECT id, name, score
-            FROM leaderboard
-            ORDER BY score DESC, id ASC
-            LIMIT 100
-            """
-        ).fetchall()
+@app.errorhandler(500)
+def server_error(error):
+    return jsonify({
+        "success": False,
+        "message": "Internal server error."
+    }), 500
 
-        connection.close()
 
-        result = []
-
-        for row in rows:
-
-            result.append(
-                {
-                    "id": row["id"],
-                    "name": row["name"],
-                    "score": row["score"]
-                }
-            )
-
-        return jsonify(result)
-
-    except Exception as error:
-
-        print(
-            "Leaderboard error:",
-            error
-        )
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unable to load leaderboard."
-            }
-        ), 500
-
-
-@app.route(
-    "/api/score",
-    methods=["POST"]
-)
-def submit_score():
-
-    data = request.get_json(
-        silent=True
-    )
-
-    if not data:
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Invalid data."
-            }
-        ), 400
-
-    name = str(
-        data.get(
-            "name",
-            ""
-        )
-    ).strip()
-
-    try:
-
-        score = int(
-            data.get(
-                "score",
-                0
-            )
-        )
-
-    except Exception:
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Invalid score."
-            }
-        ), 400
-
-    if not name:
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Name is required."
-            }
-        ), 400
-
-    if len(name) > 15:
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Name is too long."
-            }
-        ), 400
-
-    if score < 0:
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Invalid score."
-            }
-        ), 400
-
-    try:
-
-        connection = get_connection()
-
-        existing = connection.execute(
-            """
-            SELECT id, name, score
-            FROM leaderboard
-            WHERE LOWER(name) = LOWER(?)
-            """,
-            (
-                name,
-            )
-        ).fetchone()
-
-        if existing:
-
-            old_score = int(
-                existing["score"]
-            )
-
-            if score > old_score:
-
-                connection.execute(
-                    """
-                    UPDATE leaderboard
-                    SET score = ?
-                    WHERE id = ?
-                    """,
-                    (
-                        score,
-                        existing["id"]
-                    )
-                )
-
-        else:
-
-            connection.execute(
-                """
-                INSERT INTO leaderboard
-                (
-                    name,
-                    score
-                )
-                VALUES
-                (
-                    ?,
-                    ?
-                )
-                """,
-                (
-                    name,
-                    score
-                )
-            )
-
-        connection.commit()
-        connection.close()
-
-        return jsonify(
-            {
-                "success": True,
-                "message": "Score saved."
-            }
-        )
-
-    except Exception as error:
-
-        print(
-            "Score error:",
-            error
-        )
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unable to save score."
-            }
-        ), 500
-
-
-@app.route(
-    "/api/admin/login",
-    methods=["POST"]
-)
-def admin_login():
-
-    data = request.get_json(
-        silent=True
-    )
-
-    if not data:
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Invalid data."
-            }
-        ), 400
-
-    password = str(
-        data.get(
-            "password",
-            ""
-        )
-    )
-
-    if not ADMIN_SECRET:
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Admin password is not configured."
-            }
-        ), 500
-
-    if secrets.compare_digest(
-        password,
-        ADMIN_SECRET
-    ):
-
-        return jsonify(
-            {
-                "success": True,
-                "admin_secret": ADMIN_SECRET
-            }
-        )
-
-    return jsonify(
-        {
-            "success": False,
-            "message": "Wrong password."
-        }
-    ), 401
-
-
-@app.route(
-    "/api/admin/players",
-    methods=["GET"]
-)
-def admin_get_players():
-
-    if not check_admin():
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unauthorized."
-            }
-        ), 401
-
-    try:
-
-        connection = get_connection()
-
-        rows = connection.execute(
-            """
-            SELECT id, name, score
-            FROM leaderboard
-            ORDER BY score DESC, id ASC
-            """
-        ).fetchall()
-
-        connection.close()
-
-        players = []
-
-        for row in rows:
-
-            players.append(
-                {
-                    "id": row["id"],
-                    "name": row["name"],
-                    "score": row["score"]
-                }
-            )
-
-        return jsonify(
-            {
-                "success": True,
-                "players": players
-            }
-        )
-
-    except Exception as error:
-
-        print(
-            "Admin players error:",
-            error
-        )
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unable to load players."
-            }
-        ), 500
-
-
-@app.route(
-    "/api/admin/player/<int:player_id>",
-    methods=["PUT"]
-)
-def admin_update_player(
-    player_id
-):
-
-    if not check_admin():
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unauthorized."
-            }
-        ), 401
-
-    data = request.get_json(
-        silent=True
-    )
-
-    if not data:
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Invalid data."
-            }
-        ), 400
-
-    try:
-
-        score = int(
-            data.get(
-                "score"
-            )
-        )
-
-    except Exception:
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Invalid score."
-            }
-        ), 400
-
-    if score < 0:
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Invalid score."
-            }
-        ), 400
-
-    try:
-
-        connection = get_connection()
-
-        existing = connection.execute(
-            """
-            SELECT id
-            FROM leaderboard
-            WHERE id = ?
-            """,
-            (
-                player_id,
-            )
-        ).fetchone()
-
-        if not existing:
-
-            connection.close()
-
-            return jsonify(
-                {
-                    "success": False,
-                    "message": "Player not found."
-                }
-            ), 404
-
-        connection.execute(
-            """
-            UPDATE leaderboard
-            SET score = ?
-            WHERE id = ?
-            """,
-            (
-                score,
-                player_id
-            )
-        )
-
-        connection.commit()
-        connection.close()
-
-        return jsonify(
-            {
-                "success": True,
-                "message": "Score updated."
-            }
-        )
-
-    except Exception as error:
-
-        print(
-            "Admin update error:",
-            error
-        )
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unable to update score."
-            }
-        ), 500
-
-
-@app.route(
-    "/api/admin/player/<int:player_id>",
-    methods=["DELETE"]
-)
-def admin_delete_player(
-    player_id
-):
-
-    if not check_admin():
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unauthorized."
-            }
-        ), 401
-
-    try:
-
-        connection = get_connection()
-
-        existing = connection.execute(
-            """
-            SELECT id
-            FROM leaderboard
-            WHERE id = ?
-            """,
-            (
-                player_id,
-            )
-        ).fetchone()
-
-        if not existing:
-
-            connection.close()
-
-            return jsonify(
-                {
-                    "success": False,
-                    "message": "Player not found."
-                }
-            ), 404
-
-        connection.execute(
-            """
-            DELETE FROM leaderboard
-            WHERE id = ?
-            """,
-            (
-                player_id,
-            )
-        )
-
-        connection.commit()
-        connection.close()
-
-        return jsonify(
-            {
-                "success": True,
-                "message": "Player deleted."
-            }
-        )
-
-    except Exception as error:
-
-        print(
-            "Admin delete error:",
-            error
-        )
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unable to delete player."
-            }
-        ), 500
-
-
-@app.route(
-    "/api/admin/leaderboard/clear",
-    methods=["DELETE"]
-)
-def admin_clear_leaderboard():
-
-    if not check_admin():
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unauthorized."
-            }
-        ), 401
-
-    try:
-
-        connection = get_connection()
-
-        connection.execute(
-            """
-            DELETE FROM leaderboard
-            """
-        )
-
-        connection.commit()
-        connection.close()
-
-        return jsonify(
-            {
-                "success": True,
-                "message": "Leaderboard cleared."
-            }
-        )
-
-    except Exception as error:
-
-        print(
-            "Admin clear error:",
-            error
-        )
-
-        return jsonify(
-            {
-                "success": False,
-                "message": "Unable to clear leaderboard."
-            }
-        ), 500
-
-
-init_database()
-
+# =========================
+# Run Server
+# =========================
 
 if __name__ == "__main__":
-
     port = int(
         os.environ.get(
             "PORT",
