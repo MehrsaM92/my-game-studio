@@ -23,13 +23,13 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #0f172a;
+            background: #111827;
             color: white;
         }
 
         header {
             background: #020617;
-            padding: 20px 55px;
+            padding: 20px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -61,19 +61,18 @@
         }
 
         .hero {
-            min-height: 550px;
+            min-height: 520px;
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 70px 30px;
-            background:
-                linear-gradient(
-                    135deg,
-                    #020617,
-                    #0f172a,
-                    #164e63
-                );
+            padding: 60px 30px;
+            background: linear-gradient(
+                135deg,
+                #0f172a,
+                #1e293b,
+                #0c4a6e
+            );
         }
 
         .hero-content {
@@ -81,15 +80,15 @@
         }
 
         .hero h1 {
-            font-size: 62px;
+            font-size: 60px;
             margin-bottom: 25px;
         }
 
         .hero p {
-            font-size: 21px;
+            font-size: 20px;
             color: #cbd5e1;
             line-height: 1.7;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
         }
 
         .button {
@@ -97,9 +96,9 @@
             padding: 14px 30px;
             background: #0ea5e9;
             color: white;
-            border: none;
-            border-radius: 8px;
             text-decoration: none;
+            border-radius: 8px;
+            border: none;
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
@@ -111,18 +110,18 @@
         }
 
         .section {
-            padding: 80px 50px;
+            padding: 75px 40px;
         }
 
         .section-title {
             text-align: center;
-            font-size: 42px;
+            font-size: 40px;
             margin-bottom: 18px;
         }
 
         .section-description {
             max-width: 750px;
-            margin: 0 auto 50px;
+            margin: 0 auto 45px;
             text-align: center;
             color: #94a3b8;
             line-height: 1.7;
@@ -130,21 +129,19 @@
         }
 
         /* =========================
-           GAMES
-           ========================= */
+           Games
+        ========================= */
 
         .games {
-            background: #0f172a;
+            background: #111827;
         }
 
         .game-grid {
-            max-width: 1100px;
+            max-width: 1050px;
             margin: auto;
             display: grid;
-            grid-template-columns: repeat(
-                auto-fit,
-                minmax(320px, 1fr)
-            );
+            grid-template-columns:
+                repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
 
@@ -152,22 +149,22 @@
             background: #1e293b;
             border: 1px solid #334155;
             border-radius: 14px;
-            padding: 35px;
+            padding: 32px;
             transition: 0.3s;
         }
 
         .game-card:hover {
-            transform: translateY(-6px);
+            transform: translateY(-5px);
             border-color: #38bdf8;
         }
 
         .game-icon {
-            font-size: 65px;
+            font-size: 60px;
             margin-bottom: 20px;
         }
 
         .game-card h3 {
-            font-size: 30px;
+            font-size: 28px;
             margin-bottom: 15px;
         }
 
@@ -177,7 +174,7 @@
             margin-bottom: 25px;
         }
 
-        .platform {
+        .platform-title {
             color: #94a3b8;
             font-size: 14px;
             margin-bottom: 12px;
@@ -185,8 +182,8 @@
 
         .download-button {
             width: 100%;
-            background: #f59e0b;
             text-align: center;
+            background: #f59e0b;
         }
 
         .download-button:hover {
@@ -194,81 +191,67 @@
         }
 
         /* =========================
-           CALL OF DUTY
-           ========================= */
+           Call of Duty
+        ========================= */
 
         .call-of-duty {
             background: #020617;
         }
 
-        .cod-header {
-            max-width: 900px;
-            margin: auto;
-            text-align: center;
-        }
-
-        .cod-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            margin-bottom: 18px;
-            border-radius: 20px;
-            background: #1e293b;
-            color: #38bdf8;
-            border: 1px solid #334155;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
         .cod-grid {
             max-width: 1100px;
-            margin: 50px auto 0;
+            margin: auto;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns:
+                repeat(3, 1fr);
             gap: 25px;
         }
 
         .cod-card {
-            background: #0f172a;
+            background: #1e293b;
             border: 1px solid #334155;
-            border-radius: 14px;
+            border-radius: 12px;
             padding: 30px;
-            min-height: 220px;
+            transition: 0.3s;
         }
 
-        .cod-card-icon {
-            font-size: 42px;
+        .cod-card:hover {
+            transform: translateY(-5px);
+            border-color: #38bdf8;
+        }
+
+        .cod-icon {
+            font-size: 45px;
             margin-bottom: 18px;
         }
 
         .cod-card h3 {
-            font-size: 24px;
+            font-size: 25px;
             margin-bottom: 12px;
         }
 
         .cod-card p {
-            color: #94a3b8;
-            line-height: 1.6;
+            color: #cbd5e1;
+            line-height: 1.7;
         }
 
         /* =========================
-           GUNS
-           ========================= */
+           Guns
+        ========================= */
 
         .guns {
             background: #111827;
         }
 
-        .guns-container {
-            max-width: 1100px;
+        .gun-container {
+            max-width: 1050px;
             margin: auto;
         }
 
-        #guns-list {
+        .gun-grid {
             display: grid;
-            grid-template-columns: repeat(
-                auto-fit,
-                minmax(300px, 1fr)
-            );
+            grid-template-columns:
+                repeat(2, 1fr);
             gap: 25px;
         }
 
@@ -281,21 +264,21 @@
         }
 
         .gun-card:hover {
+            transform: translateY(-5px);
             border-color: #38bdf8;
-            transform: translateY(-4px);
         }
 
         .gun-card h3 {
-            font-size: 27px;
+            font-size: 29px;
             margin-bottom: 12px;
         }
 
         .gun-type {
             display: inline-block;
-            padding: 6px 12px;
-            border-radius: 6px;
             background: #0c4a6e;
             color: #7dd3fc;
+            padding: 6px 12px;
+            border-radius: 6px;
             font-size: 13px;
             font-weight: bold;
             margin-bottom: 18px;
@@ -307,8 +290,8 @@
         }
 
         /* =========================
-           ATTACHMENTS
-           ========================= */
+           Attachments
+        ========================= */
 
         .attachments {
             background: #0f172a;
@@ -319,27 +302,24 @@
             margin: auto;
         }
 
-        #attachments-list {
-            display: grid;
-            gap: 25px;
-        }
-
         .attachment-card {
             background: #1e293b;
             border: 1px solid #334155;
             border-radius: 14px;
-            padding: 35px;
+            padding: 32px;
+            margin-bottom: 25px;
         }
 
         .attachment-card h3 {
-            font-size: 28px;
-            margin-bottom: 25px;
+            font-size: 29px;
             color: #38bdf8;
+            margin-bottom: 25px;
         }
 
         .attachment-list {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns:
+                repeat(2, 1fr);
             gap: 15px;
         }
 
@@ -354,7 +334,7 @@
             display: block;
             color: #94a3b8;
             font-size: 13px;
-            margin-bottom: 6px;
+            margin-bottom: 7px;
         }
 
         .attachment-value {
@@ -363,8 +343,8 @@
         }
 
         /* =========================
-           LOADOUTS
-           ========================= */
+           Loadouts
+        ========================= */
 
         .loadouts {
             background: #020617;
@@ -375,45 +355,43 @@
             margin: auto;
         }
 
-        #loadouts-list {
-            display: grid;
-            gap: 25px;
-        }
-
         .loadout-card {
             background: #1e293b;
             border: 1px solid #334155;
             border-radius: 14px;
             padding: 30px;
+            margin-bottom: 20px;
         }
 
         .loadout-card h3 {
             font-size: 27px;
-            margin-bottom: 10px;
+            color: #38bdf8;
+            margin-bottom: 15px;
         }
 
-        .loadout-description {
-            color: #94a3b8;
-            margin-bottom: 25px;
+        .loadout-card p {
+            color: #cbd5e1;
+            line-height: 1.8;
         }
 
-        .loadout-attachments {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+        .loadout-list {
+            margin-top: 20px;
+            list-style: none;
         }
 
-        .loadout-attachment {
-            padding: 14px;
-            background: #0f172a;
-            border-radius: 8px;
-            border: 1px solid #334155;
+        .loadout-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #334155;
             color: #cbd5e1;
         }
 
+        .loadout-list li:last-child {
+            border-bottom: none;
+        }
+
         /* =========================
-           GUIDE
-           ========================= */
+           Guide
+        ========================= */
 
         .guide {
             background: #111827;
@@ -427,15 +405,15 @@
         .guide-card {
             background: #1e293b;
             border: 1px solid #334155;
-            border-radius: 14px;
-            padding: 35px;
+            border-radius: 12px;
+            padding: 30px;
             margin-bottom: 20px;
         }
 
         .guide-card h3 {
             font-size: 24px;
-            margin-bottom: 15px;
             color: #38bdf8;
+            margin-bottom: 15px;
         }
 
         .guide-card p {
@@ -443,23 +421,9 @@
             line-height: 1.8;
         }
 
-        .loading,
-        .empty,
-        .error {
-            padding: 25px;
-            text-align: center;
-            border-radius: 10px;
-            background: #1e293b;
-            color: #94a3b8;
-        }
-
-        .error {
-            color: #f87171;
-        }
-
         /* =========================
-           ABOUT
-           ========================= */
+           About
+        ========================= */
 
         .about {
             background: #0f172a;
@@ -478,14 +442,14 @@
         }
 
         /* =========================
-           FOOTER
-           ========================= */
+           Footer
+        ========================= */
 
         footer {
             padding: 30px;
-            background: #020617;
             text-align: center;
-            color: #64748b;
+            background: #020617;
+            color: #94a3b8;
             border-top: 1px solid #1e293b;
         }
 
@@ -542,7 +506,14 @@
 </header>
 
 
-<section class="hero" id="home">
+<!-- =========================
+     HOME
+========================= -->
+
+<section
+    class="hero"
+    id="home"
+>
 
     <div class="hero-content">
 
@@ -552,8 +523,8 @@
 
         <p>
             Download games, explore Call of Duty
-            weapons, check attachments and loadouts,
-            and find useful gaming guides.
+            weapons, attachments, loadouts,
+            and useful gaming guides.
         </p>
 
         <a
@@ -568,6 +539,10 @@
 </section>
 
 
+<!-- =========================
+     GAMES
+========================= -->
+
 <section
     class="section games"
     id="games"
@@ -578,10 +553,12 @@
     </h2>
 
     <p class="section-description">
-        Games available in the Game Download Hub.
+        Games available on Game Download Hub.
     </p>
 
+
     <div class="game-grid">
+
 
         <div class="game-card">
 
@@ -598,7 +575,7 @@
                 and survive as long as possible.
             </p>
 
-            <div class="platform">
+            <div class="platform-title">
                 PC Version
             </div>
 
@@ -612,40 +589,37 @@
 
         </div>
 
+
     </div>
 
 </section>
 
+
+<!-- =========================
+     CALL OF DUTY
+========================= -->
 
 <section
     class="section call-of-duty"
     id="call-of-duty"
 >
 
-    <div class="cod-header">
+    <h2 class="section-title">
+        🎮 Call of Duty
+    </h2>
 
-        <span class="cod-badge">
-            CALL OF DUTY
-        </span>
-
-        <h2 class="section-title">
-            Call of Duty: Mobile
-        </h2>
-
-        <p class="section-description">
-            Explore weapons, attachments,
-            loadouts, and useful Call of Duty
-            information.
-        </p>
-
-    </div>
+    <p class="section-description">
+        Explore Call of Duty weapons,
+        attachments, loadouts and guides.
+    </p>
 
 
     <div class="cod-grid">
 
+
         <div class="cod-card">
 
-            <div class="cod-card-icon">
+            <div class="cod-icon">
                 🔫
             </div>
 
@@ -654,8 +628,8 @@
             </h3>
 
             <p>
-                Browse weapons available in
-                the Call of Duty section.
+                Browse Call of Duty weapons
+                and their recommended builds.
             </p>
 
         </div>
@@ -663,7 +637,7 @@
 
         <div class="cod-card">
 
-            <div class="cod-card-icon">
+            <div class="cod-icon">
                 🧩
             </div>
 
@@ -672,8 +646,8 @@
             </h3>
 
             <p>
-                View recommended attachment
-                configurations for weapons.
+                See the attachments selected
+                for each weapon.
             </p>
 
         </div>
@@ -681,7 +655,7 @@
 
         <div class="cod-card">
 
-            <div class="cod-card-icon">
+            <div class="cod-icon">
                 🎯
             </div>
 
@@ -690,16 +664,21 @@
             </h3>
 
             <p>
-                View complete weapon loadouts
-                and builds.
+                Find complete weapon setups
+                for different playstyles.
             </p>
 
         </div>
+
 
     </div>
 
 </section>
 
+
+<!-- =========================
+     GUNS
+========================= -->
 
 <section
     class="section guns"
@@ -711,16 +690,53 @@
     </h2>
 
     <p class="section-description">
-        Call of Duty weapons available here.
+        Call of Duty weapons currently
+        available on the website.
     </p>
 
-    <div class="guns-container">
 
-        <div id="guns-list">
+    <div class="gun-container">
 
-            <div class="loading">
-                Loading guns...
+        <div class="gun-grid">
+
+
+            <div class="gun-card">
+
+                <h3>
+                    QQ9 - Carmen
+                </h3>
+
+                <span class="gun-type">
+                    SMG
+                </span>
+
+                <p>
+                    A close-range SMG setup
+                    designed for fast and
+                    aggressive fights.
+                </p>
+
             </div>
+
+
+            <div class="gun-card">
+
+                <h3>
+                    DL Q33
+                </h3>
+
+                <span class="gun-type">
+                    Sniper
+                </span>
+
+                <p>
+                    A sniper rifle for
+                    precision and long-range
+                    combat.
+                </p>
+
+            </div>
+
 
         </div>
 
@@ -728,6 +744,10 @@
 
 </section>
 
+
+<!-- =========================
+     ATTACHMENTS
+========================= -->
 
 <section
     class="section attachments"
@@ -739,23 +759,134 @@
     </h2>
 
     <p class="section-description">
-        Weapon attachment configurations.
+        Weapon attachments for the
+        current Call of Duty builds.
     </p>
+
 
     <div class="attachment-container">
 
-        <div id="attachments-list">
 
-            <div class="loading">
-                Loading attachments...
+        <!-- QQ9 CARMEN -->
+
+        <div class="attachment-card">
+
+            <h3>
+                QQ9 - Carmen
+            </h3>
+
+
+            <div class="attachment-list">
+
+
+                <div class="attachment-item">
+
+                    <span class="attachment-label">
+                        Muzzle
+                    </span>
+
+                    <span class="attachment-value">
+                        Monolithic Suppressor
+                    </span>
+
+                </div>
+
+
+                <div class="attachment-item">
+
+                    <span class="attachment-label">
+                        Barrel
+                    </span>
+
+                    <span class="attachment-value">
+                        RTC Recon Tac Long
+                    </span>
+
+                </div>
+
+
+                <div class="attachment-item">
+
+                    <span class="attachment-label">
+                        Stock
+                    </span>
+
+                    <span class="attachment-value">
+                        No Stock
+                    </span>
+
+                </div>
+
+
+                <div class="attachment-item">
+
+                    <span class="attachment-label">
+                        Ammunition
+                    </span>
+
+                    <span class="attachment-value">
+                        45 Round Extended Mag
+                    </span>
+
+                </div>
+
+
+                <div class="attachment-item">
+
+                    <span class="attachment-label">
+                        Rear Grip
+                    </span>
+
+                    <span class="attachment-value">
+                        Granulated Grip Tape
+                    </span>
+
+                </div>
+
+
             </div>
 
         </div>
+
+
+        <!-- DL Q33 -->
+
+        <div class="attachment-card">
+
+            <h3>
+                DL Q33
+            </h3>
+
+
+            <div class="attachment-list">
+
+
+                <div class="attachment-item">
+
+                    <span class="attachment-label">
+                        Status
+                    </span>
+
+                    <span class="attachment-value">
+                        Build coming soon
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
 
     </div>
 
 </section>
 
+
+<!-- =========================
+     LOADOUTS
+========================= -->
 
 <section
     class="section loadouts"
@@ -767,23 +898,91 @@
     </h2>
 
     <p class="section-description">
-        Recommended Call of Duty weapon loadouts.
+        Complete Call of Duty weapon
+        loadouts for different situations.
     </p>
+
 
     <div class="loadout-container">
 
-        <div id="loadouts-list">
 
-            <div class="loading">
-                Loading loadouts...
-            </div>
+        <div class="loadout-card">
+
+            <h3>
+                QQ9 - Carmen | Close Range
+            </h3>
+
+            <p>
+                An aggressive close-range
+                SMG setup focused on fast
+                combat.
+            </p>
+
+
+            <ul class="loadout-list">
+
+                <li>
+                    Muzzle:
+                    Monolithic Suppressor
+                </li>
+
+                <li>
+                    Barrel:
+                    RTC Recon Tac Long
+                </li>
+
+                <li>
+                    Stock:
+                    No Stock
+                </li>
+
+                <li>
+                    Ammunition:
+                    45 Round Extended Mag
+                </li>
+
+                <li>
+                    Rear Grip:
+                    Granulated Grip Tape
+                </li>
+
+            </ul>
 
         </div>
+
+
+        <div class="loadout-card">
+
+            <h3>
+                DL Q33 | Long Range
+            </h3>
+
+            <p>
+                A long-range sniper setup
+                focused on precision.
+            </p>
+
+
+            <ul class="loadout-list">
+
+                <li>
+                    Attachments:
+                    Coming soon
+                </li>
+
+            </ul>
+
+        </div>
+
 
     </div>
 
 </section>
 
+
+<!-- =========================
+     GUIDE
+========================= -->
 
 <section
     class="section guide"
@@ -795,11 +994,14 @@
     </h2>
 
     <p class="section-description">
-        Useful information for playing games
-        and using Call of Duty builds.
+        Useful information for playing
+        games and using the Call of Duty
+        builds on this website.
     </p>
 
+
     <div class="guide-container">
+
 
         <div class="guide-card">
 
@@ -808,9 +1010,9 @@
             </h3>
 
             <p>
-                Choose a game from the Games section
-                and follow its instructions to start
-                playing.
+                Choose a game from the Games
+                section and use the available
+                download button to get started.
             </p>
 
         </div>
@@ -819,12 +1021,14 @@
         <div class="guide-card">
 
             <h3>
-                🔫 Call of Duty
+                🔫 Using Weapon Builds
             </h3>
 
             <p>
-                Open Guns, Attachments, or Loadouts
-                to find the weapon information you need.
+                Open the Attachments section,
+                select your weapon, and use
+                the listed attachments in your
+                Call of Duty gunsmith.
             </p>
 
         </div>
@@ -833,20 +1037,42 @@
         <div class="guide-card">
 
             <h3>
-                🛠️ Weapon Builds
+                ⚔️ Close Range Combat
             </h3>
 
             <p>
-                Choose a weapon and use its recommended
-                attachments to build your setup.
+                For close-range fights, the
+                QQ9 - Carmen setup is designed
+                around an aggressive SMG
+                playstyle.
             </p>
 
         </div>
+
+
+        <div class="guide-card">
+
+            <h3>
+                🎯 Long Range Combat
+            </h3>
+
+            <p>
+                For long-range gameplay,
+                the DL Q33 can be used as a
+                precision sniper rifle.
+            </p>
+
+        </div>
+
 
     </div>
 
 </section>
 
+
+<!-- =========================
+     ABOUT
+========================= -->
 
 <section
     class="section about"
@@ -860,16 +1086,22 @@
         </h2>
 
         <p>
-            Game Download Hub is an independent
-            gaming website for publishing games,
-            organizing gaming information, and
-            experimenting with new projects.
+            Game Download Hub is an
+            independent gaming website
+            for publishing games,
+            organizing gaming information,
+            and experimenting with new
+            gaming projects.
         </p>
 
     </div>
 
 </section>
 
+
+<!-- =========================
+     FOOTER
+========================= -->
 
 <footer>
 
@@ -879,570 +1111,6 @@
     </p>
 
 </footer>
-
-
-<script>
-
-    const API_URL =
-        "https://my-game-studio-backend.onrender.com";
-
-
-    function createElement(
-        tag,
-        className,
-        text
-    ) {
-
-        const element =
-            document.createElement(tag);
-
-
-        if (className) {
-
-            element.className =
-                className;
-
-        }
-
-
-        if (text !== undefined) {
-
-            element.textContent =
-                text;
-
-        }
-
-
-        return element;
-
-    }
-
-
-    // =========================
-    // GUNS
-    // =========================
-
-    async function loadGuns() {
-
-        const container =
-            document.getElementById(
-                "guns-list"
-            );
-
-
-        container.innerHTML =
-            '<div class="loading">Loading guns...</div>';
-
-
-        try {
-
-            const response =
-                await fetch(
-                    API_URL +
-                    "/api/call-of-duty/guns",
-                    {
-                        method: "GET",
-                        cache: "no-cache"
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "HTTP " +
-                    response.status
-                );
-
-            }
-
-
-            const data =
-                await response.json();
-
-
-            container.innerHTML =
-                "";
-
-
-            if (
-                !data.success ||
-                !Array.isArray(data.guns) ||
-                data.guns.length === 0
-            ) {
-
-                container.innerHTML =
-                    '<div class="empty">No guns available yet.</div>';
-
-                return;
-
-            }
-
-
-            data.guns.forEach(
-                gun => {
-
-                    const card =
-                        createElement(
-                            "div",
-                            "gun-card"
-                        );
-
-
-                    const title =
-                        createElement(
-                            "h3",
-                            null,
-                            gun.name ||
-                            "Unknown Weapon"
-                        );
-
-
-                    const type =
-                        createElement(
-                            "span",
-                            "gun-type",
-                            gun.type ||
-                            "Weapon"
-                        );
-
-
-                    const description =
-                        createElement(
-                            "p",
-                            null,
-                            gun.description ||
-                            "Call of Duty weapon."
-                        );
-
-
-                    card.appendChild(
-                        title
-                    );
-
-                    card.appendChild(
-                        type
-                    );
-
-                    card.appendChild(
-                        description
-                    );
-
-
-                    container.appendChild(
-                        card
-                    );
-
-                }
-            );
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Guns error:",
-                error
-            );
-
-
-            container.innerHTML =
-                '<div class="error">Unable to load guns right now.</div>';
-
-        }
-
-    }
-
-
-    // =========================
-    // ATTACHMENTS
-    // =========================
-
-    async function loadAttachments() {
-
-        const container =
-            document.getElementById(
-                "attachments-list"
-            );
-
-
-        container.innerHTML =
-            '<div class="loading">Loading attachments...</div>';
-
-
-        try {
-
-            const response =
-                await fetch(
-                    API_URL +
-                    "/api/call-of-duty/attachments",
-                    {
-                        method: "GET",
-                        cache: "no-cache"
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "HTTP " +
-                    response.status
-                );
-
-            }
-
-
-            const data =
-                await response.json();
-
-
-            container.innerHTML =
-                "";
-
-
-            if (
-                !data.success ||
-                !Array.isArray(data.attachments) ||
-                data.attachments.length === 0
-            ) {
-
-                container.innerHTML =
-                    '<div class="empty">No attachments available yet.</div>';
-
-                return;
-
-            }
-
-
-            data.attachments.forEach(
-                attachment => {
-
-                    const card =
-                        createElement(
-                            "div",
-                            "attachment-card"
-                        );
-
-
-                    const title =
-                        createElement(
-                            "h3",
-                            null,
-                            attachment.weapon ||
-                            "Unknown Weapon"
-                        );
-
-
-                    const list =
-                        createElement(
-                            "div",
-                            "attachment-list"
-                        );
-
-
-                    const attachmentData = [
-
-                        [
-                            "Muzzle",
-                            attachment.muzzle
-                        ],
-
-                        [
-                            "Barrel",
-                            attachment.barrel
-                        ],
-
-                        [
-                            "Stock",
-                            attachment.stock
-                        ],
-
-                        [
-                            "Ammunition",
-                            attachment.ammunition
-                        ],
-
-                        [
-                            "Rear Grip",
-                            attachment.rear_grip
-                        ]
-
-                    ];
-
-
-                    attachmentData.forEach(
-                        item => {
-
-                            const itemBox =
-                                createElement(
-                                    "div",
-                                    "attachment-item"
-                                );
-
-
-                            const label =
-                                createElement(
-                                    "span",
-                                    "attachment-label",
-                                    item[0]
-                                );
-
-
-                            const value =
-                                createElement(
-                                    "span",
-                                    "attachment-value",
-                                    item[1] ||
-                                    "Not specified"
-                                );
-
-
-                            itemBox.appendChild(
-                                label
-                            );
-
-                            itemBox.appendChild(
-                                value
-                            );
-
-
-                            list.appendChild(
-                                itemBox
-                            );
-
-                        }
-                    );
-
-
-                    card.appendChild(
-                        title
-                    );
-
-                    card.appendChild(
-                        list
-                    );
-
-
-                    container.appendChild(
-                        card
-                    );
-
-                }
-            );
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Attachments error:",
-                error
-            );
-
-
-            container.innerHTML =
-                '<div class="error">Unable to load attachments right now.</div>';
-
-        }
-
-    }
-
-
-    // =========================
-    // LOADOUTS
-    // =========================
-
-    async function loadLoadouts() {
-
-        const container =
-            document.getElementById(
-                "loadouts-list"
-            );
-
-
-        container.innerHTML =
-            '<div class="loading">Loading loadouts...</div>';
-
-
-        try {
-
-            const response =
-                await fetch(
-                    API_URL +
-                    "/api/call-of-duty/loadouts",
-                    {
-                        method: "GET",
-                        cache: "no-cache"
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "HTTP " +
-                    response.status
-                );
-
-            }
-
-
-            const data =
-                await response.json();
-
-
-            container.innerHTML =
-                "";
-
-
-            if (
-                !data.success ||
-                !Array.isArray(data.loadouts) ||
-                data.loadouts.length === 0
-            ) {
-
-                container.innerHTML =
-                    '<div class="empty">No loadouts available yet.</div>';
-
-                return;
-
-            }
-
-
-            data.loadouts.forEach(
-                loadout => {
-
-                    const card =
-                        createElement(
-                            "div",
-                            "loadout-card"
-                        );
-
-
-                    const title =
-                        createElement(
-                            "h3",
-                            null,
-                            loadout.name ||
-                            "Unnamed Loadout"
-                        );
-
-
-                    const description =
-                        createElement(
-                            "p",
-                            "loadout-description",
-                            loadout.description ||
-                            "Saved Call of Duty loadout."
-                        );
-
-
-                    const attachmentList =
-                        createElement(
-                            "div",
-                            "loadout-attachments"
-                        );
-
-
-                    if (
-                        Array.isArray(
-                            loadout.attachments
-                        )
-                    ) {
-
-                        loadout.attachments.forEach(
-                            (
-                                attachment,
-                                index
-                            ) => {
-
-                                const item =
-                                    createElement(
-                                        "div",
-                                        "loadout-attachment"
-                                    );
-
-
-                                item.textContent =
-                                    "#" +
-                                    (
-                                        index + 1
-                                    ) +
-                                    " " +
-                                    attachment;
-
-
-                                attachmentList.appendChild(
-                                    item
-                                );
-
-                            }
-                        );
-
-                    }
-
-
-                    card.appendChild(
-                        title
-                    );
-
-                    card.appendChild(
-                        description
-                    );
-
-                    card.appendChild(
-                        attachmentList
-                    );
-
-
-                    container.appendChild(
-                        card
-                    );
-
-                }
-            );
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Loadouts error:",
-                error
-            );
-
-
-            container.innerHTML =
-                '<div class="error">Unable to load loadouts right now.</div>';
-
-        }
-
-    }
-
-
-    // =========================
-    // INITIALIZE
-    // =========================
-
-    async function initializeWebsite() {
-
-        await Promise.all([
-
-            loadGuns(),
-
-            loadAttachments(),
-
-            loadLoadouts()
-
-        ]);
-
-    }
-
-
-    initializeWebsite();
-
-</script>
 
 
 </body>
