@@ -342,98 +342,56 @@
             font-weight: bold;
         }
 
-        <!-- =========================
-             LOADOUT
-        ========================= -->
-        
-        <section
-            class="section loadouts"
-            id="loadouts"
-        >
-        
-            <h2 class="section-title">
-                🎯 Our Recommendation for the New Season
-            </h2>
-        
-            <p class="section-description">
-                Our recommended Call of Duty loadout
-                for the new season.
-            </p>
-        
-            <div class="loadout-container">
-        
-                <div class="loadout-card">
-        
-                    <h3>
-                        New Season Recommended Loadout
-                    </h3>
-        
-                    <ul class="loadout-list">
-        
-                        <li>
-                            <strong>Primary Weapon:</strong>
-                            QQ9 - Carmen
-                        </li>
-        
-                        <li>
-                            <strong>Secondary Weapon:</strong>
-                            Kali Sticks
-                        </li>
-        
-                        <li>
-                            <strong>Character:</strong>
-                            Any
-                        </li>
-        
-                        <li>
-                            <strong>Wildcard:</strong>
-                            Any
-                        </li>
-        
-                        <li>
-                            <strong>Operator Skill:</strong>
-                            K9 Unit
-                        </li>
-        
-                        <li>
-                            <strong>Lethal:</strong>
-                            Contact Grenade or Trip Mine
-                        </li>
-        
-                        <li>
-                            <strong>Tactical:</strong>
-                            Smoke Grenade or Heartbeat Sensor
-                        </li>
-        
-                        <li>
-                            <strong>Scorestreaks:</strong>
-                            XS1 Goliath /
-                            Hunter Killer Drone or Predator Missile /
-                            UAV or Cluster Strike
-                        </li>
-        
-                        <li>
-                            <strong>Red Perk:</strong>
-                            Lightweight and Martyrdom
-                        </li>
-        
-                        <li>
-                            <strong>Green Perk:</strong>
-                            Quick Fix
-                        </li>
-        
-                        <li>
-                            <strong>Blue Perk:</strong>
-                            Dead Silence
-                        </li>
-        
-                    </ul>
-        
-                </div>
-        
-            </div>
-        
-        </section>
+        /* =========================
+           Loadouts
+        ========================= */
+
+        .loadouts {
+            background: #111827;
+        }
+
+        .loadout-container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .loadout-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 32px;
+            margin-bottom: 25px;
+        }
+
+        .loadout-card h3 {
+            font-size: 29px;
+            color: #38bdf8;
+            margin-bottom: 18px;
+        }
+
+        .loadout-card p {
+            color: #cbd5e1;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .loadout-list {
+            list-style: none;
+            display: grid;
+            gap: 12px;
+        }
+
+        .loadout-list li {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 15px;
+            color: #cbd5e1;
+        }
+
+        .loadout-list li strong {
+            color: white;
+        }
 
         /* =========================
            Guide
@@ -940,12 +898,12 @@
 >
 
     <h2 class="section-title">
-        🎯 Loadouts
+        🎯 Our Recommendation for the New Season
     </h2>
 
     <p class="section-description">
-        Complete Call of Duty weapon
-        loadouts for different situations.
+        Recommended Call of Duty loadout
+        for the new season.
     </p>
 
 
@@ -955,66 +913,113 @@
         <div class="loadout-card">
 
             <h3>
-                QQ9 - Carmen | Close Range
+                New Season Recommended Loadout
             </h3>
-
-            <p>
-                An aggressive close-range
-                SMG setup focused on fast
-                combat.
-            </p>
 
 
             <ul class="loadout-list">
 
-                <li>
-                    Muzzle:
-                    Monolithic Suppressor
-                </li>
 
                 <li>
-                    Barrel:
-                    RTC Recon Tac Long
+                    <strong>
+                        Primary Weapon:
+                    </strong>
+
+                    QQ9 - Carmen
                 </li>
+
 
                 <li>
-                    Stock:
-                    No Stock
+                    <strong>
+                        Secondary Weapon:
+                    </strong>
+
+                    Kali Sticks
                 </li>
+
 
                 <li>
-                    Ammunition:
-                    45 Round Extended Mag
+                    <strong>
+                        Character:
+                    </strong>
+
+                    Any
                 </li>
+
 
                 <li>
-                    Rear Grip:
-                    Granulated Grip Tape
+                    <strong>
+                        Wildcard:
+                    </strong>
+
+                    Any
                 </li>
 
-            </ul>
-
-        </div>
-
-
-        <div class="loadout-card">
-
-            <h3>
-                DL Q33 | Long Range
-            </h3>
-
-            <p>
-                A long-range sniper setup
-                focused on precision.
-            </p>
-
-
-            <ul class="loadout-list">
 
                 <li>
-                    Attachments:
-                    Coming soon
+                    <strong>
+                        Operator Skill:
+                    </strong>
+
+                    K9 Unit
                 </li>
+
+
+                <li>
+                    <strong>
+                        Lethal:
+                    </strong>
+
+                    Contact Grenade or Trip Mine
+                </li>
+
+
+                <li>
+                    <strong>
+                        Tactical:
+                    </strong>
+
+                    Smoke Grenade or Heartbeat Sensor
+                </li>
+
+
+                <li>
+                    <strong>
+                        Scorestreaks:
+                    </strong>
+
+                    XS1 Goliath /
+                    Hunter Killer Drone or Predator Missile /
+                    UAV or Cluster Strike
+                </li>
+
+
+                <li>
+                    <strong>
+                        Red Perk:
+                    </strong>
+
+                    Lightweight and Martyrdom
+                </li>
+
+
+                <li>
+                    <strong>
+                        Green Perk:
+                    </strong>
+
+                    Quick Fix
+                </li>
+
+
+                <li>
+                    <strong>
+                        Blue Perk:
+                    </strong>
+
+                    Dead Silence
+                </li>
+
 
             </ul>
 
