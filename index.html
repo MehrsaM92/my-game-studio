@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Game Download Hub</title>
 
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -23,21 +18,17 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: #0b1120;
-            color: #ffffff;
+            background: #0f172a;
+            color: white;
         }
 
-        /* =========================
-           Header
-        ========================= */
-
         header {
-            background: #0f172a;
+            background: #020617;
             padding: 20px 55px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #263449;
+            border-bottom: 1px solid #334155;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -47,142 +38,71 @@
             font-size: 26px;
             font-weight: bold;
             color: #38bdf8;
-            white-space: nowrap;
         }
 
         nav {
             display: flex;
-            align-items: center;
+            gap: 25px;
         }
 
         nav a {
-            color: #cbd5e1;
+            color: white;
             text-decoration: none;
-            margin-left: 28px;
-            font-size: 15px;
-            transition: 0.25s;
+            font-size: 16px;
         }
 
         nav a:hover {
             color: #38bdf8;
         }
 
-        /* =========================
-           Hero
-        ========================= */
-
         .hero {
-            min-height: 540px;
-
+            min-height: 550px;
             display: flex;
             justify-content: center;
             align-items: center;
-
             text-align: center;
-
-            padding: 80px 30px;
-
+            padding: 70px 30px;
             background:
-                radial-gradient(
-                    circle at top right,
-                    rgba(14, 165, 233, 0.18),
-                    transparent 35%
-                ),
                 linear-gradient(
                     135deg,
                     #020617,
                     #0f172a,
-                    #172554
+                    #164e63
                 );
         }
 
         .hero-content {
-            max-width: 900px;
-        }
-
-        .hero-badge {
-            display: inline-block;
-
-            padding: 8px 16px;
-
-            margin-bottom: 25px;
-
-            border: 1px solid #334155;
-            border-radius: 30px;
-
-            background: #111827;
-
-            color: #38bdf8;
-
-            font-size: 14px;
-            font-weight: bold;
+            max-width: 850px;
         }
 
         .hero h1 {
-            font-size: 64px;
-            line-height: 1.1;
+            font-size: 62px;
             margin-bottom: 25px;
         }
 
-        .hero h1 span {
-            color: #38bdf8;
-        }
-
         .hero p {
-            font-size: 20px;
-            color: #94a3b8;
+            font-size: 21px;
+            color: #cbd5e1;
             line-height: 1.7;
             margin-bottom: 35px;
         }
 
-        .hero-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
         .button {
             display: inline-block;
-
-            padding: 14px 28px;
-
+            padding: 14px 30px;
             background: #0ea5e9;
-
             color: white;
-
-            text-decoration: none;
-
-            border-radius: 8px;
-
-            font-weight: bold;
-
             border: none;
-
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
             cursor: pointer;
-
-            transition: 0.25s;
+            transition: 0.3s;
         }
 
         .button:hover {
             background: #0284c7;
             transform: translateY(-2px);
-        }
-
-        .button.secondary {
-            background: #1e293b;
-            border: 1px solid #475569;
-        }
-
-        .button.secondary:hover {
-            background: #334155;
-        }
-
-        /* =========================
-           General Sections
-        ========================= */
-
-        section {
-            scroll-margin-top: 90px;
         }
 
         .section {
@@ -191,52 +111,43 @@
 
         .section-title {
             text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .section-title h2 {
             font-size: 42px;
-            margin-bottom: 12px;
+            margin-bottom: 18px;
         }
 
-        .section-title p {
+        .section-description {
+            max-width: 750px;
+            margin: 0 auto 50px;
+            text-align: center;
             color: #94a3b8;
+            line-height: 1.7;
             font-size: 17px;
         }
 
         /* =========================
-           Games
-        ========================= */
+           GAMES
+           ========================= */
 
         .games {
-            background: #111827;
+            background: #0f172a;
         }
 
         .game-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fit,
-                    minmax(320px, 1fr)
-                );
-
-            gap: 30px;
-
             max-width: 1100px;
-
             margin: auto;
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(320px, 1fr)
+            );
+            gap: 30px;
         }
 
         .game-card {
             background: #1e293b;
-
             border: 1px solid #334155;
-
             border-radius: 14px;
-
-            padding: 30px;
-
+            padding: 35px;
             transition: 0.3s;
         }
 
@@ -246,24 +157,12 @@
         }
 
         .game-icon {
-            width: 80px;
-            height: 80px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: #0f172a;
-
-            border-radius: 15px;
-
-            font-size: 42px;
-
-            margin-bottom: 25px;
+            font-size: 65px;
+            margin-bottom: 20px;
         }
 
         .game-card h3 {
-            font-size: 28px;
+            font-size: 30px;
             margin-bottom: 15px;
         }
 
@@ -273,32 +172,16 @@
             margin-bottom: 25px;
         }
 
-        .game-info {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-
-        .tag {
-            display: inline-block;
-
-            padding: 6px 10px;
-
-            background: #0f172a;
-
-            border: 1px solid #334155;
-
-            border-radius: 6px;
-
+        .platform {
             color: #94a3b8;
-
-            font-size: 12px;
+            font-size: 14px;
+            margin-bottom: 12px;
         }
 
         .download-button {
             width: 100%;
-            text-align: center;
             background: #f59e0b;
+            text-align: center;
         }
 
         .download-button:hover {
@@ -306,337 +189,317 @@
         }
 
         /* =========================
-           Call of Duty
-        ========================= */
+           CALL OF DUTY
+           ========================= */
 
         .call-of-duty {
             background: #020617;
         }
 
-        .cod-intro {
-            max-width: 850px;
-            margin: 0 auto 50px;
-
+        .cod-header {
+            max-width: 900px;
+            margin: auto;
             text-align: center;
+        }
 
-            color: #cbd5e1;
-
-            line-height: 1.8;
-
-            font-size: 17px;
+        .cod-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            margin-bottom: 18px;
+            border-radius: 20px;
+            background: #1e293b;
+            color: #38bdf8;
+            border: 1px solid #334155;
+            font-size: 14px;
+            font-weight: bold;
         }
 
         .cod-grid {
             max-width: 1100px;
-
-            margin: auto;
-
+            margin: 50px auto 0;
             display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
         }
 
         .cod-card {
-            background: #111827;
-
+            background: #0f172a;
             border: 1px solid #334155;
-
-            border-radius: 12px;
-
-            padding: 28px;
-
-            transition: 0.25s;
-        }
-
-        .cod-card:hover {
-            border-color: #f59e0b;
-            transform: translateY(-4px);
+            border-radius: 14px;
+            padding: 30px;
+            min-height: 220px;
         }
 
         .cod-card-icon {
-            font-size: 38px;
+            font-size: 42px;
             margin-bottom: 18px;
         }
 
         .cod-card h3 {
-            font-size: 22px;
+            font-size: 24px;
             margin-bottom: 12px;
         }
 
         .cod-card p {
             color: #94a3b8;
             line-height: 1.6;
-            margin-bottom: 20px;
         }
 
-        .cod-card a {
-            color: #38bdf8;
-            text-decoration: none;
-            font-weight: bold;
+        /* =========================
+           GUNS
+           ========================= */
+
+        .guns {
+            background: #111827;
         }
 
-        .cod-card a:hover {
+        .guns-container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        #guns-list {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(300px, 1fr)
+            );
+            gap: 25px;
+        }
+
+        .gun-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 30px;
+            transition: 0.3s;
+        }
+
+        .gun-card:hover {
+            border-color: #38bdf8;
+            transform: translateY(-4px);
+        }
+
+        .gun-card h3 {
+            font-size: 27px;
+            margin-bottom: 12px;
+        }
+
+        .gun-type {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: #0c4a6e;
             color: #7dd3fc;
-        }
-
-        /* =========================
-           Data Panels
-        ========================= */
-
-        .data-section {
-            background: #111827;
-        }
-
-        .data-box {
-            max-width: 1100px;
-
-            margin: auto;
-
-            background: #1e293b;
-
-            border: 1px solid #334155;
-
-            border-radius: 14px;
-
-            padding: 30px;
-        }
-
-        .data-header {
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            margin-bottom: 25px;
-        }
-
-        .data-header h3 {
-            font-size: 24px;
-        }
-
-        .data-status {
-            color: #94a3b8;
-            font-size: 14px;
-        }
-
-        .data-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 18px;
-        }
-
-        .data-card {
-            background: #0f172a;
-
-            border: 1px solid #334155;
-
-            border-radius: 10px;
-
-            padding: 20px;
-        }
-
-        .data-card h4 {
-            color: #ffffff;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-
-        .data-card p {
-            color: #94a3b8;
-            line-height: 1.5;
-            font-size: 14px;
-        }
-
-        .data-list {
-            margin-top: 25px;
-        }
-
-        .data-item {
-            display: grid;
-
-            grid-template-columns:
-                70px 1fr auto;
-
-            gap: 15px;
-
-            align-items: center;
-
-            background: #0f172a;
-
-            border: 1px solid #263449;
-
-            border-radius: 8px;
-
-            padding: 15px;
-
-            margin-bottom: 10px;
-        }
-
-        .data-number {
-            color: #38bdf8;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .data-name {
-            font-weight: bold;
-        }
-
-        .data-description {
-            color: #94a3b8;
-            font-size: 13px;
-            margin-top: 5px;
-        }
-
-        .data-type {
-            color: #f59e0b;
             font-size: 13px;
             font-weight: bold;
+            margin-bottom: 18px;
         }
 
-        .loading {
-            text-align: center;
-            color: #94a3b8;
-            padding: 30px;
-        }
-
-        .error {
-            text-align: center;
-            color: #ef4444;
-            padding: 30px;
-        }
-
-        .empty {
-            text-align: center;
-            color: #94a3b8;
-            padding: 30px;
-        }
-
-        /* =========================
-           Loadouts
-        ========================= */
-
-        .loadouts {
-            background: #020617;
-        }
-
-        .loadout-grid {
-            max-width: 1100px;
-
-            margin: auto;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 25px;
-        }
-
-        .loadout-card {
-            background: #111827;
-
-            border: 1px solid #334155;
-
-            border-radius: 12px;
-
-            padding: 25px;
-        }
-
-        .loadout-card h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
-
-        .loadout-card p {
-            color: #94a3b8;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .loadout-list {
-            list-style: none;
-        }
-
-        .loadout-list li {
-            background: #0f172a;
-
-            border: 1px solid #263449;
-
-            padding: 12px 15px;
-
-            border-radius: 7px;
-
-            margin-bottom: 8px;
-
-            color: #cbd5e1;
-        }
-
-        .loadout-list li strong {
-            color: #38bdf8;
-        }
-
-        /* =========================
-           Guides
-        ========================= */
-
-        .guides {
-            background: #111827;
-        }
-
-        .guide-grid {
-            max-width: 1100px;
-
-            margin: auto;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 25px;
-        }
-
-        .guide-card {
-            background: #1e293b;
-
-            border: 1px solid #334155;
-
-            border-radius: 12px;
-
-            padding: 25px;
-        }
-
-        .guide-number {
-            color: #38bdf8;
-
-            font-size: 14px;
-
-            font-weight: bold;
-
-            margin-bottom: 12px;
-        }
-
-        .guide-card h3 {
-            font-size: 21px;
-            margin-bottom: 12px;
-        }
-
-        .guide-card p {
+        .gun-card p {
             color: #cbd5e1;
             line-height: 1.7;
         }
 
         /* =========================
-           About
-        ========================= */
+           ATTACHMENTS
+           ========================= */
+
+        .attachments {
+            background: #0f172a;
+        }
+
+        .attachment-container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        #attachments-list {
+            display: grid;
+            gap: 25px;
+        }
+
+        .attachment-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 35px;
+        }
+
+        .attachment-card h3 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: #38bdf8;
+        }
+
+        .attachment-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .attachment-item {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .attachment-label {
+            display: block;
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .attachment-value {
+            color: white;
+            font-weight: bold;
+        }
+
+        /* =========================
+           LOADOUTS
+           ========================= */
+
+        .loadouts {
+            background: #020617;
+        }
+
+        .loadout-container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        #loadouts-list {
+            display: grid;
+            gap: 25px;
+        }
+
+        .loadout-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 30px;
+        }
+
+        .loadout-card h3 {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .loadout-description {
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        .loadout-attachments {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .loadout-attachment {
+            padding: 14px;
+            background: #0f172a;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            color: #cbd5e1;
+        }
+
+        /* =========================
+           GUIDE
+           ========================= */
+
+        .guide {
+            background: #111827;
+        }
+
+        .guide-container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .guide-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            padding: 35px;
+            margin-bottom: 20px;
+        }
+
+        .guide-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #38bdf8;
+        }
+
+        .guide-card p {
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+
+        /* =========================
+           SERVER STATUS
+           ========================= */
+
+        .status-section {
+            background: #020617;
+            text-align: center;
+        }
+
+        .status-box {
+            max-width: 500px;
+            margin: auto;
+            padding: 25px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .status-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: #64748b;
+        }
+
+        .status-dot.online {
+            background: #22c55e;
+        }
+
+        .status-dot.offline {
+            background: #ef4444;
+        }
+
+        #status-text {
+            color: #94a3b8;
+        }
+
+        .loading,
+        .empty,
+        .error {
+            padding: 25px;
+            text-align: center;
+            border-radius: 10px;
+            background: #1e293b;
+            color: #94a3b8;
+        }
+
+        .error {
+            color: #f87171;
+        }
+
+        /* =========================
+           ABOUT
+           ========================= */
 
         .about {
             background: #0f172a;
@@ -648,11 +511,6 @@
             margin: auto;
         }
 
-        .about h2 {
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
-
         .about p {
             color: #cbd5e1;
             line-height: 1.9;
@@ -660,413 +518,260 @@
         }
 
         /* =========================
-           Footer
-        ========================= */
+           FOOTER
+           ========================= */
 
         footer {
+            padding: 30px;
             background: #020617;
-
-            border-top: 1px solid #1e293b;
-
-            padding: 30px 50px;
-
             text-align: center;
-
             color: #64748b;
+            border-top: 1px solid #1e293b;
         }
-
-        /* =========================
-           Desktop Layout
-        ========================= */
-
-        @media (min-width: 1000px) {
-
-            body {
-                min-width: 1000px;
-            }
-
-        }
-
     </style>
-
 </head>
-
 
 <body>
 
+<header>
 
-    <!-- =========================
-         Header
-    ========================= -->
+    <div class="logo">
+        Game Download Hub
+    </div>
 
-    <header>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#games">Games</a>
+        <a href="#call-of-duty">Call of Duty</a>
+        <a href="#guns">Guns</a>
+        <a href="#attachments">Attachments</a>
+        <a href="#loadouts">Loadouts</a>
+        <a href="#guide">Guide</a>
+        <a href="#about">About</a>
+    </nav>
 
-        <div class="logo">
-            Game Download Hub
-        </div>
-
-        <nav>
-
-            <a href="#home">
-                Home
-            </a>
-
-            <a href="#games">
-                Games
-            </a>
-
-            <a href="#call-of-duty">
-                Call of Duty
-            </a>
-
-            <a href="#guns">
-                Guns
-            </a>
-
-            <a href="#attachments">
-                Attachments
-            </a>
-
-            <a href="#loadouts">
-                Loadouts
-            </a>
-
-            <a href="#guides">
-                Guides
-            </a>
-
-        </nav>
-
-    </header>
+</header>
 
 
-    <!-- =========================
-         Hero
-    ========================= -->
+<section class="hero" id="home">
 
-    <section class="hero" id="home">
+    <div class="hero-content">
 
-        <div class="hero-content">
+        <h1>
+            Welcome to Game Download Hub
+        </h1>
 
-            <div class="hero-badge">
-                GAME DOWNLOAD HUB
-            </div>
-
-            <h1>
-                Games,
-                <span>Loadouts</span>
-                & Guides
-            </h1>
-
-            <p>
-                Download games, explore Call of Duty weapons,
-                find useful attachments, build loadouts,
-                and learn how to play better.
-            </p>
-
-            <div class="hero-buttons">
-
-                <a
-                    href="#games"
-                    class="button"
-                >
-                    Explore Games
-                </a>
-
-                <a
-                    href="#call-of-duty"
-                    class="button secondary"
-                >
-                    Call of Duty
-                </a>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         Games
-    ========================= -->
-
-    <section
-        class="section games"
-        id="games"
-    >
-
-        <div class="section-title">
-
-            <h2>
-                Games
-            </h2>
-
-            <p>
-                Download the available game.
-            </p>
-
-        </div>
-
-
-        <div
-            id="games-container"
-            class="game-grid"
-        >
-
-            <div class="loading">
-                Loading games...
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         Call of Duty
-    ========================= -->
-
-    <section
-        class="section call-of-duty"
-        id="call-of-duty"
-    >
-
-        <div class="section-title">
-
-            <h2>
-                Call of Duty
-            </h2>
-
-            <p>
-                Weapons, attachments, loadouts and guides.
-            </p>
-
-        </div>
-
-
-        <p class="cod-intro">
-
-            This section is dedicated to Call of Duty.
-            Browse the available weapons, learn about
-            attachments, check recommended loadouts,
-            and use the guides to improve your gameplay.
-
+        <p>
+            Download games, explore Call of Duty weapons,
+            check attachments and loadouts, and find
+            useful gaming guides.
         </p>
 
+        <a href="#games" class="button">
+            Explore Games
+        </a>
 
-        <div class="cod-grid">
+    </div>
+
+</section>
 
 
-            <div class="cod-card">
+<section class="section games" id="games">
 
-                <div class="cod-card-icon">
-                    🔫
-                </div>
+    <h2 class="section-title">
+        🎮 Games
+    </h2>
 
-                <h3>
-                    Guns
-                </h3>
+    <p class="section-description">
+        Games available in the Game Download Hub.
+    </p>
 
-                <p>
-                    Browse the available weapons
-                    and their information.
-                </p>
+    <div class="game-grid">
 
-                <a href="#guns">
-                    View Guns →
-                </a>
+        <div class="game-card">
 
+            <div class="game-icon">
+                🚗
             </div>
 
-
-            <div class="cod-card">
-
-                <div class="cod-card-icon">
-                    🧩
-                </div>
-
-                <h3>
-                    Attachments
-                </h3>
-
-                <p>
-                    Find attachments and understand
-                    what they are useful for.
-                </p>
-
-                <a href="#attachments">
-                    View Attachments →
-                </a>
-
-            </div>
-
-
-            <div class="cod-card">
-
-                <div class="cod-card-icon">
-                    🎯
-                </div>
-
-                <h3>
-                    Loadouts
-                </h3>
-
-                <p>
-                    Explore recommended weapon
-                    setups and loadouts.
-                </p>
-
-                <a href="#loadouts">
-                    View Loadouts →
-                </a>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         Guns
-    ========================= -->
-
-    <section
-        class="section data-section"
-        id="guns"
-    >
-
-        <div class="section-title">
-
-            <h2>
-                🔫 Guns
-            </h2>
+            <h3>
+                Car Game
+            </h3>
 
             <p>
-                Available Call of Duty weapons.
+                Drive your car, avoid obstacles,
+                and survive as long as possible.
             </p>
 
-        </div>
-
-
-        <div class="data-box">
-
-            <div class="data-header">
-
-                <h3>
-                    Weapon Database
-                </h3>
-
-                <div
-                    class="data-status"
-                    id="guns-status"
-                >
-                    Loading...
-                </div>
-
+            <div class="platform">
+                PC Version
             </div>
 
-
-            <div
-                id="guns-container"
-                class="data-list"
+            <a
+                href="CarGame.exe"
+                class="button download-button"
+                download
             >
-
-                <div class="loading">
-                    Loading guns...
-                </div>
-
-            </div>
+                Download Car Game PC
+            </a>
 
         </div>
 
-    </section>
+    </div>
+
+</section>
 
 
-    <!-- =========================
-         Attachments
-    ========================= -->
+<section
+    class="section call-of-duty"
+    id="call-of-duty"
+>
 
-    <section
-        class="section data-section"
-        id="attachments"
-    >
+    <div class="cod-header">
 
-        <div class="section-title">
+        <span class="cod-badge">
+            CALL OF DUTY
+        </span>
 
-            <h2>
-                🧩 Attachments
-            </h2>
+        <h2 class="section-title">
+            Call of Duty: Mobile
+        </h2>
+
+        <p class="section-description">
+            Explore weapons, attachments,
+            loadouts, and useful Call of Duty
+            information.
+        </p>
+
+    </div>
+
+    <div class="cod-grid">
+
+        <div class="cod-card">
+
+            <div class="cod-card-icon">
+                🔫
+            </div>
+
+            <h3>
+                Guns
+            </h3>
 
             <p>
-                Find useful attachments for your weapons.
+                Browse weapons stored in the
+                Call of Duty database.
             </p>
 
         </div>
 
+        <div class="cod-card">
 
-        <div class="data-box">
-
-            <div class="data-header">
-
-                <h3>
-                    Attachment Database
-                </h3>
-
-                <div
-                    class="data-status"
-                    id="attachments-status"
-                >
-                    Loading...
-                </div>
-
+            <div class="cod-card-icon">
+                🧩
             </div>
 
-
-            <div
-                id="attachments-container"
-                class="data-list"
-            >
-
-                <div class="loading">
-                    Loading attachments...
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         Loadouts
-    ========================= -->
-
-    <section
-        class="section loadouts"
-        id="loadouts"
-    >
-
-        <div class="section-title">
-
-            <h2>
-                🎯 Loadouts
-            </h2>
+            <h3>
+                Attachments
+            </h3>
 
             <p>
-                Recommended Call of Duty loadouts.
+                View recommended attachment
+                configurations for weapons.
             </p>
 
         </div>
 
+        <div class="cod-card">
 
-        <div
-            id="loadouts-container"
-            class="loadout-grid"
-        >
+            <div class="cod-card-icon">
+                🎯
+            </div>
+
+            <h3>
+                Loadouts
+            </h3>
+
+            <p>
+                View complete weapon loadouts
+                stored in the database.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="section guns" id="guns">
+
+    <h2 class="section-title">
+        🔫 Guns
+    </h2>
+
+    <p class="section-description">
+        Call of Duty weapons available in the database.
+    </p>
+
+    <div class="guns-container">
+
+        <div id="guns-list">
+
+            <div class="loading">
+                Loading guns...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section
+    class="section attachments"
+    id="attachments"
+>
+
+    <h2 class="section-title">
+        🧩 Attachments
+    </h2>
+
+    <p class="section-description">
+        Weapon attachment configurations.
+    </p>
+
+    <div class="attachment-container">
+
+        <div id="attachments-list">
+
+            <div class="loading">
+                Loading attachments...
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section
+    class="section loadouts"
+    id="loadouts"
+>
+
+    <h2 class="section-title">
+        🎯 Loadouts
+    </h2>
+
+    <p class="section-description">
+        Recommended Call of Duty weapon loadouts.
+    </p>
+
+    <div class="loadout-container">
+
+        <div id="loadouts-list">
 
             <div class="loading">
                 Loading loadouts...
@@ -1074,1103 +779,765 @@
 
         </div>
 
-    </section>
+    </div>
+
+</section>
 
 
-    <!-- =========================
-         Guides
-    ========================= -->
+<section
+    class="section guide"
+    id="guide"
+>
 
-    <section
-        class="section guides"
-        id="guides"
-    >
+    <h2 class="section-title">
+        📖 Game Guide
+    </h2>
 
-        <div class="section-title">
+    <p class="section-description">
+        Useful information for playing games
+        and using Call of Duty builds.
+    </p>
 
-            <h2>
-                📖 How To Play
-            </h2>
+    <div class="guide-container">
+
+        <div class="guide-card">
+
+            <h3>
+                🎮 Getting Started
+            </h3>
 
             <p>
-                Basic tips and solutions for better gameplay.
+                Choose a game from the Games section
+                and follow its instructions to start
+                playing.
             </p>
 
         </div>
 
+        <div class="guide-card">
 
-        <div class="guide-grid">
-
-
-            <div class="guide-card">
-
-                <div class="guide-number">
-                    GUIDE 01
-                </div>
-
-                <h3>
-                    Choose Your Weapon
-                </h3>
-
-                <p>
-                    Pick a weapon based on the way
-                    you want to play. Consider range,
-                    accuracy, mobility and damage
-                    before building your setup.
-                </p>
-
-            </div>
-
-
-            <div class="guide-card">
-
-                <div class="guide-number">
-                    GUIDE 02
-                </div>
-
-                <h3>
-                    Build Your Loadout
-                </h3>
-
-                <p>
-                    Combine the weapon with attachments
-                    that support your playstyle instead
-                    of simply choosing the most popular
-                    attachment.
-                </p>
-
-            </div>
-
-
-            <div class="guide-card">
-
-                <div class="guide-number">
-                    GUIDE 03
-                </div>
-
-                <h3>
-                    Improve Your Aim
-                </h3>
-
-                <p>
-                    Practice your aim and learn the
-                    recoil pattern of your preferred
-                    weapon. Consistency is more useful
-                    than constantly changing settings.
-                </p>
-
-            </div>
-
-
-            <div class="guide-card">
-
-                <div class="guide-number">
-                    GUIDE 04
-                </div>
-
-                <h3>
-                    Learn The Map
-                </h3>
-
-                <p>
-                    Pay attention to common routes,
-                    cover locations and dangerous
-                    areas. Good positioning can make
-                    a major difference in a match.
-                </p>
-
-            </div>
-
-
-            <div class="guide-card">
-
-                <div class="guide-number">
-                    GUIDE 05
-                </div>
-
-                <h3>
-                    Use Attachments Carefully
-                </h3>
-
-                <p>
-                    Attachments usually involve tradeoffs.
-                    Improving one stat may reduce another,
-                    so build your weapon around the role
-                    you want it to perform.
-                </p>
-
-            </div>
-
-
-            <div class="guide-card">
-
-                <div class="guide-number">
-                    GUIDE 06
-                </div>
-
-                <h3>
-                    Practice Your Setup
-                </h3>
-
-                <p>
-                    After creating a loadout, spend time
-                    using it before changing everything.
-                    Give yourself enough time to understand
-                    its strengths and weaknesses.
-                </p>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         About
-    ========================= -->
-
-    <section
-        class="section about"
-        id="about"
-    >
-
-        <div class="about-content">
-
-            <h2>
-                About Game Download Hub
-            </h2>
+            <h3>
+                🔫 Call of Duty
+            </h3>
 
             <p>
-
-                Game Download Hub is a place for
-                downloading games and finding useful
-                Call of Duty information.
-
-                The website will be expanded over time
-                with more games, weapons, attachments,
-                loadouts and gameplay guides.
-
+                Open Guns, Attachments, or Loadouts
+                to find the weapon information you need.
             </p>
 
         </div>
 
-    </section>
+        <div class="guide-card">
+
+            <h3>
+                🛠️ Website
+            </h3>
+
+            <p>
+                Call of Duty information is loaded
+                dynamically from the Flask backend.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
 
 
-    <!-- =========================
-         Footer
-    ========================= -->
+<section class="section status-section">
 
-    <footer>
+    <h2 class="section-title">
+        🌐 Server Status
+    </h2>
 
-        <p>
-            © 2026 Game Download Hub.
-            All rights reserved.
+    <p class="section-description">
+        Checking connection to the Game Download Hub API.
+    </p>
+
+    <div class="status-box">
+
+        <div class="status-indicator">
+
+            <span
+                id="status-dot"
+                class="status-dot"
+            ></span>
+
+            <span id="status-title">
+                Checking...
+            </span>
+
+        </div>
+
+        <p id="status-text">
+            Connecting to server...
         </p>
 
-    </footer>
+    </div>
+
+</section>
 
 
-    <!-- =========================
-         JavaScript
-    ========================= -->
+<section
+    class="section about"
+    id="about"
+>
 
-    <script>
+    <div class="about-content">
+
+        <h2 class="section-title">
+            About
+        </h2>
+
+        <p>
+            Game Download Hub is an independent
+            gaming website for publishing games,
+            organizing gaming information, and
+            experimenting with new projects.
+        </p>
+
+    </div>
+
+</section>
 
 
-        /*
-        ============================================
-        Backend URL
-        ============================================
-        */
+<footer>
 
-        const API_URL =
-            "https://my-game-studio-backend.onrender.com";
+    <p>
+        © 2026 Game Download Hub.
+        All rights reserved.
+    </p>
+
+</footer>
 
 
-        /*
-        ============================================
-        Helper
-        ============================================
-        */
+<script>
 
-        function escapeHTML(value) {
+    const API_URL =
+        "https://my-game-studio-backend.onrender.com";
 
-            const div =
-                document.createElement("div");
 
-            div.textContent =
-                value ?? "";
+    function createElement(
+        tag,
+        className,
+        text
+    ) {
 
-            return div.innerHTML;
+        const element =
+            document.createElement(tag);
 
+        if (className) {
+            element.className =
+                className;
         }
 
+        if (text !== undefined) {
+            element.textContent =
+                text;
+        }
 
-        /*
-        ============================================
-        Games
-        ============================================
-        */
-
-        async function loadGames() {
-
-            const container =
-                document.getElementById(
-                    "games-container"
-                );
+        return element;
+    }
 
 
-            try {
+    // =========================
+    // SERVER STATUS
+    // =========================
 
-                const response =
-                    await fetch(
-                        API_URL +
-                        "/api/games",
-                        {
-                            method: "GET",
-                            cache: "no-cache"
-                        }
-                    );
+    async function loadServerStatus() {
 
+        const dot =
+            document.getElementById(
+                "status-dot"
+            );
 
-                if (!response.ok) {
+        const title =
+            document.getElementById(
+                "status-title"
+            );
 
-                    throw new Error(
-                        "Server returned " +
-                        response.status
-                    );
-
-                }
-
-
-                const data =
-                    await response.json();
+        const text =
+            document.getElementById(
+                "status-text"
+            );
 
 
-                container.innerHTML =
-                    "";
+        try {
 
-
-                const games =
-                    data.games;
-
-
-                if (
-                    !Array.isArray(games)
-                    ||
-                    games.length === 0
-                ) {
-
-                    /*
-                    Fallback game.
-                    This keeps the current game
-                    visible even while GAMES = []
-                    in Flask.
-                    */
-
-                    container.innerHTML = `
-
-                        <div class="game-card">
-
-                            <div class="game-icon">
-                                🚗
-                            </div>
-
-                            <h3>
-                                Car Game
-                            </h3>
-
-                            <p>
-                                Drive your car,
-                                avoid obstacles,
-                                and survive as long
-                                as possible.
-                            </p>
-
-                            <div class="game-info">
-
-                                <span class="tag">
-                                    PC
-                                </span>
-
-                                <span class="tag">
-                                    Windows
-                                </span>
-
-                            </div>
-
-                            <a
-                                href="CarGame.exe"
-                                class="button download-button"
-                                download
-                            >
-                                Download Car Game
-                            </a>
-
-                        </div>
-
-                    `;
-
-                    return;
-
-                }
-
-
-                games.forEach(
-                    (game) => {
-
-                        const card =
-                            document.createElement(
-                                "div"
-                            );
-
-
-                        card.className =
-                            "game-card";
-
-
-                        card.innerHTML = `
-
-                            <div class="game-icon">
-                                ${escapeHTML(
-                                    game.icon ||
-                                    "🎮"
-                                )}
-                            </div>
-
-                            <h3>
-                                ${escapeHTML(
-                                    game.name ||
-                                    "Game"
-                                )}
-                            </h3>
-
-                            <p>
-                                ${escapeHTML(
-                                    game.description ||
-                                    "Game available for download."
-                                )}
-                            </p>
-
-                            <div class="game-info">
-
-                                <span class="tag">
-                                    ${escapeHTML(
-                                        game.platform ||
-                                        "PC"
-                                    )}
-                                </span>
-
-                            </div>
-
-                            <a
-                                href="${escapeHTML(
-                                    game.download ||
-                                    "#"
-                                )}"
-                                class="button download-button"
-                                download
-                            >
-                                Download Game
-                            </a>
-
-                        `;
-
-
-                        container.appendChild(
-                            card
-                        );
-
+            const response =
+                await fetch(
+                    API_URL +
+                    "/api/status",
+                    {
+                        method: "GET",
+                        cache: "no-cache"
                     }
                 );
 
-            }
 
-            catch (error) {
+            if (!response.ok) {
 
-                console.error(
-                    "Games error:",
-                    error
+                throw new Error(
+                    "Server error"
                 );
 
+            }
 
-                /*
-                Fallback
-                */
 
-                container.innerHTML = `
+            const data =
+                await response.json();
 
-                    <div class="game-card">
 
-                        <div class="game-icon">
-                            🚗
-                        </div>
+            if (
+                data.success &&
+                data.online
+            ) {
 
-                        <h3>
-                            Car Game
-                        </h3>
+                dot.className =
+                    "status-dot online";
 
-                        <p>
-                            Drive your car,
-                            avoid obstacles,
-                            and survive as long
-                            as possible.
-                        </p>
+                title.textContent =
+                    "Server Online";
 
-                        <div class="game-info">
+                text.textContent =
+                    "Game Download Hub API is online.";
 
-                            <span class="tag">
-                                PC
-                            </span>
+            }
 
-                            <span class="tag">
-                                Windows
-                            </span>
+            else {
 
-                        </div>
-
-                        <a
-                            href="CarGame.exe"
-                            class="button download-button"
-                            download
-                        >
-                            Download Car Game
-                        </a>
-
-                    </div>
-
-                `;
+                throw new Error(
+                    "API offline"
+                );
 
             }
 
         }
 
+        catch (error) {
 
-        /*
-        ============================================
-        Guns
-        ============================================
-        */
+            console.error(
+                "Status error:",
+                error
+            );
 
-        async function loadGuns() {
+            dot.className =
+                "status-dot offline";
 
-            const container =
-                document.getElementById(
-                    "guns-container"
-                );
+            title.textContent =
+                "Server Offline";
 
+            text.textContent =
+                "Unable to connect to the Game Download Hub API.";
 
-            const status =
-                document.getElementById(
-                    "guns-status"
-                );
+        }
 
-
-            try {
-
-                const response =
-                    await fetch(
-                        API_URL +
-                        "/api/call-of-duty/guns",
-                        {
-                            method: "GET",
-                            cache: "no-cache"
-                        }
-                    );
+    }
 
 
-                if (!response.ok) {
+    // =========================
+    // GUNS
+    // =========================
 
-                    throw new Error(
-                        "Server returned " +
-                        response.status
-                    );
+    async function loadGuns() {
 
-                }
-
-
-                const data =
-                    await response.json();
+        const container =
+            document.getElementById(
+                "guns-list"
+            );
 
 
-                const guns =
-                    data.guns;
+        container.innerHTML =
+            '<div class="loading">Loading guns...</div>';
 
 
-                container.innerHTML =
-                    "";
+        try {
 
-
-                if (
-                    !Array.isArray(guns)
-                    ||
-                    guns.length === 0
-                ) {
-
-                    container.innerHTML = `
-
-                        <div class="empty">
-
-                            No guns have been added yet.
-
-                            <br><br>
-
-                            Add weapons to
-                            CALL_OF_DUTY["guns"]
-                            in your Flask backend.
-
-                        </div>
-
-                    `;
-
-                    status.textContent =
-                        "0 weapons";
-
-                    return;
-
-                }
-
-
-                status.textContent =
-                    guns.length +
-                    " weapons";
-
-
-                guns.forEach(
-                    (gun, index) => {
-
-                        const item =
-                            document.createElement(
-                                "div"
-                            );
-
-
-                        item.className =
-                            "data-item";
-
-
-                        item.innerHTML = `
-
-                            <div class="data-number">
-                                #${index + 1}
-                            </div>
-
-                            <div>
-
-                                <div class="data-name">
-                                    ${escapeHTML(
-                                        gun.name ||
-                                        "Weapon"
-                                    )}
-                                </div>
-
-                                <div class="data-description">
-                                    ${escapeHTML(
-                                        gun.description ||
-                                        "No description available."
-                                    )}
-                                </div>
-
-                            </div>
-
-                            <div class="data-type">
-                                ${escapeHTML(
-                                    gun.type ||
-                                    "GUN"
-                                )}
-                            </div>
-
-                        `;
-
-
-                        container.appendChild(
-                            item
-                        );
-
+            const response =
+                await fetch(
+                    API_URL +
+                    "/api/call-of-duty/guns",
+                    {
+                        method: "GET",
+                        cache: "no-cache"
                     }
                 );
 
-            }
 
-            catch (error) {
+            if (!response.ok) {
 
-                console.error(
-                    "Guns error:",
-                    error
+                throw new Error(
+                    "HTTP " +
+                    response.status
                 );
 
-
-                status.textContent =
-                    "Offline";
+            }
 
 
-                container.innerHTML = `
+            const data =
+                await response.json();
 
-                    <div class="error">
-                        Unable to load guns.
-                    </div>
 
-                `;
+            container.innerHTML =
+                "";
+
+
+            if (
+                !data.success ||
+                !Array.isArray(data.guns) ||
+                data.guns.length === 0
+            ) {
+
+                container.innerHTML =
+                    '<div class="empty">No guns available yet.</div>';
+
+                return;
 
             }
+
+
+            data.guns.forEach(
+                gun => {
+
+                    const card =
+                        createElement(
+                            "div",
+                            "gun-card"
+                        );
+
+
+                    const title =
+                        createElement(
+                            "h3",
+                            null,
+                            gun.name ||
+                            "Unknown Weapon"
+                        );
+
+
+                    const type =
+                        createElement(
+                            "span",
+                            "gun-type",
+                            gun.type ||
+                            "Weapon"
+                        );
+
+
+                    const description =
+                        createElement(
+                            "p",
+                            null,
+                            gun.description ||
+                            "Call of Duty weapon."
+                        );
+
+
+                    card.appendChild(title);
+                    card.appendChild(type);
+                    card.appendChild(description);
+
+                    container.appendChild(card);
+
+                }
+            );
 
         }
 
+        catch (error) {
 
-        /*
-        ============================================
-        Attachments
-        ============================================
-        */
-
-        async function loadAttachments() {
-
-            const container =
-                document.getElementById(
-                    "attachments-container"
-                );
+            console.error(
+                "Guns error:",
+                error
+            );
 
 
-            const status =
-                document.getElementById(
-                    "attachments-status"
-                );
+            container.innerHTML =
+                '<div class="error">Unable to load guns right now.</div>';
+
+        }
+
+    }
 
 
-            try {
+    // =========================
+    // ATTACHMENTS
+    // =========================
 
-                const response =
-                    await fetch(
-                        API_URL +
-                        "/api/call-of-duty/attachments",
-                        {
-                            method: "GET",
-                            cache: "no-cache"
-                        }
-                    );
+    async function loadAttachments() {
 
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Server returned " +
-                        response.status
-                    );
-
-                }
+        const container =
+            document.getElementById(
+                "attachments-list"
+            );
 
 
-                const data =
-                    await response.json();
+        container.innerHTML =
+            '<div class="loading">Loading attachments...</div>';
 
 
-                const attachments =
-                    data.attachments;
+        try {
 
-
-                container.innerHTML =
-                    "";
-
-
-                if (
-                    !Array.isArray(
-                        attachments
-                    )
-                    ||
-                    attachments.length === 0
-                ) {
-
-                    container.innerHTML = `
-
-                        <div class="empty">
-
-                            No attachments have been
-                            added yet.
-
-                            <br><br>
-
-                            Add attachments to
-                            CALL_OF_DUTY["attachments"]
-                            in your Flask backend.
-
-                        </div>
-
-                    `;
-
-                    status.textContent =
-                        "0 attachments";
-
-                    return;
-
-                }
-
-
-                status.textContent =
-                    attachments.length +
-                    " attachments";
-
-
-                attachments.forEach(
-                    (
-                        attachment,
-                        index
-                    ) => {
-
-                        const item =
-                            document.createElement(
-                                "div"
-                            );
-
-
-                        item.className =
-                            "data-item";
-
-
-                        item.innerHTML = `
-
-                            <div class="data-number">
-                                #${index + 1}
-                            </div>
-
-                            <div>
-
-                                <div class="data-name">
-                                    ${escapeHTML(
-                                        attachment.name ||
-                                        "Attachment"
-                                    )}
-                                </div>
-
-                                <div class="data-description">
-                                    ${escapeHTML(
-                                        attachment.description ||
-                                        "No description available."
-                                    )}
-                                </div>
-
-                            </div>
-
-                            <div class="data-type">
-                                ${escapeHTML(
-                                    attachment.type ||
-                                    "ATTACHMENT"
-                                )}
-                            </div>
-
-                        `;
-
-
-                        container.appendChild(
-                            item
-                        );
-
+            const response =
+                await fetch(
+                    API_URL +
+                    "/api/call-of-duty/attachments",
+                    {
+                        method: "GET",
+                        cache: "no-cache"
                     }
                 );
 
-            }
 
-            catch (error) {
+            if (!response.ok) {
 
-                console.error(
-                    "Attachments error:",
-                    error
+                throw new Error(
+                    "HTTP " +
+                    response.status
                 );
-
-
-                status.textContent =
-                    "Offline";
-
-
-                container.innerHTML = `
-
-                    <div class="error">
-                        Unable to load attachments.
-                    </div>
-
-                `;
 
             }
 
-        }
+
+            const data =
+                await response.json();
 
 
-        /*
-        ============================================
-        Loadouts
-        ============================================
-        */
-
-        async function loadLoadouts() {
-
-            const container =
-                document.getElementById(
-                    "loadouts-container"
-                );
+            container.innerHTML =
+                "";
 
 
-            try {
-
-                const response =
-                    await fetch(
-                        API_URL +
-                        "/api/call-of-duty/loadouts",
-                        {
-                            method: "GET",
-                            cache: "no-cache"
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Server returned " +
-                        response.status
-                    );
-
-                }
-
-
-                const data =
-                    await response.json();
-
-
-                const loadouts =
-                    data.loadouts;
-
+            if (
+                !data.success ||
+                !Array.isArray(data.attachments) ||
+                data.attachments.length === 0
+            ) {
 
                 container.innerHTML =
-                    "";
+                    '<div class="empty">No attachments available yet.</div>';
+
+                return;
+
+            }
 
 
-                if (
-                    !Array.isArray(loadouts)
-                    ||
-                    loadouts.length === 0
-                ) {
+            data.attachments.forEach(
+                attachment => {
 
-                    container.innerHTML = `
-
-                        <div class="loadout-card">
-
-                            <h3>
-                                No Loadouts Yet
-                            </h3>
-
-                            <p>
-                                Loadouts will appear here
-                                when you add them to
-                                CALL_OF_DUTY["loadouts"]
-                                in the Flask backend.
-                            </p>
-
-                        </div>
-
-                    `;
-
-                    return;
-
-                }
+                    const card =
+                        createElement(
+                            "div",
+                            "attachment-card"
+                        );
 
 
-                loadouts.forEach(
-                    (loadout) => {
-
-                        const card =
-                            document.createElement(
-                                "div"
-                            );
-
-
-                        card.className =
-                            "loadout-card";
+                    const title =
+                        createElement(
+                            "h3",
+                            null,
+                            attachment.weapon ||
+                            "Unknown Weapon"
+                        );
 
 
-                        let itemsHTML =
-                            "";
+                    const list =
+                        createElement(
+                            "div",
+                            "attachment-list"
+                        );
 
 
-                        if (
-                            Array.isArray(
-                                loadout.attachments
-                            )
-                        ) {
+                    const attachmentData = [
 
-                            loadout.attachments
-                                .forEach(
-                                    attachment => {
+                        [
+                            "Muzzle",
+                            attachment.muzzle
+                        ],
 
-                                        itemsHTML += `
+                        [
+                            "Barrel",
+                            attachment.barrel
+                        ],
 
-                                            <li>
-                                                <strong>
-                                                    Attachment:
-                                                </strong>
+                        [
+                            "Stock",
+                            attachment.stock
+                        ],
 
-                                                ${escapeHTML(
-                                                    attachment
-                                                )}
-                                            </li>
+                        [
+                            "Ammunition",
+                            attachment.ammunition
+                        ],
 
-                                        `;
+                        [
+                            "Rear Grip",
+                            attachment.rear_grip
+                        ]
 
-                                    }
+                    ];
+
+
+                    attachmentData.forEach(
+                        item => {
+
+                            const itemBox =
+                                createElement(
+                                    "div",
+                                    "attachment-item"
                                 );
 
+
+                            const label =
+                                createElement(
+                                    "span",
+                                    "attachment-label",
+                                    item[0]
+                                );
+
+
+                            const value =
+                                createElement(
+                                    "span",
+                                    "attachment-value",
+                                    item[1] ||
+                                    "Not specified"
+                                );
+
+
+                            itemBox.appendChild(
+                                label
+                            );
+
+                            itemBox.appendChild(
+                                value
+                            );
+
+                            list.appendChild(
+                                itemBox
+                            );
+
                         }
+                    );
 
 
-                        card.innerHTML = `
+                    card.appendChild(title);
+                    card.appendChild(list);
 
-                            <h3>
-                                ${escapeHTML(
-                                    loadout.name ||
-                                    "Loadout"
-                                )}
-                            </h3>
+                    container.appendChild(card);
 
-                            <p>
-                                ${escapeHTML(
-                                    loadout.description ||
-                                    "Recommended loadout."
-                                )}
-                            </p>
+                }
+            );
 
-                            <ul class="loadout-list">
+        }
 
-                                <li>
-                                    <strong>
-                                        Weapon:
-                                    </strong>
+        catch (error) {
 
-                                    ${escapeHTML(
-                                        loadout.weapon ||
-                                        "Not specified"
-                                    )}
-                                </li>
-
-                                ${itemsHTML}
-
-                            </ul>
-
-                        `;
+            console.error(
+                "Attachments error:",
+                error
+            );
 
 
-                        container.appendChild(
-                            card
-                        );
+            container.innerHTML =
+                '<div class="error">Unable to load attachments right now.</div>';
 
+        }
+
+    }
+
+
+    // =========================
+    // LOADOUTS
+    // =========================
+
+    async function loadLoadouts() {
+
+        const container =
+            document.getElementById(
+                "loadouts-list"
+            );
+
+
+        container.innerHTML =
+            '<div class="loading">Loading loadouts...</div>';
+
+
+        try {
+
+            const response =
+                await fetch(
+                    API_URL +
+                    "/api/call-of-duty/loadouts",
+                    {
+                        method: "GET",
+                        cache: "no-cache"
                     }
                 );
 
-            }
 
-            catch (error) {
+            if (!response.ok) {
 
-                console.error(
-                    "Loadouts error:",
-                    error
+                throw new Error(
+                    "HTTP " +
+                    response.status
                 );
 
+            }
 
-                container.innerHTML = `
 
-                    <div class="loadout-card">
+            const data =
+                await response.json();
 
-                        <h3>
-                            Unable to Load Loadouts
-                        </h3>
 
-                        <p>
-                            The server could not
-                            provide loadout data.
-                        </p>
+            container.innerHTML =
+                "";
 
-                    </div>
 
-                `;
+            if (
+                !data.success ||
+                !Array.isArray(data.loadouts) ||
+                data.loadouts.length === 0
+            ) {
+
+                container.innerHTML =
+                    '<div class="empty">No loadouts available yet.</div>';
+
+                return;
 
             }
 
-        }
+
+            data.loadouts.forEach(
+                loadout => {
+
+                    const card =
+                        createElement(
+                            "div",
+                            "loadout-card"
+                        );
 
 
-        /*
-        ============================================
-        Call of Duty Main Data
-        ============================================
-        */
-
-        async function loadCallOfDutyData() {
-
-            try {
-
-                const response =
-                    await fetch(
-                        API_URL +
-                        "/api/call-of-duty",
-                        {
-                            method: "GET",
-                            cache: "no-cache"
-                        }
-                    );
+                    const title =
+                        createElement(
+                            "h3",
+                            null,
+                            loadout.name ||
+                            "Unnamed Loadout"
+                        );
 
 
-                if (!response.ok) {
+                    const description =
+                        createElement(
+                            "p",
+                            "loadout-description",
+                            loadout.description ||
+                            "Saved Call of Duty loadout."
+                        );
 
-                    throw new Error(
-                        "Call of Duty API error"
-                    );
+
+                    const attachmentList =
+                        createElement(
+                            "div",
+                            "loadout-attachments"
+                        );
+
+
+                    if (
+                        Array.isArray(
+                            loadout.attachments
+                        )
+                    ) {
+
+                        loadout.attachments.forEach(
+                            (
+                                attachment,
+                                index
+                            ) => {
+
+                                const item =
+                                    createElement(
+                                        "div",
+                                        "loadout-attachment"
+                                    );
+
+
+                                item.textContent =
+                                    "#" +
+                                    (
+                                        index + 1
+                                    ) +
+                                    " " +
+                                    attachment;
+
+
+                                attachmentList.appendChild(
+                                    item
+                                );
+
+                            }
+                        );
+
+                    }
+
+
+                    card.appendChild(title);
+                    card.appendChild(description);
+                    card.appendChild(attachmentList);
+
+                    container.appendChild(card);
 
                 }
-
-
-                const data =
-                    await response.json();
-
-
-                console.log(
-                    "Call of Duty data:",
-                    data
-                );
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "Call of Duty data error:",
-                    error
-                );
-
-            }
+            );
 
         }
 
+        catch (error) {
 
-        /*
-        ============================================
-        Start
-        ============================================
-        */
-
-        loadGames();
-
-        loadGuns();
-
-        loadAttachments();
-
-        loadLoadouts();
-
-        loadCallOfDutyData();
+            console.error(
+                "Loadouts error:",
+                error
+            );
 
 
-    </script>
+            container.innerHTML =
+                '<div class="error">Unable to load loadouts right now.</div>';
 
+        }
+
+    }
+
+
+    // =========================
+    // INITIALIZE
+    // =========================
+
+    async function initializeWebsite() {
+
+        await Promise.all([
+
+            loadServerStatus(),
+
+            loadGuns(),
+
+            loadAttachments(),
+
+            loadLoadouts()
+
+        ]);
+
+    }
+
+
+    initializeWebsite();
+
+
+    setInterval(
+        loadServerStatus,
+        30000
+    );
+
+</script>
 
 </body>
-
 </html>
