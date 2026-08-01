@@ -36,19 +36,22 @@ GAMES = []
 # =========================
 CALL_OF_DUTY = {
     "games": [
-        "Call of Duty: Mobile"
+        {
+            "name": "Call of Duty: Mobile"
+        }
     ],
 
     "guns": [
         {
-            "name": "QQ9-Carmen",
-            "type": "SMG"
+            "name": "QQ9",
+            "type": "SMG",
+            "description": "Carmen QQ9 setup for close-range combat."
         }
     ],
 
     "attachments": [
         {
-            "weapon": "QQ9-Carmen",
+            "weapon": "QQ9 - Carmen",
             "muzzle": "Monolithic Suppressor",
             "barrel": "RTC Recon Tac Long",
             "stock": "No Stock",
@@ -57,19 +60,7 @@ CALL_OF_DUTY = {
         }
     ],
 
-    "loadouts": [
-        {
-            "name": "QQ9-Carmen",
-            "weapon": "QQ9-Carmen",
-            "attachments": [
-                "Monolithic Suppressor",
-                "RTC Recon Tac Long",
-                "No Stock",
-                "45 Round Extended Mag",
-                "Granulated Grip Tape"
-            ]
-        }
-    ]
+    "loadouts": []
 }
 # =========================
 # Home
