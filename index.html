@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Game Download Hub</title>
 
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -438,51 +443,6 @@
             line-height: 1.8;
         }
 
-        /* =========================
-           SERVER STATUS
-           ========================= */
-
-        .status-section {
-            background: #020617;
-            text-align: center;
-        }
-
-        .status-box {
-            max-width: 500px;
-            margin: auto;
-            padding: 25px;
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-        }
-
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-            font-weight: bold;
-        }
-
-        .status-dot {
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-            background: #64748b;
-        }
-
-        .status-dot.online {
-            background: #22c55e;
-        }
-
-        .status-dot.offline {
-            background: #ef4444;
-        }
-
-        #status-text {
-            color: #94a3b8;
-        }
-
         .loading,
         .empty,
         .error {
@@ -528,10 +488,14 @@
             color: #64748b;
             border-top: 1px solid #1e293b;
         }
+
     </style>
+
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -540,14 +504,39 @@
     </div>
 
     <nav>
-        <a href="#home">Home</a>
-        <a href="#games">Games</a>
-        <a href="#call-of-duty">Call of Duty</a>
-        <a href="#guns">Guns</a>
-        <a href="#attachments">Attachments</a>
-        <a href="#loadouts">Loadouts</a>
-        <a href="#guide">Guide</a>
-        <a href="#about">About</a>
+
+        <a href="#home">
+            Home
+        </a>
+
+        <a href="#games">
+            Games
+        </a>
+
+        <a href="#call-of-duty">
+            Call of Duty
+        </a>
+
+        <a href="#guns">
+            Guns
+        </a>
+
+        <a href="#attachments">
+            Attachments
+        </a>
+
+        <a href="#loadouts">
+            Loadouts
+        </a>
+
+        <a href="#guide">
+            Guide
+        </a>
+
+        <a href="#about">
+            About
+        </a>
+
     </nav>
 
 </header>
@@ -562,12 +551,15 @@
         </h1>
 
         <p>
-            Download games, explore Call of Duty weapons,
-            check attachments and loadouts, and find
-            useful gaming guides.
+            Download games, explore Call of Duty
+            weapons, check attachments and loadouts,
+            and find useful gaming guides.
         </p>
 
-        <a href="#games" class="button">
+        <a
+            href="#games"
+            class="button"
+        >
             Explore Games
         </a>
 
@@ -576,7 +568,10 @@
 </section>
 
 
-<section class="section games" id="games">
+<section
+    class="section games"
+    id="games"
+>
 
     <h2 class="section-title">
         🎮 Games
@@ -645,6 +640,7 @@
 
     </div>
 
+
     <div class="cod-grid">
 
         <div class="cod-card">
@@ -658,11 +654,12 @@
             </h3>
 
             <p>
-                Browse weapons stored in the
-                Call of Duty database.
+                Browse weapons available in
+                the Call of Duty section.
             </p>
 
         </div>
+
 
         <div class="cod-card">
 
@@ -681,6 +678,7 @@
 
         </div>
 
+
         <div class="cod-card">
 
             <div class="cod-card-icon">
@@ -693,7 +691,7 @@
 
             <p>
                 View complete weapon loadouts
-                stored in the database.
+                and builds.
             </p>
 
         </div>
@@ -703,14 +701,17 @@
 </section>
 
 
-<section class="section guns" id="guns">
+<section
+    class="section guns"
+    id="guns"
+>
 
     <h2 class="section-title">
         🔫 Guns
     </h2>
 
     <p class="section-description">
-        Call of Duty weapons available in the database.
+        Call of Duty weapons available here.
     </p>
 
     <div class="guns-container">
@@ -814,6 +815,7 @@
 
         </div>
 
+
         <div class="guide-card">
 
             <h3>
@@ -827,52 +829,19 @@
 
         </div>
 
+
         <div class="guide-card">
 
             <h3>
-                🛠️ Website
+                🛠️ Weapon Builds
             </h3>
 
             <p>
-                Call of Duty information is loaded
-                dynamically from the Flask backend.
+                Choose a weapon and use its recommended
+                attachments to build your setup.
             </p>
 
         </div>
-
-    </div>
-
-</section>
-
-
-<section class="section status-section">
-
-    <h2 class="section-title">
-        🌐 Server Status
-    </h2>
-
-    <p class="section-description">
-        Checking connection to the Game Download Hub API.
-    </p>
-
-    <div class="status-box">
-
-        <div class="status-indicator">
-
-            <span
-                id="status-dot"
-                class="status-dot"
-            ></span>
-
-            <span id="status-title">
-                Checking...
-            </span>
-
-        </div>
-
-        <p id="status-text">
-            Connecting to server...
-        </p>
 
     </div>
 
@@ -927,111 +896,24 @@
         const element =
             document.createElement(tag);
 
+
         if (className) {
+
             element.className =
                 className;
+
         }
+
 
         if (text !== undefined) {
+
             element.textContent =
                 text;
+
         }
+
 
         return element;
-    }
-
-
-    // =========================
-    // SERVER STATUS
-    // =========================
-
-    async function loadServerStatus() {
-
-        const dot =
-            document.getElementById(
-                "status-dot"
-            );
-
-        const title =
-            document.getElementById(
-                "status-title"
-            );
-
-        const text =
-            document.getElementById(
-                "status-text"
-            );
-
-
-        try {
-
-            const response =
-                await fetch(
-                    API_URL +
-                    "/api/status",
-                    {
-                        method: "GET",
-                        cache: "no-cache"
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Server error"
-                );
-
-            }
-
-
-            const data =
-                await response.json();
-
-
-            if (
-                data.success &&
-                data.online
-            ) {
-
-                dot.className =
-                    "status-dot online";
-
-                title.textContent =
-                    "Server Online";
-
-                text.textContent =
-                    "Game Download Hub API is online.";
-
-            }
-
-            else {
-
-                throw new Error(
-                    "API offline"
-                );
-
-            }
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Status error:",
-                error
-            );
-
-            dot.className =
-                "status-dot offline";
-
-            title.textContent =
-                "Server Offline";
-
-            text.textContent =
-                "Unable to connect to the Game Download Hub API.";
-
-        }
 
     }
 
@@ -1134,11 +1016,22 @@
                         );
 
 
-                    card.appendChild(title);
-                    card.appendChild(type);
-                    card.appendChild(description);
+                    card.appendChild(
+                        title
+                    );
 
-                    container.appendChild(card);
+                    card.appendChild(
+                        type
+                    );
+
+                    card.appendChild(
+                        description
+                    );
+
+
+                    container.appendChild(
+                        card
+                    );
 
                 }
             );
@@ -1313,6 +1206,7 @@
                                 value
                             );
 
+
                             list.appendChild(
                                 itemBox
                             );
@@ -1321,10 +1215,18 @@
                     );
 
 
-                    card.appendChild(title);
-                    card.appendChild(list);
+                    card.appendChild(
+                        title
+                    );
 
-                    container.appendChild(card);
+                    card.appendChild(
+                        list
+                    );
+
+
+                    container.appendChild(
+                        card
+                    );
 
                 }
             );
@@ -1481,11 +1383,22 @@
                     }
 
 
-                    card.appendChild(title);
-                    card.appendChild(description);
-                    card.appendChild(attachmentList);
+                    card.appendChild(
+                        title
+                    );
 
-                    container.appendChild(card);
+                    card.appendChild(
+                        description
+                    );
+
+                    card.appendChild(
+                        attachmentList
+                    );
+
+
+                    container.appendChild(
+                        card
+                    );
 
                 }
             );
@@ -1516,8 +1429,6 @@
 
         await Promise.all([
 
-            loadServerStatus(),
-
             loadGuns(),
 
             loadAttachments(),
@@ -1531,13 +1442,9 @@
 
     initializeWebsite();
 
-
-    setInterval(
-        loadServerStatus,
-        30000
-    );
-
 </script>
 
+
 </body>
+
 </html>
