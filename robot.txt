@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://mehrsam92.github.io/my-game-studio/sitemap.xml
