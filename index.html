@@ -4,23 +4,28 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>My Game Studio - Game Reviews and Introductions</title>
 
     <meta name="description"
-        content="Welcome to My Game Studio. Discover different games, read game introductions, and share your opinions with other players.">
+          content="Welcome to My Game Studio. Discover different games, read game introductions, and share your opinions with other players.">
 
     <meta name="keywords"
-        content="games, game reviews, game introductions, My Game Studio">
+          content="games, game reviews, game introductions, My Game Studio">
 
-    <meta name="author" content="My Game Studio">
+    <meta name="author"
+          content="My Game Studio">
+
 
     <style>
 
         * {
             box-sizing: border-box;
         }
+
 
         body {
             margin: 0;
@@ -29,11 +34,13 @@
             font-family: Arial, sans-serif;
         }
 
+
         header {
             padding: 35px 20px;
             text-align: center;
             background: #0b2942;
         }
+
 
         header h1 {
             margin: 0;
@@ -41,16 +48,19 @@
             color: #4db8ff;
         }
 
+
         header p {
             font-size: 18px;
             color: #c8e8ff;
         }
+
 
         nav {
             padding: 15px;
             text-align: center;
             background: #061522;
         }
+
 
         nav a {
             color: white;
@@ -59,15 +69,18 @@
             font-size: 17px;
         }
 
+
         nav a:hover {
             color: #4db8ff;
         }
+
 
         main {
             max-width: 1000px;
             margin: auto;
             padding: 30px 20px;
         }
+
 
         section {
             margin-bottom: 40px;
@@ -76,9 +89,11 @@
             border-radius: 12px;
         }
 
+
         h2 {
             color: #4db8ff;
         }
+
 
         .game {
             padding: 20px;
@@ -86,6 +101,7 @@
             border-radius: 10px;
             margin-top: 20px;
         }
+
 
         button {
             padding: 10px 20px;
@@ -97,9 +113,11 @@
             font-size: 16px;
         }
 
+
         button:hover {
             background: #20a4f3;
         }
+
 
         input,
         textarea {
@@ -112,10 +130,12 @@
             font-size: 16px;
         }
 
+
         textarea {
             min-height: 120px;
             resize: vertical;
         }
+
 
         .comment {
             margin-top: 15px;
@@ -124,50 +144,96 @@
             border-radius: 8px;
         }
 
+
         .comment h3 {
             margin-top: 0;
             color: #4db8ff;
         }
 
-        /* Admin Login */
 
-        .admin-login {
-            margin-top: 35px;
-            padding-top: 25px;
-            border-top: 1px solid #24506e;
+        /* =========================
+           SMALL ADMIN BUTTON
+           ========================= */
+
+        .admin-area {
+            margin-top: 30px;
+            text-align: center;
         }
 
-        .admin-login h3 {
+
+        #admin-open-button {
+            padding: 7px 14px;
+            font-size: 13px;
+            background: #092238;
+            border: 1px solid #24506e;
+        }
+
+
+        #admin-open-button:hover {
+            background: #1683c7;
+        }
+
+
+        /* =========================
+           ADMIN LOGIN
+           ========================= */
+
+        #admin-login-box {
+            display: none;
+            max-width: 400px;
+            margin: 20px auto 0;
+            padding: 20px;
+            background: #061522;
+            border-radius: 10px;
+            border: 1px solid #24506e;
+        }
+
+
+        #admin-login-box h3 {
             color: #4db8ff;
+            margin-top: 0;
         }
+
 
         #admin-message {
-            margin-top: 10px;
             color: #c8e8ff;
         }
 
-        /* Admin Panel */
+
+        #admin-cancel-button {
+            background: #555;
+            margin-left: 5px;
+        }
+
+
+        #admin-cancel-button:hover {
+            background: #777;
+        }
+
+
+        /* =========================
+           ADMIN PANEL
+           ========================= */
 
         #admin-panel {
             display: none;
-            margin-top: 30px;
+            margin-top: 25px;
             padding: 25px;
             background: #061522;
-            border: 1px solid #1683c7;
             border-radius: 12px;
+            border: 1px solid #1683c7;
         }
+
 
         #admin-panel h2 {
             margin-top: 0;
         }
 
-        .admin-game {
-            margin-top: 20px;
+
+        .admin-section {
+            margin-top: 25px;
         }
 
-        .admin-comments {
-            margin-top: 30px;
-        }
 
         .admin-comment {
             margin-top: 12px;
@@ -176,23 +242,28 @@
             border-radius: 8px;
         }
 
+
         .delete-comment {
             margin-top: 10px;
             background: #a83232;
         }
 
+
         .delete-comment:hover {
             background: #d44343;
         }
+
 
         .logout-button {
             margin-top: 20px;
             background: #555;
         }
 
+
         .logout-button:hover {
             background: #777;
         }
+
 
         footer {
             padding: 25px;
@@ -211,19 +282,25 @@
 
     <header>
 
-        <h1>My Game Studio</h1>
+        <h1>
+            My Game Studio
+        </h1>
 
         <p>
             Welcome to my studio.
-            Here I introduce different games and share information about them.
+            Here I introduce different games
+            and share information about them.
         </p>
 
     </header>
 
 
+
     <nav>
 
-        <a href="#">Home</a>
+        <a href="#">
+            Home
+        </a>
 
         <a href="#games">
             Games
@@ -236,20 +313,27 @@
     </nav>
 
 
+
     <main>
 
 
-        <!-- GAMES -->
+        <!-- =========================
+             GAMES
+             ========================= -->
 
         <section id="games">
 
-            <h2>Games</h2>
+            <h2>
+                Games
+            </h2>
+
 
             <div class="game">
 
                 <h2 id="game-title">
                     Game Name
                 </h2>
+
 
                 <p id="game-description">
                     Game information will be added here.
@@ -263,13 +347,16 @@
 
 
 
-        <!-- COMMENTS -->
+        <!-- =========================
+             COMMENTS
+             ========================= -->
 
         <section id="comments">
 
             <h2>
                 Comments
             </h2>
+
 
             <p>
                 Share your opinion about the games.
@@ -278,9 +365,11 @@
 
             <form id="comment-form">
 
+
                 <label for="name">
                     Your name
                 </label>
+
 
                 <input
                     type="text"
@@ -293,6 +382,7 @@
                 <label for="comment">
                     Your comment
                 </label>
+
 
                 <textarea
                     id="comment"
@@ -308,112 +398,133 @@
             </form>
 
 
+
             <div id="comments-list"></div>
 
 
 
-            <!-- ADMIN LOGIN -->
+            <!-- =========================
+                 ADMIN BUTTON
+                 ========================= -->
 
-            <div class="admin-login">
+            <div class="admin-area">
 
-                <h3>
-                    Admin Login
-                </h3>
-
-                <p>
-                    Admin access only.
-                </p>
-
-
-                <input
-                    type="password"
-                    id="admin-password"
-                    placeholder="Admin password"
-                >
-
-
-                <button id="admin-login-button">
-                    Login
+                <button id="admin-open-button">
+                    Admin
                 </button>
 
 
-                <p id="admin-message"></p>
 
-            </div>
+                <!-- ADMIN LOGIN -->
 
-
-
-            <!-- ADMIN PANEL -->
-
-            <div id="admin-panel">
-
-                <h2>
-                    Admin Panel
-                </h2>
-
-
-                <div class="admin-game">
+                <div id="admin-login-box">
 
                     <h3>
-                        Game Management
+                        Admin Login
                     </h3>
 
 
-                    <label for="admin-game-name">
-                        Game Name
-                    </label>
-
                     <input
-                        type="text"
-                        id="admin-game-name"
-                        placeholder="Game name"
+                        type="password"
+                        id="admin-password"
+                        placeholder="Admin password"
                     >
 
 
-                    <label for="admin-game-description">
-                        Game Description
-                    </label>
-
-                    <textarea
-                        id="admin-game-description"
-                        placeholder="Game description"
-                    ></textarea>
-
-
-                    <button id="save-game">
-                        Save Game
+                    <button id="admin-login-button">
+                        Login
                     </button>
 
 
-                    <p id="game-message"></p>
+                    <button id="admin-cancel-button">
+                        Cancel
+                    </button>
+
+
+                    <p id="admin-message"></p>
 
                 </div>
 
 
 
-                <div class="admin-comments">
+                <!-- =========================
+                     ADMIN PANEL
+                     ========================= -->
 
-                    <h3>
-                        Comment Management
-                    </h3>
+                <div id="admin-panel">
 
-                    <div id="admin-comments-list"></div>
+                    <h2>
+                        Admin Panel
+                    </h2>
+
+
+
+                    <div class="admin-section">
+
+                        <h3>
+                            Game Management
+                        </h3>
+
+
+                        <label for="admin-game-name">
+                            Game Name
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="admin-game-name"
+                            placeholder="Game name"
+                        >
+
+
+                        <label for="admin-game-description">
+                            Game Description
+                        </label>
+
+
+                        <textarea
+                            id="admin-game-description"
+                            placeholder="Game description"
+                        ></textarea>
+
+
+                        <button id="save-game">
+                            Save Game
+                        </button>
+
+
+                        <p id="game-message"></p>
+
+                    </div>
+
+
+
+                    <div class="admin-section">
+
+                        <h3>
+                            Comment Management
+                        </h3>
+
+
+                        <div id="admin-comments-list"></div>
+
+                    </div>
+
+
+
+                    <button
+                        id="admin-logout"
+                        class="logout-button"
+                    >
+                        Logout
+                    </button>
 
                 </div>
-
-
-                <button
-                    id="admin-logout"
-                    class="logout-button"
-                >
-                    Logout
-                </button>
 
             </div>
 
-
         </section>
-
 
     </main>
 
@@ -434,7 +545,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
-    <!-- Main JavaScript -->
+    <!-- JavaScript -->
 
     <script src="script.js"></script>
 
