@@ -1,84 +1,64 @@
-const ADMIN_PASSWORD = "-I'm Mehrsam-";
+const SUPABASE_URL = "https://gixhgrxerprsehkbedyq.supabase.co";
+const SUPABASE_KEY = "sb_publishable_zldmKFlZix45ZYpS69uDyg_aXYTZBUo";
 
+const db = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
-const loginSection =
-    document.getElementById("login-section");
+const loginSection = document.getElementById("login-section");
+const adminSection = document.getElementById("admin-section");
 
-const adminSection =
-    document.getElementById("admin-section");
+const loginButton = document.getElementById("login-button");
+const passwordInput = document.getElementById("admin-password");
+const loginMessage = document.getElementById("login-message");
 
-const loginButton =
-    document.getElementById("login-button");
+adminSection.style.display = "none";
 
-const passwordInput =
-    document.getElementById("admin-password");
+loginButton.addEventListener("click", async function () {
 
-const loginMessage =
-    document.getElementById("login-message");
+    const password = passwordInput.value.trim();
 
-
-loginButton.addEventListener("click", function() {
-
-    if (passwordInput.value === ADMIN_PASSWORD) {
-
-        loginSection.style.display = "none";
-        adminSection.style.display = "block";
-
-    } else {
-
-        loginMessage.textContent =
-            "Incorrect password.";
-
+    if (!password) {
+        loginMessage.textContent = "Please enter your password.";
+        return;
     }
 
+    loginMessage.textContent = "Logging in...";
+
+    /*
+       IMPORTANT:
+       The email must be the same email
+       you used when creating the Admin user
+       in Supabase Authentication.
+    */
+
+    const email = "YOUR_ADMIN_EMAIL";
+
+    const { data, error } = await db.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+    if (error) {
+        console.error(error);
+        loginMessage.textContent = "Incorrect email or password.";
+        return;
+    }
+
+    loginSection.style.display = "none";
+    adminSection.style.display = "block";
+
+    loginMessage.textContent = "";
 });
 
 
-document
-    .getElementById("save-game")
-    .addEventListener("click", function() {
+document.getElementById("logout").addEventListener(
+    "click",
+    async function () {
 
-        const name =
-            document.getElementById("game-name").value.trim();
-
-        const description =
-            document
-                .getElementById("game-description")
-                .value
-                .trim();
-
-
-        if (!name || !description) {
-
-            document.getElementById("admin-message")
-                .textContent =
-                "Please enter both the game name and description.";
-
-            return;
-        }
-
-
-        localStorage.setItem(
-            "gameName",
-            name
-        );
-
-        localStorage.setItem(
-            "gameDescription",
-            description
-        );
-
-
-        document.getElementById("admin-message")
-            .textContent =
-            "Game saved successfully.";
-    });
-
-
-document
-    .getElementById("logout")
-    .addEventListener("click", function() {
+        await db.auth.signOut();
 
         window.location.href = "index.html";
-
-    });
+    }
+);
