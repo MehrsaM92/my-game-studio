@@ -33,7 +33,7 @@ loginButton.addEventListener("click", async function () {
        in Supabase Authentication.
     */
 
-    const email = "YOUR_ADMIN_EMAIL";
+    const email = "ahmad_beigi_mehrsam@gmail.com";
 
     const { data, error } = await db.auth.signInWithPassword({
         email: email,
