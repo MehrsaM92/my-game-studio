@@ -5,14 +5,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My Game Studio | Game Showcase</title>
+    <title>My Game Studio - Game Reviews and Introductions</title>
 
     <meta name="description"
-        content="Welcome to My Game Studio, where different games are introduced and presented with useful information and descriptions.">
+        content="Welcome to My Game Studio. Discover different games, read game introductions, and share your opinions with other players.">
 
-    <meta name="robots" content="index, follow">
+    <meta name="keywords"
+        content="games, game reviews, game introductions, My Game Studio">
 
-    <link rel="stylesheet" href="style.css">
+    <meta name="author" content="My Game Studio">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #071a2b;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            padding: 35px 20px;
+            text-align: center;
+            background: #0b2942;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 48px;
+            color: #4db8ff;
+        }
+
+        header p {
+            font-size: 18px;
+            color: #c8e8ff;
+        }
+
+        nav {
+            padding: 15px;
+            text-align: center;
+            background: #061522;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 17px;
+        }
+
+        nav a:hover {
+            color: #4db8ff;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #0b2942;
+            border-radius: 12px;
+        }
+
+        h2 {
+            color: #4db8ff;
+        }
+
+        .game {
+            padding: 20px;
+            background: #092238;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            background: #1683c7;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #20a4f3;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .comment {
+            margin-top: 15px;
+            padding: 15px;
+            background: #092238;
+            border-radius: 8px;
+        }
+
+        .comment h3 {
+            margin-top: 0;
+            color: #4db8ff;
+        }
+
+        footer {
+            padding: 25px;
+            text-align: center;
+            background: #061522;
+            color: #aac8dc;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,86 +141,75 @@
     <header>
         <h1>My Game Studio</h1>
 
-        <nav>
-            <a href="#home">Home</a>
-            <a href="#games">Games</a>
-            <a href="#about">About</a>
-            <a href="#comments">Comments</a>
-        </nav>
+        <p>
+            Welcome to my studio.
+            Here I introduce different games and share information about them.
+        </p>
     </header>
 
+    <nav>
+        <a href="#">Home</a>
+        <a href="#games">Games</a>
+        <a href="#comments">Comments</a>
+    </nav>
+
     <main>
-
-        <section id="home">
-            <h2>Welcome to My Game Studio</h2>
-
-            <p>
-                Welcome to my website!
-            </p>
-
-            <p>
-                Here I introduce and showcase different games
-                and provide useful information about them.
-            </p>
-        </section>
-
 
         <section id="games">
 
             <h2>Games</h2>
 
-            <article class="game-card">
+            <div class="game">
 
-                <h3>Game Name</h3>
+                <h2>Game Name</h2>
 
                 <p>
-                    Game description will be added here.
+                    Game information will be added here.
+                    This section will contain an introduction
+                    and information about the game.
                 </p>
 
-            </article>
+            </div>
 
         </section>
 
 
-        <section id="about">
+        <section id="comments">
 
-            <h2>About</h2>
+            <h2>Comments</h2>
 
             <p>
-                My Game Studio is a personal website for
-                introducing and showcasing different games.
+                Share your opinion about the games.
             </p>
 
+            <form id="comment-form">
+
+                <label for="name">Your name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your name"
+                    required
+                >
+
+                <label for="comment">Your comment</label>
+
+                <textarea
+                    id="comment"
+                    placeholder="Write your comment..."
+                    required
+                ></textarea>
+
+                <button type="submit">
+                    Send Comment
+                </button>
+
+            </form>
+
+            <div id="comments-list"></div>
+
         </section>
-
-<section id="comments">
-
-    <h2>Comments</h2>
-
-    <form id="comment-form">
-
-        <input
-            type="text"
-            id="name"
-            placeholder="Your name"
-            required
-        >
-
-        <textarea
-            id="comment"
-            placeholder="Write your comment..."
-            required
-        ></textarea>
-
-        <button type="submit">
-            Send Comment
-        </button>
-
-    </form>
-
-    <div id="comments-list"></div>
-
-</section>     
 
     </main>
 
@@ -107,12 +217,16 @@
     <footer>
 
         <p>
-            © 2026 My Game Studio. All rights reserved.
+            My Game Studio © 2026
         </p>
 
     </footer>
 
 
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Your JavaScript -->
     <script src="script.js"></script>
 
 </body>
