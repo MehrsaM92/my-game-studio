@@ -4,6 +4,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_zldmKFlZix45ZYpS69uDyg_aXYTZBUo";
 
+
 const db = supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
@@ -52,7 +53,7 @@ const saveGameButton =
 
 
 // ==============================
-// ADMIN EMAIL
+// ADMIN
 // ==============================
 
 const ADMIN_EMAIL =
@@ -73,55 +74,58 @@ if (adminPanel) {
 
 
 // ==============================
-// LOAD GAME FOR EVERYONE
+// LOAD GAMES
 // ==============================
 
 async function loadGame() {
 
     const { data, error } = await db
         .from("games")
-        .select("id, name, description, updated_at")
+        .select("*")
         .order("updated_at", {
             ascending: false
-        })
-        .limit(1);
+        });
 
     if (error) {
 
         console.error(error);
 
-        document.getElementById("game-title").textContent =
-            "Unable to load game";
+        const title =
+            document.getElementById("game-title");
 
-        document.getElementById("game-description").textContent =
-            "There was a problem loading the game.";
+        const description =
+            document.getElementById("game-description");
+
+        if (title) {
+            title.textContent = "Unable to load game";
+        }
+
+        if (description) {
+            description.textContent =
+                "There was a problem loading the games.";
+        }
 
         return;
     }
 
-    const gameTitle =
+
+    const title =
         document.getElementById("game-title");
 
-    const gameDescription =
+    const description =
         document.getElementById("game-description");
-
-    const adminGameName =
-        document.getElementById("admin-game-name");
-
-    const adminGameDescription =
-        document.getElementById("admin-game-description");
 
 
     if (!data || data.length === 0) {
 
-        gameTitle.textContent =
-            "No game yet";
+        if (title) {
+            title.textContent = "No games yet";
+        }
 
-        gameDescription.textContent =
-            "The game will be added soon.";
-
-        adminGameName.value = "";
-        adminGameDescription.value = "";
+        if (description) {
+            description.textContent =
+                "The admin has not added a game yet.";
+        }
 
         return;
     }
@@ -130,21 +134,47 @@ async function loadGame() {
     const game = data[0];
 
 
-    gameTitle.textContent =
-        game.name;
-
-    gameDescription.textContent =
-        game.description;
-
-
-    if (adminGameName) {
-        adminGameName.value =
+    if (title) {
+        title.textContent =
             game.name;
     }
 
-    if (adminGameDescription) {
-        adminGameDescription.value =
+
+    if (description) {
+        description.textContent =
             game.description;
+    }
+
+
+    const adminName =
+        document.getElementById("admin-game-name");
+
+    const adminDescription =
+        document.getElementById(
+            "admin-game-description"
+        );
+
+
+    if (adminName) {
+        adminName.value =
+            game.name;
+    }
+
+
+    if (adminDescription) {
+        adminDescription.value =
+            game.description;
+    }
+
+
+    const adminPanel =
+        document.getElementById("admin-panel");
+
+    if (adminPanel) {
+
+        adminPanel.dataset.gameId =
+            game.id;
+
     }
 
 }
@@ -215,20 +245,18 @@ form.addEventListener(
 
 
 // ==============================
-// LOAD COMMENTS
+// LOAD PUBLIC COMMENTS
 // ==============================
 
 async function loadComments() {
 
-    const {
-        data,
-        error
-    } = await db
-        .from("comments")
-        .select("*")
-        .order("created_at", {
-            ascending: false
-        });
+    const { data, error } =
+        await db
+            .from("comments")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
 
 
     if (error) {
@@ -254,35 +282,38 @@ async function loadComments() {
     }
 
 
-    data.forEach(function(comment) {
+    data.forEach(
+        function(comment) {
 
-        const box =
-            document.createElement("div");
+            const box =
+                document.createElement("div");
 
-        box.className =
-            "comment";
-
-
-        const name =
-            document.createElement("h3");
-
-        name.textContent =
-            comment.name;
+            box.className =
+                "comment";
 
 
-        const text =
-            document.createElement("p");
+            const name =
+                document.createElement("h3");
 
-        text.textContent =
-            comment.comment;
+            name.textContent =
+                comment.name;
 
 
-        box.appendChild(name);
-        box.appendChild(text);
+            const text =
+                document.createElement("p");
 
-        commentsList.appendChild(box);
+            text.textContent =
+                comment.comment;
 
-    });
+
+            box.appendChild(name);
+
+            box.appendChild(text);
+
+            commentsList.appendChild(box);
+
+        }
+    );
 
 }
 
@@ -321,11 +352,9 @@ adminCancelButton.addEventListener(
         adminOpenButton.style.display =
             "inline-block";
 
-        adminPassword.value =
-            "";
+        adminPassword.value = "";
 
-        adminMessage.textContent =
-            "";
+        adminMessage.textContent = "";
 
     }
 );
@@ -358,18 +387,16 @@ adminLoginButton.addEventListener(
             "Logging in...";
 
 
-        const {
-            data,
-            error
-        } = await db.auth.signInWithPassword({
+        const { data, error } =
+            await db.auth.signInWithPassword({
 
-            email:
-                ADMIN_EMAIL,
+                email:
+                    ADMIN_EMAIL,
 
-            password:
-                password
+                password:
+                    password
 
-        });
+            });
 
 
         if (error) {
@@ -383,26 +410,33 @@ adminLoginButton.addEventListener(
         }
 
 
-        if (data.session) {
+        if (!data.session) {
 
             adminMessage.textContent =
-                "";
+                "Login failed.";
 
-            adminLoginBox.style.display =
-                "none";
-
-            adminPanel.style.display =
-                "block";
-
-            adminOpenButton.style.display =
-                "none";
-
-
-            await loadAdminComments();
-
-            await loadGame();
-
+            return;
         }
+
+
+        adminMessage.textContent = "";
+
+
+        adminLoginBox.style.display =
+            "none";
+
+
+        adminPanel.style.display =
+            "block";
+
+
+        adminOpenButton.style.display =
+            "none";
+
+
+        await loadAdminComments();
+
+        await loadGame();
 
     }
 );
@@ -427,7 +461,7 @@ adminPassword.addEventListener(
 
 
 // ==============================
-// CHECK EXISTING SESSION
+// CHECK ADMIN SESSION
 // ==============================
 
 async function checkAdminSession() {
@@ -448,23 +482,33 @@ async function checkAdminSession() {
     }
 
 
-    if (session) {
+    if (!session) {
 
-        adminOpenButton.style.display =
-            "none";
-
-        adminLoginBox.style.display =
-            "none";
-
-        adminPanel.style.display =
-            "block";
-
-
-        await loadAdminComments();
-
-        await loadGame();
-
+        return;
     }
+
+
+    if (
+        session.user.email
+        !== ADMIN_EMAIL
+    ) {
+
+        await db.auth.signOut();
+
+        return;
+    }
+
+
+    adminOpenButton.style.display =
+        "none";
+
+    adminPanel.style.display =
+        "block";
+
+
+    await loadAdminComments();
+
+    await loadGame();
 
 }
 
@@ -479,14 +523,18 @@ saveGameButton.addEventListener(
 
         const name =
             document
-                .getElementById("admin-game-name")
+                .getElementById(
+                    "admin-game-name"
+                )
                 .value
                 .trim();
 
 
         const description =
             document
-                .getElementById("admin-game-description")
+                .getElementById(
+                    "admin-game-description"
+                )
                 .value
                 .trim();
 
@@ -506,18 +554,17 @@ saveGameButton.addEventListener(
         }
 
 
-        gameMessage.textContent =
-            "Saving...";
-
-
         const {
             data: {
-                session
+                user
             }
-        } = await db.auth.getSession();
+        } = await db.auth.getUser();
 
 
-        if (!session) {
+        if (
+            !user ||
+            user.email !== ADMIN_EMAIL
+        ) {
 
             gameMessage.textContent =
                 "Admin login required.";
@@ -526,63 +573,51 @@ saveGameButton.addEventListener(
         }
 
 
-        const {
-            data: existingGames,
-            error: findError
-        } = await db
-            .from("games")
-            .select("id")
-            .order("updated_at", {
-                ascending: false
-            })
-            .limit(1);
-
-
-        if (findError) {
-
-            console.error(findError);
-
-            gameMessage.textContent =
-                "Unable to check existing game.";
-
-            return;
-        }
+        const gameId =
+            adminPanel.dataset.gameId;
 
 
         let result;
 
 
-        if (existingGames &&
-            existingGames.length > 0) {
+        if (gameId) {
 
-            const gameId =
-                existingGames[0].id;
+            // UPDATE EXISTING GAME
 
-
-            result = await db
-                .from("games")
-                .update({
-                    name: name,
-                    description: description,
-                    updated_at: new Date().toISOString()
-                })
-                .eq("id", gameId);
+            result =
+                await db
+                    .from("games")
+                    .update({
+                        name: name,
+                        description: description,
+                        updated_at:
+                            new Date().toISOString()
+                    })
+                    .eq(
+                        "id",
+                        gameId
+                    );
 
         } else {
 
-            result = await db
-                .from("games")
-                .insert({
-                    name: name,
-                    description: description
-                });
+            // CREATE NEW GAME
+
+            result =
+                await db
+                    .from("games")
+                    .insert({
+                        name: name,
+                        description: description
+                    });
 
         }
 
 
         if (result.error) {
 
-            console.error(result.error);
+            console.error(
+                result.error
+            );
 
             gameMessage.textContent =
                 "Unable to save game.";
@@ -599,87 +634,6 @@ saveGameButton.addEventListener(
 
     }
 );
-
-
-// ==============================
-// DELETE GAME
-// ==============================
-
-async function deleteGame() {
-
-    const confirmed =
-        confirm(
-            "Delete the current game?"
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
-
-    const {
-        data: existingGames,
-        error: findError
-    } = await db
-        .from("games")
-        .select("id");
-
-
-    if (findError) {
-
-        console.error(findError);
-
-        alert(
-            "Unable to find the game."
-        );
-
-        return;
-    }
-
-
-    if (!existingGames ||
-        existingGames.length === 0) {
-
-        alert(
-            "There is no game to delete."
-        );
-
-        return;
-    }
-
-
-    for (const game of existingGames) {
-
-        const {
-            error
-        } = await db
-            .from("games")
-            .delete()
-            .eq("id", game.id);
-
-
-        if (error) {
-
-            console.error(error);
-
-            alert(
-                "Unable to delete game."
-            );
-
-            return;
-        }
-
-    }
-
-
-    await loadGame();
-
-    alert(
-        "Game deleted successfully."
-    );
-
-}
 
 
 // ==============================
@@ -710,8 +664,7 @@ async function loadAdminComments() {
     }
 
 
-    adminCommentsList.innerHTML =
-        "";
+    adminCommentsList.innerHTML = "";
 
 
     if (!data || data.length === 0) {
@@ -723,163 +676,174 @@ async function loadAdminComments() {
     }
 
 
-    data.forEach(function(comment) {
+    data.forEach(
+        function(comment) {
 
-        const box =
-            document.createElement("div");
+            const box =
+                document.createElement("div");
 
-        box.className =
-            "admin-comment";
-
-
-        const name =
-            document.createElement("strong");
-
-        name.textContent =
-            comment.name;
+            box.className =
+                "admin-comment";
 
 
-        const text =
-            document.createElement("p");
+            const name =
+                document.createElement("input");
 
-        text.textContent =
-            comment.comment;
+            name.type =
+                "text";
 
-
-        const editButton =
-            document.createElement("button");
-
-        editButton.textContent =
-            "Edit";
-
-        editButton.addEventListener(
-            "click",
-            function() {
-
-                editComment(
-                    comment.id,
-                    comment.name,
-                    comment.comment
-                );
-
-            }
-        );
+            name.value =
+                comment.name;
 
 
-        const deleteButton =
-            document.createElement("button");
+            const text =
+                document.createElement("textarea");
 
-        deleteButton.textContent =
-            "Delete";
-
-        deleteButton.className =
-            "delete-comment";
+            text.value =
+                comment.comment;
 
 
-        deleteButton.addEventListener(
-            "click",
-            function() {
+            const updateButton =
+                document.createElement("button");
 
-                deleteComment(
-                    comment.id
-                );
-
-            }
-        );
+            updateButton.textContent =
+                "Update";
 
 
-        box.appendChild(name);
+            const deleteButton =
+                document.createElement("button");
 
-        box.appendChild(text);
+            deleteButton.textContent =
+                "Delete";
 
-        box.appendChild(editButton);
+            deleteButton.className =
+                "delete-comment";
 
-        box.appendChild(deleteButton);
 
-        adminCommentsList.appendChild(box);
+            const message =
+                document.createElement("p");
 
-    });
+
+            // UPDATE COMMENT
+
+            updateButton.addEventListener(
+                "click",
+                async function() {
+
+                    await updateComment(
+                        comment.id,
+                        name.value.trim(),
+                        text.value.trim(),
+                        message
+                    );
+
+                }
+            );
+
+
+            // DELETE COMMENT
+
+            deleteButton.addEventListener(
+                "click",
+                async function() {
+
+                    await deleteComment(
+                        comment.id
+                    );
+
+                }
+            );
+
+
+            box.appendChild(name);
+
+            box.appendChild(text);
+
+            box.appendChild(updateButton);
+
+            box.appendChild(deleteButton);
+
+            box.appendChild(message);
+
+
+            adminCommentsList.appendChild(
+                box
+            );
+
+        }
+    );
 
 }
 
 
 // ==============================
-// EDIT COMMENT
+// UPDATE COMMENT
 // ==============================
 
-async function editComment(
+async function updateComment(
     id,
-    oldName,
-    oldComment
+    name,
+    comment,
+    message
 ) {
-
-    const newName =
-        prompt(
-            "Edit name:",
-            oldName
-        );
-
-
-    if (newName === null) {
-        return;
-    }
-
-
-    const newComment =
-        prompt(
-            "Edit comment:",
-            oldComment
-        );
-
-
-    if (newComment === null) {
-        return;
-    }
-
-
-    const name =
-        newName.trim();
-
-    const comment =
-        newComment.trim();
-
 
     if (!name || !comment) {
 
-        alert(
-            "Name and comment cannot be empty."
-        );
+        message.textContent =
+            "Name and comment cannot be empty.";
 
         return;
     }
 
 
     const {
-        error
-    } = await db
-        .from("comments")
-        .update({
-            name: name,
-            comment: comment
-        })
-        .eq("id", id);
+        data: {
+            user
+        }
+    } = await db.auth.getUser();
+
+
+    if (
+        !user ||
+        user.email !== ADMIN_EMAIL
+    ) {
+
+        message.textContent =
+            "Admin login required.";
+
+        return;
+    }
+
+
+    const { error } =
+        await db
+            .from("comments")
+            .update({
+                name: name,
+                comment: comment
+            })
+            .eq(
+                "id",
+                id
+            );
 
 
     if (error) {
 
         console.error(error);
 
-        alert(
-            "Unable to edit comment."
-        );
+        message.textContent =
+            "Unable to update comment.";
 
         return;
     }
 
 
-    await loadComments();
+    message.textContent =
+        "Comment updated.";
 
-    await loadAdminComments();
+
+    await loadComments();
 
 }
 
@@ -897,16 +861,39 @@ async function deleteComment(id) {
 
 
     if (!confirmed) {
+
         return;
     }
 
 
     const {
-        error
-    } = await db
-        .from("comments")
-        .delete()
-        .eq("id", id);
+        data: {
+            user
+        }
+    } = await db.auth.getUser();
+
+
+    if (
+        !user ||
+        user.email !== ADMIN_EMAIL
+    ) {
+
+        alert(
+            "Admin login required."
+        );
+
+        return;
+    }
+
+
+    const { error } =
+        await db
+            .from("comments")
+            .delete()
+            .eq(
+                "id",
+                id
+            );
 
 
     if (error) {
@@ -944,14 +931,18 @@ adminLogout.addEventListener(
         adminPanel.style.display =
             "none";
 
+
         adminLoginBox.style.display =
             "none";
+
 
         adminOpenButton.style.display =
             "inline-block";
 
+
         adminPassword.value =
             "";
+
 
         adminMessage.textContent =
             "";
@@ -961,11 +952,11 @@ adminLogout.addEventListener(
 
 
 // ==============================
-// START
+// START WEBSITE
 // ==============================
-
-loadComments();
 
 loadGame();
 
-checkAdminSession();        
+loadComments();
+
+checkAdminSession();
