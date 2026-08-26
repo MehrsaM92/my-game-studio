@@ -72,45 +72,34 @@
 
         </section>
 
+<section id="comments">
 
-        <section id="comments">
+    <h2>Comments</h2>
 
-            <h2>Comments</h2>
+    <form id="comment-form">
 
-            <form id="comment-form">
+        <input
+            type="text"
+            id="name"
+            placeholder="Your name"
+            required
+        >
 
-                <label for="name">
-                    Your Name
-                </label>
+        <textarea
+            id="comment"
+            placeholder="Write your comment..."
+            required
+        ></textarea>
 
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Enter your name"
-                    required
-                >
+        <button type="submit">
+            Send Comment
+        </button>
 
-                <label for="comment">
-                    Your Comment
-                </label>
+    </form>
 
-                <textarea
-                    id="comment"
-                    name="comment"
-                    placeholder="Write your comment..."
-                    required
-                ></textarea>
+    <div id="comments-list"></div>
 
-                <button type="submit">
-                    Submit Comment
-                </button>
-
-            </form>
-
-            <div id="comments-list"></div>
-
-        </section>
+</section>     
 
     </main>
 
