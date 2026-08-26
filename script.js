@@ -560,6 +560,52 @@ adminLogout.addEventListener(
     }
 );
 
+// ==============================
+// ADMIN BUTTON
+// ==============================
+
+const adminOpenButton =
+    document.getElementById("admin-open-button");
+
+const adminLoginBox =
+    document.getElementById("admin-login-box");
+
+const adminCancelButton =
+    document.getElementById("admin-cancel-button");
+
+
+adminOpenButton.addEventListener(
+    "click",
+    function() {
+
+        adminLoginBox.style.display =
+            "block";
+
+        adminOpenButton.style.display =
+            "none";
+
+        adminPassword.focus();
+
+    }
+);
+
+
+adminCancelButton.addEventListener(
+    "click",
+    function() {
+
+        adminLoginBox.style.display =
+            "none";
+
+        adminOpenButton.style.display =
+            "inline-block";
+
+        adminPassword.value = "";
+
+        adminMessage.textContent = "";
+
+    }
+);
 
 // ==============================
 // START
