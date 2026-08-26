@@ -1,105 +1,71 @@
 const form = document.getElementById("comment-form");
 const commentsList = document.getElementById("comments-list");
 
-const API_URL = "http://127.0.0.1:5000";
+let comments = JSON.parse(
+    localStorage.getItem("comments") || "[]"
+);
 
 
-async function loadComments() {
+function saveComments() {
 
-    try {
+    localStorage.setItem(
+        "comments",
+        JSON.stringify(comments)
+    );
 
-        const response = await fetch(
-            `${API_URL}/comments`
-        );
-
-        const comments = await response.json();
-
-        commentsList.innerHTML = "";
-
-        comments.forEach(showComment);
-
-    } catch (error) {
-
-        console.error(
-            "Could not connect to server:",
-            error
-        );
-
-    }
 }
 
 
-function showComment(comment) {
+function showComments() {
 
-    const box = document.createElement("div");
+    commentsList.innerHTML = "";
 
-    const name = document.createElement("h3");
-    name.textContent = comment.name;
+    comments.forEach(comment => {
 
-    const text = document.createElement("p");
-    text.textContent = comment.comment;
+        const box = document.createElement("div");
 
-    box.appendChild(name);
-    box.appendChild(text);
+        const name = document.createElement("h3");
+        name.textContent = comment.name;
 
-    commentsList.appendChild(box);
+        const text = document.createElement("p");
+        text.textContent = comment.text;
+
+        box.appendChild(name);
+        box.appendChild(text);
+
+        commentsList.appendChild(box);
+
+    });
+
 }
 
 
-form.addEventListener("submit", async function(event) {
+form.addEventListener("submit", function(event) {
 
     event.preventDefault();
 
     const name =
         document.getElementById("name").value.trim();
 
-    const comment =
+    const text =
         document.getElementById("comment").value.trim();
 
-
-    if (!name || !comment) {
+    if (!name || !text) {
         return;
     }
 
+    comments.push({
+        name: name,
+        text: text
+    });
 
-    try {
+    saveComments();
 
-        const response = await fetch(
-            `${API_URL}/comments`,
-            {
-                method: "POST",
+    showComments();
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-                    name: name,
-                    comment: comment
-                })
-            }
-        );
-
-
-        if (!response.ok) {
-            throw new Error("Failed to save comment.");
-        }
-
-
-        form.reset();
-
-        await loadComments();
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert(
-            "Could not connect to the server."
-        );
-    }
+    form.reset();
 
 });
 
 
-loadComments();
+showComments();
