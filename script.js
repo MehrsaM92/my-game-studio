@@ -21,6 +21,15 @@ const form =
 const commentsList =
     document.getElementById("comments-list");
 
+const adminOpenButton =
+    document.getElementById("admin-open-button");
+
+const adminLoginBox =
+    document.getElementById("admin-login-box");
+
+const adminCancelButton =
+    document.getElementById("admin-cancel-button");
+
 const adminPassword =
     document.getElementById("admin-password");
 
@@ -49,6 +58,19 @@ const saveGameButton =
 
 const ADMIN_EMAIL =
     "ahmad_beigi_mehrsam@gmail.com";
+
+
+// ==============================
+// INITIAL STATE
+// ==============================
+
+if (adminLoginBox) {
+    adminLoginBox.style.display = "none";
+}
+
+if (adminPanel) {
+    adminPanel.style.display = "none";
+}
 
 
 // ==============================
@@ -177,6 +199,48 @@ form.addEventListener(
 
 
 // ==============================
+// OPEN ADMIN LOGIN
+// ==============================
+
+adminOpenButton.addEventListener(
+    "click",
+    function() {
+
+        adminLoginBox.style.display =
+            "block";
+
+        adminOpenButton.style.display =
+            "none";
+
+        adminPassword.focus();
+
+    }
+);
+
+
+// ==============================
+// CANCEL ADMIN LOGIN
+// ==============================
+
+adminCancelButton.addEventListener(
+    "click",
+    function() {
+
+        adminLoginBox.style.display =
+            "none";
+
+        adminOpenButton.style.display =
+            "inline-block";
+
+        adminPassword.value = "";
+
+        adminMessage.textContent = "";
+
+    }
+);
+
+
+// ==============================
 // ADMIN LOGIN
 // ==============================
 
@@ -228,12 +292,33 @@ adminLoginButton.addEventListener(
 
             adminMessage.textContent = "";
 
+            adminLoginBox.style.display =
+                "none";
+
             adminPanel.style.display =
                 "block";
 
             await loadAdminComments();
 
             loadGame();
+
+        }
+
+    }
+);
+
+
+// ==============================
+// ENTER KEY LOGIN
+// ==============================
+
+adminPassword.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            adminLoginButton.click();
 
         }
 
@@ -262,6 +347,9 @@ async function checkAdminSession() {
 
 
     if (session) {
+
+        adminOpenButton.style.display =
+            "none";
 
         adminPanel.style.display =
             "block";
@@ -296,11 +384,14 @@ function loadGame() {
 
         document.getElementById(
             "game-title"
-        ).textContent = savedName;
+        ).textContent =
+            savedName;
+
 
         document.getElementById(
             "admin-game-name"
-        ).value = savedName;
+        ).value =
+            savedName;
 
     }
 
@@ -311,6 +402,7 @@ function loadGame() {
             "game-description"
         ).textContent =
             savedDescription;
+
 
         document.getElementById(
             "admin-game-description"
@@ -377,7 +469,8 @@ saveGameButton.addEventListener(
 
         document.getElementById(
             "game-title"
-        ).textContent = name;
+        ).textContent =
+            name;
 
 
         document.getElementById(
@@ -552,53 +645,13 @@ adminLogout.addEventListener(
             "none";
 
 
-        adminPassword.value = "";
-
-        adminMessage.textContent =
-            "Logged out.";
-
-    }
-);
-
-// ==============================
-// ADMIN BUTTON
-// ==============================
-
-const adminOpenButton =
-    document.getElementById("admin-open-button");
-
-const adminLoginBox =
-    document.getElementById("admin-login-box");
-
-const adminCancelButton =
-    document.getElementById("admin-cancel-button");
-
-
-adminOpenButton.addEventListener(
-    "click",
-    function() {
-
-        adminLoginBox.style.display =
-            "block";
-
-        adminOpenButton.style.display =
-            "none";
-
-        adminPassword.focus();
-
-    }
-);
-
-
-adminCancelButton.addEventListener(
-    "click",
-    function() {
-
         adminLoginBox.style.display =
             "none";
+
 
         adminOpenButton.style.display =
             "inline-block";
+
 
         adminPassword.value = "";
 
@@ -606,6 +659,7 @@ adminCancelButton.addEventListener(
 
     }
 );
+
 
 // ==============================
 // START
