@@ -5,29 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My Game Studio | Games, Reviews and Introductions</title>
+    <title>My Game Studio - Game Reviews and Introductions</title>
 
     <meta name="description"
-        content="My Game Studio is a gaming website where you can discover games, read game introductions, and share your opinions through comments.">
-
-    <meta name="keywords"
-        content="My Game Studio, games, game reviews, game introductions, gaming">
-
-    <meta name="author" content="My Game Studio">
-
-    <link rel="canonical"
-        href="https://mehrsam92.github.io/my-game-studio/">
-
-    <meta name="robots" content="index, follow">
+        content="Welcome to My Game Studio. Discover different games, read game introductions, and share your opinions with other players.">
 
     <style>
-
         * {
             box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
         }
 
         body {
@@ -35,11 +20,10 @@
             background: #071a2b;
             color: white;
             font-family: Arial, sans-serif;
-            line-height: 1.6;
         }
 
         header {
-            padding: 55px 20px;
+            padding: 35px 20px;
             text-align: center;
             background: #0b2942;
         }
@@ -51,8 +35,6 @@
         }
 
         header p {
-            max-width: 750px;
-            margin: 15px auto 0;
             font-size: 18px;
             color: #c8e8ff;
         }
@@ -91,16 +73,8 @@
             color: #4db8ff;
         }
 
-        .intro {
-            text-align: center;
-        }
-
-        .intro p {
-            color: #d3e9f7;
-        }
-
         .game {
-            padding: 25px;
+            padding: 20px;
             background: #092238;
             border-radius: 10px;
             margin-top: 20px;
@@ -111,7 +85,8 @@
         }
 
         .game-description {
-            color: #d3e9f7;
+            white-space: pre-wrap;
+            line-height: 1.6;
         }
 
         button {
@@ -156,10 +131,6 @@
             color: #4db8ff;
         }
 
-        .comments-info {
-            color: #c8e8ff;
-        }
-
         .admin-area {
             margin-top: 30px;
             text-align: center;
@@ -199,10 +170,6 @@
             margin-left: 5px;
         }
 
-        #admin-cancel-button:hover {
-            background: #777;
-        }
-
         #admin-panel {
             display: none;
             margin-top: 25px;
@@ -210,6 +177,7 @@
             background: #061522;
             border-radius: 12px;
             border: 1px solid #1683c7;
+            text-align: left;
         }
 
         #admin-panel h2 {
@@ -220,6 +188,13 @@
             margin-top: 25px;
         }
 
+        .admin-game {
+            margin-top: 15px;
+            padding: 18px;
+            background: #092238;
+            border-radius: 8px;
+        }
+
         .admin-comment {
             margin-top: 12px;
             padding: 15px;
@@ -227,11 +202,23 @@
             border-radius: 8px;
         }
 
+        .admin-actions {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .edit-button {
+            background: #1683c7;
+        }
+
+        .delete-button,
         .delete-comment {
-            margin-top: 10px;
             background: #a83232;
         }
 
+        .delete-button:hover,
         .delete-comment:hover {
             background: #d44343;
         }
@@ -245,114 +232,67 @@
             background: #777;
         }
 
+        .admin-edit-box {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #061522;
+            border-radius: 8px;
+        }
+
+        .success {
+            color: #7dff9b;
+        }
+
+        .error {
+            color: #ff8585;
+        }
+
         footer {
             padding: 25px;
             text-align: center;
             background: #061522;
             color: #aac8dc;
         }
-
-        @media (max-width: 600px) {
-
-            header h1 {
-                font-size: 36px;
-            }
-
-            nav a {
-                margin: 0 7px;
-                font-size: 15px;
-            }
-
-            main {
-                padding: 20px 12px;
-            }
-
-            section {
-                padding: 20px;
-            }
-
-        }
-
     </style>
-
 </head>
 
 <body>
 
 <header>
-
     <h1>My Game Studio</h1>
 
     <p>
-        Discover games, read game introductions,
-        and share your opinions with other players.
+        Welcome to my studio.
+        Here I introduce different games and share information about them.
     </p>
-
 </header>
 
 <nav>
-
     <a href="#">Home</a>
-
     <a href="#games">Games</a>
-
     <a href="#comments">Comments</a>
-
 </nav>
 
 <main>
-
-    <section class="intro">
-
-        <h2>Welcome to My Game Studio</h2>
-
-        <p>
-            My Game Studio is a gaming website dedicated
-            to introducing games and creating a place where
-            players can share their opinions.
-        </p>
-
-        <p>
-            Explore the games below and leave a comment
-            to share your thoughts.
-        </p>
-
-    </section>
 
     <section id="games">
 
         <h2>Games</h2>
 
-        <p>
-            Explore games and read their introductions
-            and descriptions.
-        </p>
-
-        <div class="game">
-
-            <h2 id="game-title">
-                My First Game
-            </h2>
-
-            <p id="game-description" class="game-description">
-                Welcome to My Game Studio.
-                This game section contains information,
-                introductions, and descriptions of games
-                published on the website.
-            </p>
-
+        <div id="games-list">
+            <p>Loading games...</p>
         </div>
 
     </section>
 
+
     <section id="comments">
 
-        <h2>Game Comments</h2>
+        <h2>Comments</h2>
 
-        <p class="comments-info">
+        <p>
             Share your opinion about the games.
-            Your comment can help other visitors discover
-            what players think about the games.
         </p>
 
         <form id="comment-form">
@@ -386,11 +326,13 @@
 
         <div id="comments-list"></div>
 
+
         <div class="admin-area">
 
             <button id="admin-open-button">
                 Admin
             </button>
+
 
             <div id="admin-login-box">
 
@@ -416,54 +358,69 @@
 
             </div>
 
+
             <div id="admin-panel">
 
                 <h2>
                     Admin Panel
                 </h2>
 
+
                 <div class="admin-section">
 
                     <h3>
-                        Game Management
+                        Add New Game
                     </h3>
 
-                    <label for="admin-game-name">
+                    <label for="new-game-name">
                         Game Name
                     </label>
 
                     <input
                         type="text"
-                        id="admin-game-name"
+                        id="new-game-name"
                         placeholder="Game name"
                     >
 
-                    <label for="admin-game-description">
+                    <label for="new-game-description">
                         Game Description
                     </label>
 
                     <textarea
-                        id="admin-game-description"
+                        id="new-game-description"
                         placeholder="Game description"
                     ></textarea>
 
-                    <button id="save-game">
-                        Save Game
+                    <button id="add-game">
+                        Add Game
                     </button>
 
                     <p id="game-message"></p>
 
                 </div>
 
+
                 <div class="admin-section">
 
                     <h3>
-                        Comment Management
+                        Manage Games
+                    </h3>
+
+                    <div id="admin-games-list"></div>
+
+                </div>
+
+
+                <div class="admin-section">
+
+                    <h3>
+                        Manage Comments
                     </h3>
 
                     <div id="admin-comments-list"></div>
 
                 </div>
+
 
                 <button
                     id="admin-logout"
@@ -480,6 +437,7 @@
 
 </main>
 
+
 <footer>
 
     <p>
@@ -487,6 +445,7 @@
     </p>
 
 </footer>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
