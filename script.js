@@ -4,7 +4,6 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_zldmKFlZix45ZYpS69uDyg_aXYTZBUo";
 
-
 const db = supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
@@ -74,62 +73,79 @@ if (adminPanel) {
 
 
 // ==============================
-// LOAD COMMENTS
+// LOAD GAME FOR EVERYONE
 // ==============================
 
-async function loadComments() {
+async function loadGame() {
 
     const { data, error } = await db
-        .from("comments")
-        .select("*")
-        .order("created_at", {
+        .from("games")
+        .select("id, name, description, updated_at")
+        .order("updated_at", {
             ascending: false
-        });
-
+        })
+        .limit(1);
 
     if (error) {
 
         console.error(error);
 
-        commentsList.innerHTML =
-            "<p>Unable to load comments.</p>";
+        document.getElementById("game-title").textContent =
+            "Unable to load game";
+
+        document.getElementById("game-description").textContent =
+            "There was a problem loading the game.";
+
+        return;
+    }
+
+    const gameTitle =
+        document.getElementById("game-title");
+
+    const gameDescription =
+        document.getElementById("game-description");
+
+    const adminGameName =
+        document.getElementById("admin-game-name");
+
+    const adminGameDescription =
+        document.getElementById("admin-game-description");
+
+
+    if (!data || data.length === 0) {
+
+        gameTitle.textContent =
+            "No game yet";
+
+        gameDescription.textContent =
+            "The game will be added soon.";
+
+        adminGameName.value = "";
+        adminGameDescription.value = "";
 
         return;
     }
 
 
-    commentsList.innerHTML = "";
+    const game = data[0];
 
 
-    data.forEach(function(comment) {
+    gameTitle.textContent =
+        game.name;
 
-        const box =
-            document.createElement("div");
-
-        box.className =
-            "comment";
+    gameDescription.textContent =
+        game.description;
 
 
-        const name =
-            document.createElement("h3");
+    if (adminGameName) {
+        adminGameName.value =
+            game.name;
+    }
 
-        name.textContent =
-            comment.name;
-
-
-        const text =
-            document.createElement("p");
-
-        text.textContent =
-            comment.comment;
-
-
-        box.appendChild(name);
-        box.appendChild(text);
-
-        commentsList.appendChild(box);
-
-    });
+    if (adminGameDescription) {
+        adminGameDescription.value =
+            game.description;
+    }
 
 }
 
@@ -199,6 +215,79 @@ form.addEventListener(
 
 
 // ==============================
+// LOAD COMMENTS
+// ==============================
+
+async function loadComments() {
+
+    const {
+        data,
+        error
+    } = await db
+        .from("comments")
+        .select("*")
+        .order("created_at", {
+            ascending: false
+        });
+
+
+    if (error) {
+
+        console.error(error);
+
+        commentsList.innerHTML =
+            "<p>Unable to load comments.</p>";
+
+        return;
+    }
+
+
+    commentsList.innerHTML = "";
+
+
+    if (!data || data.length === 0) {
+
+        commentsList.innerHTML =
+            "<p>No comments yet.</p>";
+
+        return;
+    }
+
+
+    data.forEach(function(comment) {
+
+        const box =
+            document.createElement("div");
+
+        box.className =
+            "comment";
+
+
+        const name =
+            document.createElement("h3");
+
+        name.textContent =
+            comment.name;
+
+
+        const text =
+            document.createElement("p");
+
+        text.textContent =
+            comment.comment;
+
+
+        box.appendChild(name);
+        box.appendChild(text);
+
+        commentsList.appendChild(box);
+
+    });
+
+}
+
+
+// ==============================
 // OPEN ADMIN LOGIN
 // ==============================
 
@@ -232,9 +321,11 @@ adminCancelButton.addEventListener(
         adminOpenButton.style.display =
             "inline-block";
 
-        adminPassword.value = "";
+        adminPassword.value =
+            "";
 
-        adminMessage.textContent = "";
+        adminMessage.textContent =
+            "";
 
     }
 );
@@ -267,14 +358,18 @@ adminLoginButton.addEventListener(
             "Logging in...";
 
 
-        const { data, error } =
-            await db.auth.signInWithPassword({
+        const {
+            data,
+            error
+        } = await db.auth.signInWithPassword({
 
-                email: ADMIN_EMAIL,
+            email:
+                ADMIN_EMAIL,
 
-                password: password
+            password:
+                password
 
-            });
+        });
 
 
         if (error) {
@@ -290,7 +385,8 @@ adminLoginButton.addEventListener(
 
         if (data.session) {
 
-            adminMessage.textContent = "";
+            adminMessage.textContent =
+                "";
 
             adminLoginBox.style.display =
                 "none";
@@ -298,9 +394,13 @@ adminLoginButton.addEventListener(
             adminPanel.style.display =
                 "block";
 
+            adminOpenButton.style.display =
+                "none";
+
+
             await loadAdminComments();
 
-            loadGame();
+            await loadGame();
 
         }
 
@@ -333,7 +433,9 @@ adminPassword.addEventListener(
 async function checkAdminSession() {
 
     const {
-        data: { session },
+        data: {
+            session
+        },
         error
     } = await db.auth.getSession();
 
@@ -351,12 +453,16 @@ async function checkAdminSession() {
         adminOpenButton.style.display =
             "none";
 
+        adminLoginBox.style.display =
+            "none";
+
         adminPanel.style.display =
             "block";
 
+
         await loadAdminComments();
 
-        loadGame();
+        await loadGame();
 
     }
 
@@ -364,78 +470,23 @@ async function checkAdminSession() {
 
 
 // ==============================
-// LOAD GAME
-// ==============================
-
-function loadGame() {
-
-    const savedName =
-        localStorage.getItem(
-            "gameName"
-        );
-
-    const savedDescription =
-        localStorage.getItem(
-            "gameDescription"
-        );
-
-
-    if (savedName) {
-
-        document.getElementById(
-            "game-title"
-        ).textContent =
-            savedName;
-
-
-        document.getElementById(
-            "admin-game-name"
-        ).value =
-            savedName;
-
-    }
-
-
-    if (savedDescription) {
-
-        document.getElementById(
-            "game-description"
-        ).textContent =
-            savedDescription;
-
-
-        document.getElementById(
-            "admin-game-description"
-        ).value =
-            savedDescription;
-
-    }
-
-}
-
-
-// ==============================
-// SAVE GAME
+// SAVE / UPDATE GAME
 // ==============================
 
 saveGameButton.addEventListener(
     "click",
-    function() {
+    async function() {
 
         const name =
             document
-                .getElementById(
-                    "admin-game-name"
-                )
+                .getElementById("admin-game-name")
                 .value
                 .trim();
 
 
         const description =
             document
-                .getElementById(
-                    "admin-game-description"
-                )
+                .getElementById("admin-game-description")
                 .value
                 .trim();
 
@@ -455,35 +506,180 @@ saveGameButton.addEventListener(
         }
 
 
-        localStorage.setItem(
-            "gameName",
-            name
-        );
+        gameMessage.textContent =
+            "Saving...";
 
 
-        localStorage.setItem(
-            "gameDescription",
-            description
-        );
+        const {
+            data: {
+                session
+            }
+        } = await db.auth.getSession();
 
 
-        document.getElementById(
-            "game-title"
-        ).textContent =
-            name;
+        if (!session) {
+
+            gameMessage.textContent =
+                "Admin login required.";
+
+            return;
+        }
 
 
-        document.getElementById(
-            "game-description"
-        ).textContent =
-            description;
+        const {
+            data: existingGames,
+            error: findError
+        } = await db
+            .from("games")
+            .select("id")
+            .order("updated_at", {
+                ascending: false
+            })
+            .limit(1);
+
+
+        if (findError) {
+
+            console.error(findError);
+
+            gameMessage.textContent =
+                "Unable to check existing game.";
+
+            return;
+        }
+
+
+        let result;
+
+
+        if (existingGames &&
+            existingGames.length > 0) {
+
+            const gameId =
+                existingGames[0].id;
+
+
+            result = await db
+                .from("games")
+                .update({
+                    name: name,
+                    description: description,
+                    updated_at: new Date().toISOString()
+                })
+                .eq("id", gameId);
+
+        } else {
+
+            result = await db
+                .from("games")
+                .insert({
+                    name: name,
+                    description: description
+                });
+
+        }
+
+
+        if (result.error) {
+
+            console.error(result.error);
+
+            gameMessage.textContent =
+                "Unable to save game.";
+
+            return;
+        }
 
 
         gameMessage.textContent =
             "Game saved successfully.";
 
+
+        await loadGame();
+
     }
 );
+
+
+// ==============================
+// DELETE GAME
+// ==============================
+
+async function deleteGame() {
+
+    const confirmed =
+        confirm(
+            "Delete the current game?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const {
+        data: existingGames,
+        error: findError
+    } = await db
+        .from("games")
+        .select("id");
+
+
+    if (findError) {
+
+        console.error(findError);
+
+        alert(
+            "Unable to find the game."
+        );
+
+        return;
+    }
+
+
+    if (!existingGames ||
+        existingGames.length === 0) {
+
+        alert(
+            "There is no game to delete."
+        );
+
+        return;
+    }
+
+
+    for (const game of existingGames) {
+
+        const {
+            error
+        } = await db
+            .from("games")
+            .delete()
+            .eq("id", game.id);
+
+
+        if (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to delete game."
+            );
+
+            return;
+        }
+
+    }
+
+
+    await loadGame();
+
+    alert(
+        "Game deleted successfully."
+    );
+
+}
 
 
 // ==============================
@@ -514,10 +710,11 @@ async function loadAdminComments() {
     }
 
 
-    adminCommentsList.innerHTML = "";
+    adminCommentsList.innerHTML =
+        "";
 
 
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
 
         adminCommentsList.innerHTML =
             "<p>No comments yet.</p>";
@@ -549,6 +746,26 @@ async function loadAdminComments() {
             comment.comment;
 
 
+        const editButton =
+            document.createElement("button");
+
+        editButton.textContent =
+            "Edit";
+
+        editButton.addEventListener(
+            "click",
+            function() {
+
+                editComment(
+                    comment.id,
+                    comment.name,
+                    comment.comment
+                );
+
+            }
+        );
+
+
         const deleteButton =
             document.createElement("button");
 
@@ -575,11 +792,94 @@ async function loadAdminComments() {
 
         box.appendChild(text);
 
+        box.appendChild(editButton);
+
         box.appendChild(deleteButton);
 
         adminCommentsList.appendChild(box);
 
     });
+
+}
+
+
+// ==============================
+// EDIT COMMENT
+// ==============================
+
+async function editComment(
+    id,
+    oldName,
+    oldComment
+) {
+
+    const newName =
+        prompt(
+            "Edit name:",
+            oldName
+        );
+
+
+    if (newName === null) {
+        return;
+    }
+
+
+    const newComment =
+        prompt(
+            "Edit comment:",
+            oldComment
+        );
+
+
+    if (newComment === null) {
+        return;
+    }
+
+
+    const name =
+        newName.trim();
+
+    const comment =
+        newComment.trim();
+
+
+    if (!name || !comment) {
+
+        alert(
+            "Name and comment cannot be empty."
+        );
+
+        return;
+    }
+
+
+    const {
+        error
+    } = await db
+        .from("comments")
+        .update({
+            name: name,
+            comment: comment
+        })
+        .eq("id", id);
+
+
+    if (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to edit comment."
+        );
+
+        return;
+    }
+
+
+    await loadComments();
+
+    await loadAdminComments();
 
 }
 
@@ -597,16 +897,16 @@ async function deleteComment(id) {
 
 
     if (!confirmed) {
-
         return;
     }
 
 
-    const { error } =
-        await db
-            .from("comments")
-            .delete()
-            .eq("id", id);
+    const {
+        error
+    } = await db
+        .from("comments")
+        .delete()
+        .eq("id", id);
 
 
     if (error) {
@@ -644,18 +944,17 @@ adminLogout.addEventListener(
         adminPanel.style.display =
             "none";
 
-
         adminLoginBox.style.display =
             "none";
-
 
         adminOpenButton.style.display =
             "inline-block";
 
+        adminPassword.value =
+            "";
 
-        adminPassword.value = "";
-
-        adminMessage.textContent = "";
+        adminMessage.textContent =
+            "";
 
     }
 );
@@ -667,4 +966,6 @@ adminLogout.addEventListener(
 
 loadComments();
 
-checkAdminSession();
+loadGame();
+
+checkAdminSession();        
