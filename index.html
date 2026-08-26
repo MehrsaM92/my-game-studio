@@ -7,14 +7,6 @@
 
     <title>My Game Studio - Game Reviews and Introductions</title>
 
-    <meta name="description"
-        content="Welcome to My Game Studio. Discover different games, read game introductions, and share your opinions with other players.">
-
-    <meta name="keywords"
-        content="games, game reviews, game introductions, My Game Studio">
-
-    <meta name="author" content="My Game Studio">
-
     <style>
         * {
             box-sizing: border-box;
@@ -127,6 +119,27 @@
             color: #4db8ff;
         }
 
+        .admin-panel {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #24506e;
+            text-align: center;
+        }
+
+        .admin-panel a {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 6px;
+            background: #1683c7;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .admin-panel a:hover {
+            background: #20a4f3;
+        }
+
         footer {
             padding: 25px;
             text-align: center;
@@ -173,7 +186,6 @@
 
         </section>
 
-
         <section id="comments">
 
             <h2>Comments</h2>
@@ -209,24 +221,24 @@
 
             <div id="comments-list"></div>
 
+            <div class="admin-panel">
+                <a href="admin.html">
+                    Admin Panel
+                </a>
+            </div>
+
         </section>
 
     </main>
 
-
     <footer>
-
         <p>
             My Game Studio © 2026
         </p>
-
     </footer>
 
-
-    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Your JavaScript -->
     <script src="script.js"></script>
 
 </body>
