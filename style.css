@@ -1,0 +1,180 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #071426;
+    color: #eaf3ff;
+    font-family: Arial, sans-serif;
+    line-height: 1.7;
+}
+
+header {
+    background: #0b1f3a;
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 2px solid #183d68;
+}
+
+header h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: #9ecbff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+nav a:hover {
+    color: white;
+}
+
+main {
+    width: 90%;
+    max-width: 1100px;
+    margin: auto;
+}
+
+section {
+    padding: 80px 20px;
+}
+
+.hero {
+    text-align: center;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero h2 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    max-width: 700px;
+    font-size: 20px;
+    color: #b8c9dd;
+}
+
+section h2 {
+    text-align: center;
+    font-size: 34px;
+    margin-bottom: 35px;
+}
+
+.game-card {
+    background: #0b1f3a;
+    border: 1px solid #1b4775;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.game-card h3 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.game-card p {
+    color: #b8c9dd;
+}
+
+form {
+    max-width: 650px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+input,
+textarea {
+    background: #0b1f3a;
+    color: white;
+    border: 1px solid #28547f;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 16px;
+}
+
+textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+button {
+    background: #1464a5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1b7ac5;
+}
+
+#comment-list {
+    max-width: 650px;
+    margin: 40px auto 0;
+}
+
+.comment {
+    background: #0b1f3a;
+    border: 1px solid #183d68;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.comment strong {
+    display: block;
+    margin-bottom: 8px;
+}
+
+footer {
+    background: #0b1f3a;
+    text-align: center;
+    padding: 30px;
+    margin-top: 50px;
+    color: #8fa8c4;
+}
+
+@media (max-width: 600px) {
+
+    header h1 {
+        font-size: 34px;
+    }
+
+    .hero h2 {
+        font-size: 30px;
+    }
+
+    section h2 {
+        font-size: 28px;
+    }
+
+    nav {
+        gap: 15px;
+    }
+}
