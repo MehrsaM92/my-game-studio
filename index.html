@@ -5,10 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My Game Studio - Game Reviews and Introductions</title>
+    <title>My Game Studio | Games, Reviews and Introductions</title>
 
     <meta name="description"
-        content="Welcome to My Game Studio. Discover different games, read game introductions, and share your opinions with other players.">
+        content="My Game Studio is a gaming website where you can discover games, read game introductions, and share your opinions through comments.">
+
+    <meta name="keywords"
+        content="My Game Studio, games, game reviews, game introductions, gaming">
+
+    <meta name="author" content="My Game Studio">
+
+    <link rel="canonical"
+        href="https://mehrsam92.github.io/my-game-studio/">
+
+    <meta name="robots" content="index, follow">
 
     <style>
 
@@ -16,15 +26,20 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
             background: #071a2b;
             color: white;
             font-family: Arial, sans-serif;
+            line-height: 1.6;
         }
 
         header {
-            padding: 35px 20px;
+            padding: 55px 20px;
             text-align: center;
             background: #0b2942;
         }
@@ -36,6 +51,8 @@
         }
 
         header p {
+            max-width: 750px;
+            margin: 15px auto 0;
             font-size: 18px;
             color: #c8e8ff;
         }
@@ -74,11 +91,27 @@
             color: #4db8ff;
         }
 
+        .intro {
+            text-align: center;
+        }
+
+        .intro p {
+            color: #d3e9f7;
+        }
+
         .game {
-            padding: 20px;
+            padding: 25px;
             background: #092238;
             border-radius: 10px;
             margin-top: 20px;
+        }
+
+        .game h2 {
+            margin-top: 0;
+        }
+
+        .game-description {
+            color: #d3e9f7;
         }
 
         button {
@@ -123,7 +156,9 @@
             color: #4db8ff;
         }
 
-        /* Admin button */
+        .comments-info {
+            color: #c8e8ff;
+        }
 
         .admin-area {
             margin-top: 30px;
@@ -140,8 +175,6 @@
         #admin-open-button:hover {
             background: #1683c7;
         }
-
-        /* Login box */
 
         #admin-login-box {
             display: none;
@@ -166,7 +199,9 @@
             margin-left: 5px;
         }
 
-        /* Admin panel */
+        #admin-cancel-button:hover {
+            background: #777;
+        }
 
         #admin-panel {
             display: none;
@@ -206,11 +241,36 @@
             background: #555;
         }
 
+        .logout-button:hover {
+            background: #777;
+        }
+
         footer {
             padding: 25px;
             text-align: center;
             background: #061522;
             color: #aac8dc;
+        }
+
+        @media (max-width: 600px) {
+
+            header h1 {
+                font-size: 36px;
+            }
+
+            nav a {
+                margin: 0 7px;
+                font-size: 15px;
+            }
+
+            main {
+                padding: 20px 12px;
+            }
+
+            section {
+                padding: 20px;
+            }
+
         }
 
     </style>
@@ -224,57 +284,76 @@
     <h1>My Game Studio</h1>
 
     <p>
-        Welcome to my studio.
-        Here I introduce different games and share information about them.
+        Discover games, read game introductions,
+        and share your opinions with other players.
     </p>
 
 </header>
 
-
 <nav>
 
     <a href="#">Home</a>
+
     <a href="#games">Games</a>
+
     <a href="#comments">Comments</a>
 
 </nav>
 
-
 <main>
 
-    <!-- Games -->
+    <section class="intro">
+
+        <h2>Welcome to My Game Studio</h2>
+
+        <p>
+            My Game Studio is a gaming website dedicated
+            to introducing games and creating a place where
+            players can share their opinions.
+        </p>
+
+        <p>
+            Explore the games below and leave a comment
+            to share your thoughts.
+        </p>
+
+    </section>
 
     <section id="games">
 
         <h2>Games</h2>
 
+        <p>
+            Explore games and read their introductions
+            and descriptions.
+        </p>
+
         <div class="game">
 
             <h2 id="game-title">
-                Game Name
+                My First Game
             </h2>
 
-            <p id="game-description">
-                Game information will be added here.
-                This section will contain an introduction
-                and information about the game.
+            <p id="game-description" class="game-description">
+                Welcome to My Game Studio.
+                This game section contains information,
+                introductions, and descriptions of games
+                published on the website.
             </p>
 
         </div>
 
     </section>
 
-
-    <!-- Comments -->
-
     <section id="comments">
 
-        <h2>Comments</h2>
+        <h2>Game Comments</h2>
 
-        <p>
+        <p class="comments-info">
             Share your opinion about the games.
+            Your comment can help other visitors discover
+            what players think about the games.
         </p>
-
 
         <form id="comment-form">
 
@@ -289,7 +368,6 @@
                 required
             >
 
-
             <label for="comment">
                 Your comment
             </label>
@@ -300,27 +378,19 @@
                 required
             ></textarea>
 
-
             <button type="submit">
                 Send Comment
             </button>
 
         </form>
 
-
         <div id="comments-list"></div>
-
-
-        <!-- Small Admin Button -->
 
         <div class="admin-area">
 
             <button id="admin-open-button">
                 Admin
             </button>
-
-
-            <!-- Login -->
 
             <div id="admin-login-box">
 
@@ -346,15 +416,11 @@
 
             </div>
 
-
-            <!-- Admin Panel -->
-
             <div id="admin-panel">
 
                 <h2>
                     Admin Panel
                 </h2>
-
 
                 <div class="admin-section">
 
@@ -372,7 +438,6 @@
                         placeholder="Game name"
                     >
 
-
                     <label for="admin-game-description">
                         Game Description
                     </label>
@@ -382,7 +447,6 @@
                         placeholder="Game description"
                     ></textarea>
 
-
                     <button id="save-game">
                         Save Game
                     </button>
@@ -390,7 +454,6 @@
                     <p id="game-message"></p>
 
                 </div>
-
 
                 <div class="admin-section">
 
@@ -401,7 +464,6 @@
                     <div id="admin-comments-list"></div>
 
                 </div>
-
 
                 <button
                     id="admin-logout"
@@ -418,7 +480,6 @@
 
 </main>
 
-
 <footer>
 
     <p>
@@ -426,7 +487,6 @@
     </p>
 
 </footer>
-
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
