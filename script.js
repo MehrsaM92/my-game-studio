@@ -1,63 +1,30 @@
-const commentForm = document.getElementById("comment-form");
-const commentList = document.getElementById("comment-list");
+const form = document.getElementById("comment-form");
+const commentsList = document.getElementById("comments-list");
 
-let comments = JSON.parse(
-    localStorage.getItem("comments") || "[]"
-);
-
-
-function displayComments() {
-
-    commentList.innerHTML = "";
-
-    comments.forEach(function(comment) {
-
-        const box = document.createElement("div");
-
-        box.className = "comment";
-
-        const name = document.createElement("strong");
-        name.textContent = comment.name;
-
-        const text = document.createElement("p");
-        text.textContent = comment.text;
-
-        box.appendChild(name);
-        box.appendChild(text);
-
-        commentList.appendChild(box);
-    });
-}
-
-
-commentForm.addEventListener("submit", function(event) {
+form.addEventListener("submit", function(event) {
 
     event.preventDefault();
 
-    const name =
-        document.getElementById("comment-name").value.trim();
+    const name = document.getElementById("name").value.trim();
+    const comment = document.getElementById("comment").value.trim();
 
-    const text =
-        document.getElementById("comment-text").value.trim();
-
-    if (!name || !text) {
+    if (name === "" || comment === "") {
         return;
     }
 
-    comments.push({
-        name: name,
-        text: text
-    });
+    const commentBox = document.createElement("div");
+    commentBox.className = "comment";
 
-    localStorage.setItem(
-        "comments",
-        JSON.stringify(comments)
-    );
+    const nameElement = document.createElement("h3");
+    nameElement.textContent = name;
 
-    commentForm.reset();
+    const commentElement = document.createElement("p");
+    commentElement.textContent = comment;
 
-    displayComments();
+    commentBox.appendChild(nameElement);
+    commentBox.appendChild(commentElement);
+
+    commentsList.appendChild(commentBox);
+
+    form.reset();
 });
-
-
-displayComments();
