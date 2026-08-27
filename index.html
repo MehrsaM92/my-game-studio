@@ -3,7 +3,9 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Websites</title>
+    <meta name="description"
+        content="A collection of useful websites for learning, programming, AI, and web development.">
+    <title>Useful Websites for Learning and Programming</title>
     <style>
         body {
             background-color: rgba(20, 53, 201, 0.397);
@@ -192,57 +194,127 @@
                 font-size: 16px;
             }
         }
+
+        #search-box {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        #search-button {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        #search {
+            width: 220px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid rgb(150, 150, 150);
+            border-radius: 8px;
+        }
+
+        .website {
+            scroll-margin-top: 20px;
+        }
+
+        .highlight a {
+            background-color: rgb(255, 255, 0) !important;
+        }
     </style>
 </head>
 
 <body>
+
+    <div id="search-box">
+        <input type="text" id="search" placeholder="Educational...">
+        <button id="search-button">Search</button>
+    </div>
+
     <h1 id="welcome">Welcome</h1>
-    <a id="kodamoz" href="https://kodamoz.com/fa/tutorials">kodamoz Website</a>
-    <p id="kodamoz-a">
-        This site is very good for <strong><em>learning</em></strong> in Persian.
-    </p>
-    <hr id="hr1">
-    <p id="kodamoz-a2">
-        CSS
-        - HTML
-        - JavaScript
-        - Python
-        .
-        .
-        .
-    </p>
 
-    <a id="chatgpt" href="https://chatgpt.com/c">ChatGPT</a>
-    <p id="chatgpt-a">
-        This site is very good for your <strong><em>questions.</em></strong>
-    </p>
-    <hr id="hr2">
-    <p id="chatgpt-a2">
-        Learn everything with ChatGPT!
-    </p>
+    <div class="website" data-search="kodamoz educational learning programming persian html css javascript python">
+        <a id="kodamoz" href="https://kodamoz.com/fa/tutorials">kodamoz Website</a>
+        <p id="kodamoz-a">
+            A great site for <strong><em>learning programming</em></strong> in Persian.
+        </p>
+        <hr id="hr1">
+        <p id="kodamoz-a2">
+            HTML - CSS - JavaScript - Python... (Educational)
+        </p>
+    </div>
 
-    <a id="GitHub" href="https://github.com/dashboard">GitHub</a>
-    <p id="GitHub-a">
-        This site is great for <strong><em>creating your own websites!</em></strong>
-    </p>
-    <hr id="hr3">
-    <p id="GitHub-a2">
-        Create your own website.
-    </p>
+    <div class="website" data-search="chatgpt ai artificial intelligence questions learning asking">
+        <a id="chatgpt" href="https://chatgpt.com/c">ChatGPT</a>
+        <p id="chatgpt-a">
+            A useful AI tool for <strong><em>asking questions and learning</em></strong>.
+        </p>
+        <hr id="hr2">
+        <p id="chatgpt-a2">
+            Learn and get help with AI. (AI)
+        </p>
+    </div>
 
-    <a id="google-search-console" href="https://search.google.com/search-console/about">Google Search Console</a>
-    <p id="google-search-console-a">
-        This site is excellent for <strong><em>publishing</em></strong> and <strong><em>managing</em></strong> your own
-        website.
-    </p>
-    <hr id="hr4">
-    <p id="google-search-console-a2">
-        Publish and monitor your site.
-    </p>
+    <div class="website" data-search="github development programming code projects">
+        <a id="GitHub" href="https://github.com/dashboard">GitHub</a>
+        <p id="GitHub-a">
+            A platform for <strong><em>creating, sharing, and managing code</em></strong>.
+        </p>
+        <hr id="hr3">
+        <p id="GitHub-a2">
+            Store and share your projects. (Development)
+        </p>
+    </div>
+
+    <div class="website" data-search="google search console seo website search performance">
+        <a id="google-search-console" href="https://search.google.com/search-console/about">
+            Google Search Console
+        </a>
+
+        <p id="google-search-console-a">
+            A tool for <strong><em>monitoring and improving your website</em></strong> on Google.
+        </p>
+
+        <hr id="hr4">
+
+        <p id="google-search-console-a2">
+            Monitor your website's search performance. (SEO)
+        </p>
+    </div>
 
     <p id="coming-soon">
         More sites will be added later.
     </p>
+    <script>
+        const search_button = document.getElementById("search-button");
+        const search = document.getElementById("search");
+        const websites = document.querySelectorAll(".website");
+        search_button.addEventListener("click", function () {
+            const text = search.value.toLowerCase().trim();
+            if (text === "") {
+                return;
+            }
+            for (let website of websites) {
+                const data = website.getAttribute("data-search").toLowerCase();
+                if (data.includes(text)) {
+                    website.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    })
+
+                    website.classList.add("highlight");
+
+                    setTimeout(function () {
+                        website.classList.remove("highlight")
+                    }, 3000);
+                    break;
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>
