@@ -4,8 +4,8 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="A collection of useful websites for learning, programming, AI, and web development.">
-    <title>Useful Websites for Learning and Programming</title>
+        content="A collection of useful websites for learning, programming, AI, web development and downloading apps.">
+    <title>CodeNest Studio</title>
     <style>
         body {
             background-color: rgba(20, 53, 201, 0.397);
@@ -217,52 +217,6 @@
             margin-top: 150px;
         }
 
-
-        @media (max-width: 600px) {
-            #welcome {
-                left: 50%;
-                transform: translateX(-50%);
-                font-size: 60px;
-                white-space: nowrap;
-            }
-
-            #kodamoz,
-            #chatgpt,
-            #GitHub,
-            #google-search-console,
-            #Canva,
-            #file-manager {
-                left: 50%;
-                transform: translateX(-50%);
-                font-size: 35px;
-            }
-
-            #kodamoz-a,
-            #kodamoz-a2,
-            #chatgpt-a,
-            #chatgpt-a2,
-            #GitHub-a,
-            #GitHub-a2,
-            #Canva-a,
-            #Canva-a2,
-            #file-manager-a,
-            #file-manager-a2 {
-                left: 5%;
-                width: 90%;
-                font-size: 16px;
-            }
-
-            hr {
-                width: 90%;
-            }
-
-            #coming-soon {
-                left: 5%;
-                width: 90%;
-                font-size: 16px;
-            }
-        }
-
         #search-box {
             position: fixed;
             top: 20px;
@@ -304,7 +258,7 @@
 
     <h1 id="welcome">Welcome</h1>
 
-    <div class="website" data-search="kodamoz educational learning programming persian html css javascript python">
+    <div class="website" data-search="kodamoz educational learning programming persian html css javascript">
         <a id="kodamoz" href="https://kodamoz.com/fa/tutorials">kodamoz Website</a>
         <p id="kodamoz-a">
             A great site for <strong><em>learning programming</em></strong> in Persian.
@@ -369,6 +323,7 @@
             Create beautiful designs easily for school, projects, social media, and presentations. (Design)
         </p>
     </div>
+
     <div class="website" data-search="file manager python files folders download">
         <a id="file-manager" href="file_manager.exe" download>
             File Manager for windows
@@ -384,20 +339,26 @@
             Browse folders and manage files. (Python)
         </p>
     </div>
+
     <p id="coming-soon">
         More sites will be added later.
     </p>
+
     <script>
         const search_button = document.getElementById("search-button");
         const search = document.getElementById("search");
         const websites = document.querySelectorAll(".website");
+
         search_button.addEventListener("click", function () {
             const text = search.value.toLowerCase().trim();
+
             if (text === "") {
                 return;
             }
+
             for (let website of websites) {
                 const data = website.getAttribute("data-search").toLowerCase();
+
                 if (data.includes(text)) {
                     website.scrollIntoView({
                         behavior: "smooth",
@@ -409,6 +370,7 @@
                     setTimeout(function () {
                         website.classList.remove("highlight")
                     }, 3000);
+
                     break;
                 }
             }
