@@ -149,18 +149,45 @@
             font-size: 20px;
         }
 
+        #file-manager {
+            position: absolute;
+            top: 850px;
+            left: 540px;
+            color: blueviolet;
+            background-color: rgb(189, 196, 201);
+            font-size: 50px;
+            transition: 0.3s;
+        }
+
+        #file-manager-a {
+            position: absolute;
+            top: 900px;
+            left: 565px;
+            color: rgb(0, 0, 0);
+            font-size: 20px;
+        }
+
+        #file-manager-a2 {
+            position: absolute;
+            top: 920px;
+            left: 565px;
+            color: rgb(0, 0, 0);
+            font-size: 20px;
+        }
+
         #kodamoz:hover,
         #chatgpt:hover,
         #GitHub:hover,
         #google-search-console:hover,
-        #Canva:hover {
+        #Canva:hover,
+        #file-manager:hover {
             color: rgb(238, 255, 0);
             transform: scale(1.1);
         }
 
         #coming-soon {
             position: absolute;
-            top: 830px;
+            top: 980px;
             left: 565px;
             color: rgb(0, 0, 0);
             font-size: 20px;
@@ -186,6 +213,10 @@
             margin-top: 150px;
         }
 
+        #hr6 {
+            margin-top: 150px;
+        }
+
 
         @media (max-width: 600px) {
             #welcome {
@@ -199,7 +230,8 @@
             #chatgpt,
             #GitHub,
             #google-search-console,
-            #Canva {
+            #Canva,
+            #file-manager {
                 left: 50%;
                 transform: translateX(-50%);
                 font-size: 35px;
@@ -212,7 +244,9 @@
             #GitHub-a,
             #GitHub-a2,
             #Canva-a,
-            #Canva-a2 {
+            #Canva-a2,
+            #file-manager-a,
+            #file-manager-a2 {
                 left: 5%;
                 width: 90%;
                 font-size: 16px;
@@ -333,6 +367,21 @@
 
         <p id="Canva-a2">
             Create beautiful designs easily for school, projects, social media, and presentations. (Design)
+        </p>
+    </div>
+    <div class="website" data-search="file manager python files folders download">
+        <a id="file-manager" href="file_manager.exe" download>
+            File Manager for windows
+        </a>
+
+        <p id="file-manager-a">
+            A simple <strong><em>file manager</em></strong> made with Python.
+        </p>
+
+        <hr id="hr6">
+
+        <p id="file-manager-a2">
+            Browse folders and manage files. (Python)
         </p>
     </div>
     <p id="coming-soon">
