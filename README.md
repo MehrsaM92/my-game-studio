@@ -1,12 +1,21 @@
-# My Studio
+# Websites
 
-Hello and welcome to My Studio!
+A simple website for introducing useful websites.
 
-This website is a place to introduce websites and provide descriptions of them.
+## About
+
+This website introduces useful websites for learning, programming, creating projects, and finding helpful resources.
+
+The website is being improved and updated over time, and more useful websites will be added in the future.
 
 ## Technologies
 
 - HTML
 - CSS
-  
-© 2026 My Studio. All rights reserved.
+- JavaScript
+
+## Status
+
+🚧 This website is still under development.
+
+More websites and features will be added soon!
