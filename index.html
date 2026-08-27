@@ -24,6 +24,7 @@
             color: blueviolet;
             background-color: rgb(189, 196, 201);
             font-size: 50px;
+            transition: 0.3s;
         }
 
         #kodamoz-a {
@@ -49,6 +50,7 @@
             color: blueviolet;
             background-color: rgb(189, 196, 201);
             font-size: 50px;
+            transition: 0.3s;
         }
 
         #chatgpt-a {
@@ -74,6 +76,7 @@
             color: blueviolet;
             background-color: rgb(189, 196, 201);
             font-size: 50px;
+            transition: 0.3s;
         }
 
         #GitHub-a {
@@ -92,17 +95,43 @@
             font-size: 20px;
         }
 
+        #google-search-console {
+            position: absolute;
+            top: 550px;
+            left: 540px;
+            color: blueviolet;
+            background-color: rgb(189, 196, 201);
+            font-size: 50px;
+            transition: 0.3s;
+        }
+
+        #google-search-console-a {
+            position: absolute;
+            top: 600px;
+            left: 565px;
+            color: rgb(0, 0, 0);
+            font-size: 20px;
+        }
+
+        #google-search-console-a2 {
+            position: absolute;
+            top: 620px;
+            left: 565px;
+            color: rgb(0, 0, 0);
+            font-size: 20px;
+        }
+
         #kodamoz:hover,
         #chatgpt:hover,
-        #GitHub:hover {
+        #GitHub:hover,
+        #google-search-console:hover {
             color: rgb(238, 255, 0);
-            transition: 0.3s;
             transform: scale(1.1);
         }
 
         #coming-soon {
             position: absolute;
-            top: 550px;
+            top: 690px;
             left: 565px;
             color: rgb(0, 0, 0);
             font-size: 20px;
@@ -120,6 +149,10 @@
             margin-top: 150px;
         }
 
+        #hr4 {
+            margin-top: 150px;
+        }
+
 
         @media (max-width: 600px) {
             #welcome {
@@ -131,7 +164,8 @@
 
             #kodamoz,
             #chatgpt,
-            #GitHub {
+            #GitHub,
+            #google-search-console {
                 left: 50%;
                 transform: translateX(-50%);
                 font-size: 35px;
@@ -195,6 +229,17 @@
     <p id="GitHub-a2">
         Create your own website.
     </p>
+
+    <a id="google-search-console" href="https://search.google.com/search-console/about">Google Search Console</a>
+    <p id="google-search-console-a">
+        This site is excellent for <strong><em>publishing</em></strong> and <strong><em>managing</em></strong> your own
+        website.
+    </p>
+    <hr id="hr4">
+    <p id="google-search-console-a2">
+        Publish and monitor your site.
+    </p>
+
     <p id="coming-soon">
         More sites will be added later.
     </p>
