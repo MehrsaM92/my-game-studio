@@ -12,8 +12,7 @@ The website is being improved and updated over time, and more useful websites wi
 
 - HTML
 - CSS
-- JavaScript
-
+  
 ## Status
 
 🚧 This website is still under development.
