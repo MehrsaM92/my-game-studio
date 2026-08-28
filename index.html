@@ -228,6 +228,35 @@
             font-size: 20px;
         }
 
+        #dark-mode {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 1000;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .dark {
+            background-color: rgb(25, 25, 25);
+        }
+
+        .dark p,
+        .dark #welcome {
+            color: white;
+        }
+
+        .dark #kodamoz,
+        .dark #chatgpt,
+        .dark #GitHub,
+        .dark #google-search-console,
+        .dark #Canva,
+        .dark #file-manager,
+        .dark #kenney,
+        .dark #gdevelop {
+            background-color: rgb(60, 60, 60);
+        }
+
         #kodamoz:hover,
         #chatgpt:hover,
         #GitHub:hover,
@@ -238,6 +267,21 @@
         #gdevelop:hover {
             color: rgb(238, 255, 0);
             transform: scale(1.1);
+        }
+
+        #statistics {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgb(189, 196, 201);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 18px;
+            box-shadow: 3px 3px 8px rgb(80, 80, 80);
+        }
+
+        #statistics h2 {
+            margin-top: 0;
         }
 
         #coming-soon {
@@ -274,6 +318,7 @@
             top: 70px;
             right: 20px;
             z-index: 1000;
+            cursor: pointer;
         }
 
         #search {
@@ -295,6 +340,11 @@
 </head>
 
 <body>
+    <div id="statistics">
+        <h2>📊 CodeNest Statistics</h2>
+        <p>Websites: <span id="website-count">0</span></p>
+    </div>
+    <button id="dark-mode">🌙 Dark Mode</button>
 
     <div id="search-box">
         <input type="text" id="search" placeholder="Educational...">
@@ -304,7 +354,8 @@
     <h1 id="welcome">Welcome</h1>
 
     <div class="website" data-search="kodamoz tutorials programming html css javascript python web">
-        <a id="kodamoz" href="https://kodamoz.com/fa/tutorials">kodamoz Website</a>
+        <a id="kodamoz" href="https://kodamoz.com/fa/tutorials" target="_blank" rel="noopener noreferrer">kodamoz
+            Website</a>
         <p id="kodamoz-a">
             A great site for <strong><em>learning programming</em></strong> in Persian.
         </p>
@@ -315,7 +366,7 @@
     </div>
 
     <div class="website" data-search="chatgpt ai artificial intelligence questions answers assistant">
-        <a id="chatgpt" href="https://chatgpt.com/c">ChatGPT</a>
+        <a id="chatgpt" href="https://chatgpt.com/c" target="_blank" rel="noopener noreferrer">ChatGPT</a>
         <p id="chatgpt-a">
             A useful AI tool for <strong><em>asking questions and learning</em></strong>.
         </p>
@@ -326,7 +377,7 @@
     </div>
 
     <div class="website" data-search="github development repository coding projects sourcecode">
-        <a id="GitHub" href="https://github.com/dashboard">GitHub</a>
+        <a id="GitHub" href="https://github.com/dashboard" target="_blank" rel="noopener noreferrer">GitHub</a>
         <p id="GitHub-a">
             A platform for <strong><em>creating, sharing, and managing code</em></strong>.
         </p>
@@ -337,7 +388,8 @@
     </div>
 
     <div class="website" data-search="google seo monitoring indexing performance analytics">
-        <a id="google-search-console" href="https://search.google.com/search-console/about">
+        <a id="google-search-console" href="https://search.google.com/search-console/about" target="_blank"
+            rel="noopener noreferrer">
             Google Search Console
         </a>
 
@@ -353,7 +405,7 @@
     </div>
 
     <div class="website" data-search="canva design graphics presentations posters creativity">
-        <a id="Canva" href="https://www.canva.com/login">
+        <a id="Canva" href="https://www.canva.com/login" target="_blank" rel="noopener noreferrer">
             Canva
         </a>
 
@@ -386,7 +438,7 @@
     </div>
 
     <div class="website" data-search="kenney gamedev assets characters environments sprites icons">
-        <a id="kenney" href="https://kenney.nl/assets">
+        <a id="kenney" href="https://kenney.nl/assets" target="_blank" rel="noopener noreferrer">
             Kenney
         </a>
 
@@ -403,7 +455,7 @@
     </div>
 
     <div class="website" data-search="gdevelop engine 2d 3d nocode visual events behaviors gamemaker">
-        <a id="gdevelop" href="https://gdevelop.io/">
+        <a id="gdevelop" href="https://gdevelop.io/" target="_blank" rel="noopener noreferrer">
             GDevelop
         </a>
 
@@ -427,6 +479,10 @@
         const search_button = document.getElementById("search-button");
         const search = document.getElementById("search");
         const websites = document.querySelectorAll(".website");
+        const dark_mode = document.getElementById("dark-mode");
+        const website_count = document.getElementById("website-count");
+
+        website_count.textContent = websites.length;
 
         search_button.addEventListener("click", function () {
             const text = search.value.toLowerCase().trim();
@@ -452,6 +508,14 @@
 
                     break;
                 }
+            }
+        });
+        dark_mode.addEventListener("click", function () {
+            document.body.classList.toggle("dark")
+            if (document.body.classList.contains("dark")) {
+                dark_mode.textContent = "☀️ Light Mode";
+            } else {
+                dark_mode.textContent = "🌙 Dark Mode";
             }
         });
     </script>
