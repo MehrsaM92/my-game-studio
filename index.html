@@ -13,10 +13,11 @@
 
         #welcome {
             position: absolute;
-            top: -90px;
+            top: -80px;
             color: rgb(124, 88, 40);
             left: 500px;
             font-size: 100px;
+            text-shadow: 3px 3px 5px rgb(80, 80, 80);
         }
 
         #kodamoz {
@@ -175,19 +176,73 @@
             font-size: 20px;
         }
 
+        #kenney {
+            position: absolute;
+            top: 1000px;
+            left: 540px;
+            color: blueviolet;
+            background-color: rgb(189, 196, 201);
+            font-size: 50px;
+            transition: 0.3s;
+        }
+
+        #kenney-a {
+            position: absolute;
+            top: 1050px;
+            left: 410px;
+            color: rgb(0, 0, 0);
+            font-size: 20px;
+        }
+
+        #kenney-a2 {
+            position: absolute;
+            top: 1070px;
+            left: 410px;
+            color: rgb(0, 0, 0);
+            font-size: 20px;
+        }
+
+        #gdevelop {
+            position: absolute;
+            top: 1150px;
+            left: 540px;
+            color: blueviolet;
+            background-color: rgb(189, 196, 201);
+            font-size: 50px;
+            transition: 0.3s;
+        }
+
+        #gdevelop-a {
+            position: absolute;
+            top: 1200px;
+            left: 500px;
+            color: rgb(0, 0, 0);
+            font-size: 20px;
+        }
+
+        #gdevelop-a2 {
+            position: absolute;
+            top: 1220px;
+            left: 500px;
+            color: rgb(0, 0, 0);
+            font-size: 20px;
+        }
+
         #kodamoz:hover,
         #chatgpt:hover,
         #GitHub:hover,
         #google-search-console:hover,
         #Canva:hover,
-        #file-manager:hover {
+        #file-manager:hover,
+        #kenney:hover,
+        #gdevelop:hover {
             color: rgb(238, 255, 0);
             transform: scale(1.1);
         }
 
         #coming-soon {
             position: absolute;
-            top: 980px;
+            top: 1290px;
             left: 565px;
             color: rgb(0, 0, 0);
             font-size: 20px;
@@ -197,23 +252,13 @@
             margin-top: 230px;
         }
 
-        #hr2 {
-            margin-top: 150px;
-        }
-
-        #hr3 {
-            margin-top: 150px;
-        }
-
-        #hr4 {
-            margin-top: 150px;
-        }
-
-        #hr5 {
-            margin-top: 150px;
-        }
-
-        #hr6 {
+        #hr2,
+        #hr3,
+        #hr4,
+        #hr5,
+        #hr6,
+        #hr7,
+        #hr8 {
             margin-top: 150px;
         }
 
@@ -258,7 +303,7 @@
 
     <h1 id="welcome">Welcome</h1>
 
-    <div class="website" data-search="kodamoz educational learning programming persian html css javascript">
+    <div class="website" data-search="kodamoz tutorials programming html css javascript python web">
         <a id="kodamoz" href="https://kodamoz.com/fa/tutorials">kodamoz Website</a>
         <p id="kodamoz-a">
             A great site for <strong><em>learning programming</em></strong> in Persian.
@@ -269,7 +314,7 @@
         </p>
     </div>
 
-    <div class="website" data-search="chatgpt ai artificial intelligence questions learning asking">
+    <div class="website" data-search="chatgpt ai artificial intelligence questions answers assistant">
         <a id="chatgpt" href="https://chatgpt.com/c">ChatGPT</a>
         <p id="chatgpt-a">
             A useful AI tool for <strong><em>asking questions and learning</em></strong>.
@@ -280,7 +325,7 @@
         </p>
     </div>
 
-    <div class="website" data-search="github development programming code projects">
+    <div class="website" data-search="github development repository coding projects sourcecode">
         <a id="GitHub" href="https://github.com/dashboard">GitHub</a>
         <p id="GitHub-a">
             A platform for <strong><em>creating, sharing, and managing code</em></strong>.
@@ -291,7 +336,7 @@
         </p>
     </div>
 
-    <div class="website" data-search="google search console seo website search performance">
+    <div class="website" data-search="google seo monitoring indexing performance analytics">
         <a id="google-search-console" href="https://search.google.com/search-console/about">
             Google Search Console
         </a>
@@ -307,7 +352,7 @@
         </p>
     </div>
 
-    <div class="website" data-search="canva design graphic creativity ai artificial intelligence presentation poster">
+    <div class="website" data-search="canva design graphics presentations posters creativity">
         <a id="Canva" href="https://www.canva.com/login">
             Canva
         </a>
@@ -324,7 +369,7 @@
         </p>
     </div>
 
-    <div class="website" data-search="file manager python files folders download">
+    <div class="website" data-search="filemanager python folders files windows explorer download">
         <a id="file-manager" href="file_manager.exe" download>
             File Manager for windows
         </a>
@@ -340,8 +385,42 @@
         </p>
     </div>
 
+    <div class="website" data-search="kenney gamedev assets characters environments sprites icons">
+        <a id="kenney" href="https://kenney.nl/assets">
+            Kenney
+        </a>
+
+        <p id="kenney-a">
+            A great website for finding <strong><em>game assets for your projects</em></strong>.
+        </p>
+
+        <hr id="hr7">
+
+        <p id="kenney-a2">
+            Find characters, environments, UI elements, icons, and more for game development. (Game Development /
+            Assets)
+        </p>
+    </div>
+
+    <div class="website" data-search="gdevelop engine 2d 3d nocode visual events behaviors gamemaker">
+        <a id="gdevelop" href="https://gdevelop.io/">
+            GDevelop
+        </a>
+
+        <p id="gdevelop-a">
+            A powerful platform for <strong><em>creating 2D and 3D games</em></strong>.
+        </p>
+
+        <hr id="hr8">
+
+        <p id="gdevelop-a2">
+            Create games with visual events, ready-made behaviors, and optional JavaScript. (Game Development)
+        </p>
+    </div>
+
+
     <p id="coming-soon">
-        More sites will be added later.
+        More things will be added later.
     </p>
 
     <script>
@@ -376,6 +455,9 @@
             }
         });
     </script>
+
+
+
 </body>
 
 </html>
