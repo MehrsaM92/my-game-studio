@@ -140,6 +140,66 @@
         .highlight a {
             background-color: rgb(255, 255, 0) !important;
         }
+
+        #suggest-page {
+            display: none;
+            width: 700px;
+            margin: 120px auto 40px;
+            padding: 30px;
+            box-sizing: border-box;
+            text-align: center;
+            background-color: rgb(189, 196, 201);
+            border-radius: 12px;
+            box-shadow: 3px 3px 8px rgb(80, 80, 80);
+        }
+
+        #suggest-page h1 {
+            color: blueviolet;
+            font-size: 45px;
+        }
+
+        #suggest-page input,
+        #suggest-page textarea {
+            display: block;
+            width: 90%;
+            margin: 15px auto;
+            padding: 12px;
+            border: 2px solid rgb(150, 150, 150);
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+
+        }
+
+        #suggest-page textarea {
+            height: 150px;
+            resize: none;
+        }
+
+        #suggest-page button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #back-button {
+            display: none;
+            position: absolute;
+            left: 20px;
+            top: 20px;
+        }
+
+        #suggest-form button {
+            background-color: blueviolet;
+            color: white;
+        }
+
+        #suggest-form button:hover {
+            background-color: rgb(238, 255, 0);
+            color: black;
+        }
     </style>
 </head>
 
@@ -152,6 +212,7 @@
         <button>Game Development</button>
         <button>Design</button>
         <button>SEO</button>
+        <button id="suggest-button">Suggest a Website</button>
     </div>
     <div id="statistics">
         <h2>📊 CodeNest Statistics</h2>
@@ -298,6 +359,18 @@
         More things will be added later.
     </p>
 
+    <div id="suggest-page">
+        <button id="back-button">Back</button>
+        <h1>Suggest a Website</h1>
+        <p>Know a useful website? send it to CodeNest!</p>
+        <form id="suggest-form">
+            <input type="text" placeholder="Website name" required>
+            <input type="url" placeholder="Website URL" required>
+            <textarea placeholder="Why do you recommend this website?" required></textarea>
+            <button type="submit">Send Suggestion</button>
+        </form>
+    </div>
+
     <script>
         const search_button = document.getElementById("search-button");
         const search = document.getElementById("search");
@@ -305,6 +378,52 @@
         const dark_mode = document.getElementById("dark-mode");
         const website_count = document.getElementById("website-count");
         const category_button = document.querySelectorAll("#categories button");
+        const suggest_button = document.getElementById("suggest-button");
+        const back_button = document.getElementById("back-button");
+        const suggest_page = document.getElementById("suggest-page");
+        const suggest_form = document.getElementById("suggest-form");
+
+        suggest_form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const inputs = suggest_form.querySelectorAll("input");
+            const textarea = suggest_form.querySelector("textarea");
+
+            const website_name = inputs[0].value.trim();
+            const website_url = inputs[1].value.trim();
+            const reason = textarea.value.trim();
+
+            try {
+                const response = await fetch(
+                    "https://codenest-backend-uupw.onrender.com/suggest",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            name: website_name,
+                            url: website_url,
+                            reason: reason
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert("✅ Your suggestion was sent!");
+                    suggest_form.reset();
+                } else {
+                    alert("❌ " + result.message);
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert("❌ Could not connect to the server.");
+            }
+        });
+
         website_count.textContent = websites.length;
         category_button.forEach(function (button) {
             button.addEventListener("click", function () {
@@ -350,6 +469,20 @@
             } else {
                 dark_mode.textContent = "🌙 Dark Mode";
             }
+        });
+        suggest_button.addEventListener("click", function () {
+            document.querySelectorAll("body > *:not(#suggest-page)").forEach(function (element) {
+                element.style.display = "none"
+            });
+            suggest_page.style.display = "block"
+            back_button.style.display = "block"
+        });
+        back_button.addEventListener("click", function () {
+            document.querySelectorAll("body > *:not(#suggest-page)").forEach(function (element) {
+                element.style.display = ""
+            });
+            suggest_page.style.display = "none"
+            back_button.style.display = "none"
         });
     </script>
 
