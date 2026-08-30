@@ -6,6 +6,7 @@
     <meta name="description"
         content="A collection of useful websites for learning, programming, AI, web development and downloading apps.">
     <title>CodeNest Studio</title>
+
     <style>
         body {
             background-color: rgba(20, 53, 201, 0.397);
@@ -47,6 +48,10 @@
             box-shadow: 3px 3px 8px rgb(80, 80, 80);
         }
 
+        #statistics h2 {
+            margin-top: 0;
+        }
+
         #categories {
             text-align: center;
             margin: 20px 0;
@@ -68,11 +73,6 @@
             background-color: blueviolet;
             color: white;
         }
-
-        #statistics h2 {
-            margin-top: 0;
-        }
-
 
         #search-box {
             position: fixed;
@@ -140,70 +140,11 @@
         .highlight a {
             background-color: rgb(255, 255, 0) !important;
         }
-
-        #suggest-page {
-            display: none;
-            width: 700px;
-            margin: 120px auto 40px;
-            padding: 30px;
-            box-sizing: border-box;
-            text-align: center;
-            background-color: rgb(189, 196, 201);
-            border-radius: 12px;
-            box-shadow: 3px 3px 8px rgb(80, 80, 80);
-        }
-
-        #suggest-page h1 {
-            color: blueviolet;
-            font-size: 45px;
-        }
-
-        #suggest-page input,
-        #suggest-page textarea {
-            display: block;
-            width: 90%;
-            margin: 15px auto;
-            padding: 12px;
-            border: 2px solid rgb(150, 150, 150);
-            border-radius: 8px;
-            font-size: 16px;
-            box-sizing: border-box;
-
-        }
-
-        #suggest-page textarea {
-            height: 150px;
-            resize: none;
-        }
-
-        #suggest-page button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        #back-button {
-            display: none;
-            position: absolute;
-            left: 20px;
-            top: 20px;
-        }
-
-        #suggest-form button {
-            background-color: blueviolet;
-            color: white;
-        }
-
-        #suggest-form button:hover {
-            background-color: rgb(238, 255, 0);
-            color: black;
-        }
     </style>
 </head>
 
 <body>
+
     <div id="categories">
         <button>All</button>
         <button>Educational</button>
@@ -212,12 +153,13 @@
         <button>Game Development</button>
         <button>Design</button>
         <button>SEO</button>
-        <button id="suggest-button">Suggest a Website</button>
     </div>
+
     <div id="statistics">
         <h2>📊 CodeNest Statistics</h2>
         <p>The aggregate of all websites: <span id="website-count">0</span></p>
     </div>
+
     <button id="dark-mode">🌙 Dark Mode</button>
 
     <div id="search-box">
@@ -229,8 +171,12 @@
 
     <div class="website" data-search="kodamoz tutorials programming html css javascript python web"
         data-ca="Educational Programming">
-        <a id="kodamoz" href="https://kodamoz.com/fa/tutorials" target="_blank" rel="noopener noreferrer">kodamoz
-            Website</a>
+
+        <a id="kodamoz" href="https://kodamoz.com/fa/tutorials" target="_blank"
+            rel="noopener noreferrer">
+            kodamoz Website
+        </a>
+
         <p id="kodamoz-a">
             A great site for <strong><em>learning programming</em></strong> in Persian.
         </p>
@@ -238,11 +184,19 @@
         <p id="kodamoz-a2">
             HTML - CSS - JavaScript - Python... (Educational)
         </p>
+
         <hr>
     </div>
 
-    <div class="website" data-search="chatgpt ai artificial intelligence questions answers assistant" data-ca="AI">
-        <a id="chatgpt" href="https://chatgpt.com/c" target="_blank" rel="noopener noreferrer">ChatGPT</a>
+    <div class="website"
+        data-search="chatgpt ai artificial intelligence questions answers assistant"
+        data-ca="AI">
+
+        <a id="chatgpt" href="https://chatgpt.com/c" target="_blank"
+            rel="noopener noreferrer">
+            ChatGPT
+        </a>
+
         <p id="chatgpt-a">
             A useful AI tool for <strong><em>asking questions and learning</em></strong>.
         </p>
@@ -250,11 +204,19 @@
         <p id="chatgpt-a2">
             Learn and get help with AI. (AI)
         </p>
+
         <hr>
     </div>
 
-    <div class="website" data-search="github development repository coding projects sourcecode" data-ca="Programming">
-        <a id="GitHub" href="https://github.com/dashboard" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <div class="website"
+        data-search="github development repository coding projects sourcecode"
+        data-ca="Programming">
+
+        <a id="GitHub" href="https://github.com/dashboard" target="_blank"
+            rel="noopener noreferrer">
+            GitHub
+        </a>
+
         <p id="GitHub-a">
             A platform for <strong><em>creating, sharing, and managing code</em></strong>.
         </p>
@@ -262,11 +224,17 @@
         <p id="GitHub-a2">
             Store and share your projects. (Development)
         </p>
+
         <hr>
     </div>
 
-    <div class="website" data-search="google seo monitoring indexing performance analytics" data-ca="SEO">
-        <a id="google-search-console" href="https://search.google.com/search-console/about" target="_blank"
+    <div class="website"
+        data-search="google seo monitoring indexing performance analytics"
+        data-ca="SEO">
+
+        <a id="google-search-console"
+            href="https://search.google.com/search-console/about"
+            target="_blank"
             rel="noopener noreferrer">
             Google Search Console
         </a>
@@ -275,33 +243,39 @@
             A tool for <strong><em>monitoring and improving your website</em></strong> on Google.
         </p>
 
-
-
         <p id="google-search-console-a2">
             Monitor your website's search performance. (SEO)
         </p>
+
         <hr>
     </div>
 
-    <div class="website" data-search="canva design graphics presentations posters creativity" data-ca="Design">
-        <a id="Canva" href="https://www.canva.com/login" target="_blank" rel="noopener noreferrer">
+    <div class="website"
+        data-search="canva design graphics presentations posters creativity"
+        data-ca="Design">
+
+        <a id="Canva" href="https://www.canva.com/login" target="_blank"
+            rel="noopener noreferrer">
             Canva
         </a>
 
         <p id="Canva-a">
-            A simple and useful platform for <strong><em>creating designs, presentations, posters, and
-                    more!</em></strong>
+            A simple and useful platform for <strong><em>creating designs, presentations,
+            posters, and more!</em></strong>
         </p>
-
-
 
         <p id="Canva-a2">
-            Create beautiful designs easily for school, projects, social media, and presentations. (Design)
+            Create beautiful designs easily for school, projects, social media,
+            and presentations. (Design)
         </p>
+
         <hr>
     </div>
 
-    <div class="website" data-search="filemanager python folders files windows explorer download" data-ca="Programming">
+    <div class="website"
+        data-search="filemanager python folders files windows explorer download"
+        data-ca="Programming">
+
         <a id="file-manager" href="file_manager.exe" download>
             File Manager for windows
         </a>
@@ -310,17 +284,19 @@
             A simple <strong><em>file manager</em></strong> made with Python.
         </p>
 
-
-
         <p id="file-manager-a2">
             Browse folders and manage files. (Python)
         </p>
+
         <hr>
     </div>
 
-    <div class="website" data-search="kenney gamedev assets characters environments sprites icons"
+    <div class="website"
+        data-search="kenney gamedev assets characters environments sprites icons"
         data-ca="Game Development">
-        <a id="kenney" href="https://kenney.nl/assets" target="_blank" rel="noopener noreferrer">
+
+        <a id="kenney" href="https://kenney.nl/assets" target="_blank"
+            rel="noopener noreferrer">
             Kenney
         </a>
 
@@ -328,18 +304,20 @@
             A great website for finding <strong><em>game assets for your projects</em></strong>.
         </p>
 
-
-
         <p id="kenney-a2">
-            Find characters, environments, UI elements, icons, and more for game development. (Game Development /
-            Assets)
+            Find characters, environments, UI elements, icons, and more for game development.
+            (Game Development / Assets)
         </p>
+
         <hr>
     </div>
 
-    <div class="website" data-search="gdevelop engine 2d 3d nocode visual events behaviors gamemaker"
+    <div class="website"
+        data-search="gdevelop engine 2d 3d nocode visual events behaviors gamemaker"
         data-ca="Game Development">
-        <a id="gdevelop" href="https://gdevelop.io/" target="_blank" rel="noopener noreferrer">
+
+        <a id="gdevelop" href="https://gdevelop.io/" target="_blank"
+            rel="noopener noreferrer">
             GDevelop
         </a>
 
@@ -347,146 +325,104 @@
             A powerful platform for <strong><em>creating 2D and 3D games</em></strong>.
         </p>
 
-
         <p id="gdevelop-a2">
-            Create games with visual events, ready-made behaviors, and optional JavaScript. (Game Development)
+            Create games with visual events, ready-made behaviors,
+            and optional JavaScript. (Game Development)
         </p>
+
         <hr>
     </div>
-
 
     <p id="coming-soon">
         More things will be added later.
     </p>
 
-    <div id="suggest-page">
-        <button id="back-button">Back</button>
-        <h1>Suggest a Website</h1>
-        <p>Know a useful website? send it to CodeNest!</p>
-        <form id="suggest-form">
-            <input type="text" placeholder="Website name" required>
-            <input type="url" placeholder="Website URL" required>
-            <textarea placeholder="Why do you recommend this website?" required></textarea>
-            <button type="submit">Send Suggestion</button>
-        </form>
-    </div>
-
     <script>
+
         const search_button = document.getElementById("search-button");
         const search = document.getElementById("search");
         const websites = document.querySelectorAll(".website");
         const dark_mode = document.getElementById("dark-mode");
         const website_count = document.getElementById("website-count");
         const category_button = document.querySelectorAll("#categories button");
-        const suggest_button = document.getElementById("suggest-button");
-        const back_button = document.getElementById("back-button");
-        const suggest_page = document.getElementById("suggest-page");
-        const suggest_form = document.getElementById("suggest-form");
-
-        suggest_form.addEventListener("submit", async function (event) {
-            event.preventDefault();
-
-            const inputs = suggest_form.querySelectorAll("input");
-            const textarea = suggest_form.querySelector("textarea");
-
-            const website_name = inputs[0].value.trim();
-            const website_url = inputs[1].value.trim();
-            const reason = textarea.value.trim();
-
-            try {
-                const response = await fetch(
-                    "https://codenest-backend-uupw.onrender.com/suggest",
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            name: website_name,
-                            url: website_url,
-                            reason: reason
-                        })
-                    }
-                );
-
-                const result = await response.json();
-
-                if (result.success) {
-                    alert("✅ Your suggestion was sent!");
-                    suggest_form.reset();
-                } else {
-                    alert("❌ " + result.message);
-                }
-
-            } catch (error) {
-                console.error(error);
-                alert("❌ Could not connect to the server.");
-            }
-        });
 
         website_count.textContent = websites.length;
+
         category_button.forEach(function (button) {
+
             button.addEventListener("click", function () {
+
                 const category = button.textContent.toLowerCase();
+
                 for (let website of websites) {
-                    const data = website.getAttribute("data-ca").toLowerCase();
+
+                    const data =
+                        website.getAttribute("data-ca").toLowerCase();
+
                     if (category === "all") {
+
                         website.style.display = "";
-                    }
-                    else if (data.includes(category)) {
+
+                    } else if (data.includes(category)) {
+
                         website.style.display = "";
-                    }
-                    else {
+
+                    } else {
+
                         website.style.display = "none";
+
                     }
                 }
-            })
-        })
+            });
+        });
+
         search_button.addEventListener("click", function () {
+
             const text = search.value.toLowerCase().trim();
+
             if (text === "") {
                 return;
             }
+
             for (let website of websites) {
-                const data = website.getAttribute("data-search").toLowerCase();
+
+                const data =
+                    website.getAttribute("data-search").toLowerCase();
+
                 if (data.includes(text)) {
+
                     website.scrollIntoView({
                         behavior: "smooth",
                         block: "center"
-                    })
+                    });
+
                     website.classList.add("highlight");
+
                     setTimeout(function () {
-                        website.classList.remove("highlight")
+                        website.classList.remove("highlight");
                     }, 3000);
+
                     break;
                 }
             }
         });
+
         dark_mode.addEventListener("click", function () {
-            document.body.classList.toggle("dark")
+
+            document.body.classList.toggle("dark");
+
             if (document.body.classList.contains("dark")) {
+
                 dark_mode.textContent = "☀️ Light Mode";
+
             } else {
+
                 dark_mode.textContent = "🌙 Dark Mode";
+
             }
         });
-        suggest_button.addEventListener("click", function () {
-            document.querySelectorAll("body > *:not(#suggest-page)").forEach(function (element) {
-                element.style.display = "none"
-            });
-            suggest_page.style.display = "block"
-            back_button.style.display = "block"
-        });
-        back_button.addEventListener("click", function () {
-            document.querySelectorAll("body > *:not(#suggest-page)").forEach(function (element) {
-                element.style.display = ""
-            });
-            suggest_page.style.display = "none"
-            back_button.style.display = "none"
-        });
+
     </script>
-
-
 
 </body>
 
