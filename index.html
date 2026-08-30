@@ -140,24 +140,39 @@
         .highlight a {
             background-color: rgb(255, 255, 0) !important;
         }
+
+        #sort-select {
+            padding: 10px 15px;
+            position: absolute;
+            margin: -60px auto;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: rgb(189, 196, 201);
+            font-size: 16px;
+        }
     </style>
 </head>
 
 <body>
 
     <div id="categories">
-        <button>All</button>
-        <button>Educational</button>
-        <button>AI</button>
-        <button>Programming</button>
-        <button>Game Development</button>
-        <button>Design</button>
-        <button>SEO</button>
+        <button class="category">All</button>
+        <button class="category">Educational</button>
+        <button class="category">AI</button>
+        <button class="category">Programming</button>
+        <button class="category">Game Development</button>
+        <button class="category">Design</button>
+        <button class="category">SEO</button>
     </div>
-
+    <select id="sort-select">
+        <option value="low-high">Low → High</option>
+        <option value="high-low">High → Low</option>
+    </select>
     <div id="statistics">
         <h2>📊 CodeNest Statistics</h2>
-        <p>The aggregate of all websites: <span id="website-count">0</span></p>
+        <p>Total websites: <span id="website-count">0</span></p>
+        <p>Total categories: <span id="category-count">0</span></p>
     </div>
 
     <button id="dark-mode">🌙 Dark Mode</button>
@@ -168,171 +183,156 @@
     </div>
 
     <h1 id="welcome">Welcome</h1>
+    <div id="websites-container">
+        <div class="website" data-id="1" data-search="kodamoz tutorials programming html css javascript python web"
+            data-ca="Educational Programming">
 
-    <div class="website" data-search="kodamoz tutorials programming html css javascript python web"
-        data-ca="Educational Programming">
+            <a id="kodamoz" href="https://kodamoz.com/fa/tutorials" target="_blank" rel="noopener noreferrer">
+                kodamoz Website
+            </a>
 
-        <a id="kodamoz" href="https://kodamoz.com/fa/tutorials" target="_blank"
-            rel="noopener noreferrer">
-            kodamoz Website
-        </a>
+            <p id="kodamoz-a">
+                A great site for <strong><em>learning programming</em></strong> in Persian.
+            </p>
 
-        <p id="kodamoz-a">
-            A great site for <strong><em>learning programming</em></strong> in Persian.
-        </p>
+            <p id="kodamoz-a2">
+                HTML - CSS - JavaScript - Python... (Educational)
+            </p>
 
-        <p id="kodamoz-a2">
-            HTML - CSS - JavaScript - Python... (Educational)
-        </p>
+            <hr>
+        </div>
 
-        <hr>
+        <div class="website" data-id="2" data-search="chatgpt ai artificial intelligence questions answers assistant"
+            data-ca="AI">
+
+            <a id="chatgpt" href="https://chatgpt.com/c" target="_blank" rel="noopener noreferrer">
+                ChatGPT
+            </a>
+
+            <p id="chatgpt-a">
+                A useful AI tool for <strong><em>asking questions and learning</em></strong>.
+            </p>
+
+            <p id="chatgpt-a2">
+                Learn and get help with AI. (AI)
+            </p>
+
+            <hr>
+        </div>
+
+        <div class="website" data-id="3" data-search="github development repository coding projects sourcecode"
+            data-ca="Programming">
+
+            <a id="GitHub" href="https://github.com/dashboard" target="_blank" rel="noopener noreferrer">
+                GitHub
+            </a>
+
+            <p id="GitHub-a">
+                A platform for <strong><em>creating, sharing, and managing code</em></strong>.
+            </p>
+
+            <p id="GitHub-a2">
+                Store and share your projects. (Development)
+            </p>
+
+            <hr>
+        </div>
+
+        <div class="website" data-id="4" data-search="google seo monitoring indexing performance analytics"
+            data-ca="SEO">
+
+            <a id="google-search-console" href="https://search.google.com/search-console/about" target="_blank"
+                rel="noopener noreferrer">
+                Google Search Console
+            </a>
+
+            <p id="google-search-console-a">
+                A tool for <strong><em>monitoring and improving your website</em></strong> on Google.
+            </p>
+
+            <p id="google-search-console-a2">
+                Monitor your website's search performance. (SEO)
+            </p>
+
+            <hr>
+        </div>
+
+        <div class="website" data-id="5" data-search="canva design graphics presentations posters creativity"
+            data-ca="Design">
+
+            <a id="Canva" href="https://www.canva.com/login" target="_blank" rel="noopener noreferrer">
+                Canva
+            </a>
+
+            <p id="Canva-a">
+                A simple and useful platform for <strong><em>creating designs, presentations,
+                        posters, and more!</em></strong>
+            </p>
+
+            <p id="Canva-a2">
+                Create beautiful designs easily for school, projects, social media,
+                and presentations. (Design)
+            </p>
+
+            <hr>
+        </div>
+
+        <div class="website" data-id="6" data-search="filemanager python folders files windows explorer download"
+            data-ca="Programming">
+
+            <a id="file-manager" href="file_manager.exe" download>
+                File Manager for windows
+            </a>
+
+            <p id="file-manager-a">
+                A simple <strong><em>file manager</em></strong> made with Python.
+            </p>
+
+            <p id="file-manager-a2">
+                Browse folders and manage files. (Python)
+            </p>
+
+            <hr>
+        </div>
+
+        <div class="website" data-id="7" data-search="kenney gamedev assets characters environments sprites icons"
+            data-ca="Game Development">
+
+            <a id="kenney" href="https://kenney.nl/assets" target="_blank" rel="noopener noreferrer">
+                Kenney
+            </a>
+
+            <p id="kenney-a">
+                A great website for finding <strong><em>game assets for your projects</em></strong>.
+            </p>
+
+            <p id="kenney-a2">
+                Find characters, environments, UI elements, icons, and more for game development.
+                (Game Development / Assets)
+            </p>
+
+            <hr>
+        </div>
+
+        <div class="website" data-id="8" data-search="gdevelop engine 2d 3d nocode visual events behaviors gamemaker"
+            data-ca="Game Development">
+
+            <a id="gdevelop" href="https://gdevelop.io/" target="_blank" rel="noopener noreferrer">
+                GDevelop
+            </a>
+
+            <p id="gdevelop-a">
+                A powerful platform for <strong><em>creating 2D and 3D games</em></strong>.
+            </p>
+
+            <p id="gdevelop-a2">
+                Create games with visual events, ready-made behaviors,
+                and optional JavaScript. (Game Development)
+            </p>
+
+            <hr>
+        </div>
     </div>
-
-    <div class="website"
-        data-search="chatgpt ai artificial intelligence questions answers assistant"
-        data-ca="AI">
-
-        <a id="chatgpt" href="https://chatgpt.com/c" target="_blank"
-            rel="noopener noreferrer">
-            ChatGPT
-        </a>
-
-        <p id="chatgpt-a">
-            A useful AI tool for <strong><em>asking questions and learning</em></strong>.
-        </p>
-
-        <p id="chatgpt-a2">
-            Learn and get help with AI. (AI)
-        </p>
-
-        <hr>
-    </div>
-
-    <div class="website"
-        data-search="github development repository coding projects sourcecode"
-        data-ca="Programming">
-
-        <a id="GitHub" href="https://github.com/dashboard" target="_blank"
-            rel="noopener noreferrer">
-            GitHub
-        </a>
-
-        <p id="GitHub-a">
-            A platform for <strong><em>creating, sharing, and managing code</em></strong>.
-        </p>
-
-        <p id="GitHub-a2">
-            Store and share your projects. (Development)
-        </p>
-
-        <hr>
-    </div>
-
-    <div class="website"
-        data-search="google seo monitoring indexing performance analytics"
-        data-ca="SEO">
-
-        <a id="google-search-console"
-            href="https://search.google.com/search-console/about"
-            target="_blank"
-            rel="noopener noreferrer">
-            Google Search Console
-        </a>
-
-        <p id="google-search-console-a">
-            A tool for <strong><em>monitoring and improving your website</em></strong> on Google.
-        </p>
-
-        <p id="google-search-console-a2">
-            Monitor your website's search performance. (SEO)
-        </p>
-
-        <hr>
-    </div>
-
-    <div class="website"
-        data-search="canva design graphics presentations posters creativity"
-        data-ca="Design">
-
-        <a id="Canva" href="https://www.canva.com/login" target="_blank"
-            rel="noopener noreferrer">
-            Canva
-        </a>
-
-        <p id="Canva-a">
-            A simple and useful platform for <strong><em>creating designs, presentations,
-            posters, and more!</em></strong>
-        </p>
-
-        <p id="Canva-a2">
-            Create beautiful designs easily for school, projects, social media,
-            and presentations. (Design)
-        </p>
-
-        <hr>
-    </div>
-
-    <div class="website"
-        data-search="filemanager python folders files windows explorer download"
-        data-ca="Programming">
-
-        <a id="file-manager" href="file_manager.exe" download>
-            File Manager for windows
-        </a>
-
-        <p id="file-manager-a">
-            A simple <strong><em>file manager</em></strong> made with Python.
-        </p>
-
-        <p id="file-manager-a2">
-            Browse folders and manage files. (Python)
-        </p>
-
-        <hr>
-    </div>
-
-    <div class="website"
-        data-search="kenney gamedev assets characters environments sprites icons"
-        data-ca="Game Development">
-
-        <a id="kenney" href="https://kenney.nl/assets" target="_blank"
-            rel="noopener noreferrer">
-            Kenney
-        </a>
-
-        <p id="kenney-a">
-            A great website for finding <strong><em>game assets for your projects</em></strong>.
-        </p>
-
-        <p id="kenney-a2">
-            Find characters, environments, UI elements, icons, and more for game development.
-            (Game Development / Assets)
-        </p>
-
-        <hr>
-    </div>
-
-    <div class="website"
-        data-search="gdevelop engine 2d 3d nocode visual events behaviors gamemaker"
-        data-ca="Game Development">
-
-        <a id="gdevelop" href="https://gdevelop.io/" target="_blank"
-            rel="noopener noreferrer">
-            GDevelop
-        </a>
-
-        <p id="gdevelop-a">
-            A powerful platform for <strong><em>creating 2D and 3D games</em></strong>.
-        </p>
-
-        <p id="gdevelop-a2">
-            Create games with visual events, ready-made behaviors,
-            and optional JavaScript. (Game Development)
-        </p>
-
-        <hr>
-    </div>
-
     <p id="coming-soon">
         More things will be added later.
     </p>
@@ -342,11 +342,15 @@
         const search_button = document.getElementById("search-button");
         const search = document.getElementById("search");
         const websites = document.querySelectorAll(".website");
+        const categories2 = document.querySelectorAll(".category");
         const dark_mode = document.getElementById("dark-mode");
         const website_count = document.getElementById("website-count");
+        const category_count = document.getElementById("category-count");
         const category_button = document.querySelectorAll("#categories button");
+        const sort_select = document.getElementById("sort-select");
 
         website_count.textContent = websites.length;
+        category_count.textContent = categories2.length;
 
         category_button.forEach(function (button) {
 
@@ -420,6 +424,21 @@
                 dark_mode.textContent = "🌙 Dark Mode";
 
             }
+        });
+        sort_select.addEventListener("change", function () {
+            const container = document.getElementById("websites-container");
+            const website_array = Array.from(websites);
+            website_array.sort(function (a, b) {
+                const id_a = Number(a.getAttribute("data-id"));
+                const id_b = Number(b.getAttribute("data-id"));
+                if (sort_select.value === "low-high") {
+                    return id_a - id_b;
+                };
+                return id_b - id_a;
+            });
+            website_array.forEach(function (website) {
+                container.appendChild(website);
+            });
         });
 
     </script>
