@@ -137,6 +137,12 @@
             margin: 40px 0;
         }
 
+        #all {
+            text-align: center;
+            font-size: 20px;
+            margin: 40px 0;
+        }
+
         .highlight a {
             background-color: rgb(255, 255, 0) !important;
         }
@@ -150,6 +156,101 @@
             border-radius: 8px;
             background-color: rgb(189, 196, 201);
             font-size: 16px;
+        }
+
+        #search-message {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            z-index: 1000;
+            margin: 0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background-color: rgb(255, 255, 0);
+            font-size: 16px;
+            display: none;
+        }
+
+        #language-select {
+            padding: 10px 15px;
+            position: absolute;
+            margin: -60px 150px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: rgb(189, 196, 201);
+            font-size: 16px;
+        }
+
+        #translator {
+            width: 700px;
+            max-width: 90%;
+            margin: 50px auto;
+            padding: 25px;
+            text-align: center;
+            background-color: rgb(189, 196, 201);
+            border-radius: 15px;
+            box-shadow: 3px 3px 10px rgb(80, 80, 80);
+        }
+
+        #translator h2 {
+            font-size: 30px;
+            margin-top: 0;
+        }
+
+        #translator-languages {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        #source-language,
+        #target-language {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #translator-input,
+        #translator-output {
+            width: 90%;
+            height: 160px;
+            padding: 15px;
+            margin: 10px;
+            font-size: 18px;
+            border: 2px solid rgb(150, 150, 150);
+            border-radius: 10px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        #translator button {
+            padding: 10px 20px;
+            margin: 8px 5px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        #translator button:hover {
+            transform: scale(1.08);
+            background-color: blueviolet;
+            color: white;
+        }
+
+        #translation-status {
+            min-height: 20px;
+            font-size: 16px;
+        }
+
+        .dark #translator {
+            background-color: rgb(60, 60, 60);
         }
     </style>
 </head>
@@ -181,14 +282,14 @@
         <input type="text" id="search" placeholder="Search">
         <button id="search-button">Search</button>
     </div>
-
+    <p id="search-message"></p>
     <h1 id="welcome">Welcome</h1>
     <div id="websites-container">
         <div class="website" data-id="1" data-search="kodamoz tutorials programming html css javascript python web"
             data-ca="Educational Programming">
 
             <a id="kodamoz" href="https://kodamoz.com/fa/tutorials" target="_blank" rel="noopener noreferrer">
-                kodamoz Website
+                1. kodamoz Website
             </a>
 
             <p id="kodamoz-a">
@@ -206,7 +307,7 @@
             data-ca="AI">
 
             <a id="chatgpt" href="https://chatgpt.com/c" target="_blank" rel="noopener noreferrer">
-                ChatGPT
+                2. ChatGPT
             </a>
 
             <p id="chatgpt-a">
@@ -224,7 +325,7 @@
             data-ca="Programming">
 
             <a id="GitHub" href="https://github.com/dashboard" target="_blank" rel="noopener noreferrer">
-                GitHub
+                3. GitHub
             </a>
 
             <p id="GitHub-a">
@@ -243,7 +344,7 @@
 
             <a id="google-search-console" href="https://search.google.com/search-console/about" target="_blank"
                 rel="noopener noreferrer">
-                Google Search Console
+                4. Google Search Console
             </a>
 
             <p id="google-search-console-a">
@@ -261,7 +362,7 @@
             data-ca="Design">
 
             <a id="Canva" href="https://www.canva.com/login" target="_blank" rel="noopener noreferrer">
-                Canva
+                5. Canva
             </a>
 
             <p id="Canva-a">
@@ -281,7 +382,7 @@
             data-ca="Programming">
 
             <a id="file-manager" href="file_manager.exe" download>
-                File Manager for windows
+                6. File Manager for windows
             </a>
 
             <p id="file-manager-a">
@@ -299,7 +400,7 @@
             data-ca="Game Development">
 
             <a id="kenney" href="https://kenney.nl/assets" target="_blank" rel="noopener noreferrer">
-                Kenney
+                7. Kenney
             </a>
 
             <p id="kenney-a">
@@ -318,7 +419,7 @@
             data-ca="Game Development">
 
             <a id="gdevelop" href="https://gdevelop.io/" target="_blank" rel="noopener noreferrer">
-                GDevelop
+                8. GDevelop
             </a>
 
             <p id="gdevelop-a">
@@ -332,10 +433,32 @@
 
             <hr>
         </div>
+        <div class="website" data-id="9" data-search="call of duty cod mobile warzone modern warfare game fps shooting"
+            data-ca="Game Development">
+
+            <a id="call-of-duty" href="https://www.callofduty.com/en/mobile" target="_blank" rel="noopener noreferrer">
+                9. Call of Duty
+            </a>
+
+            <p id="call-of-duty-a">
+                A popular <strong><em>first-person shooter game</em></strong> with exciting multiplayer battles.
+            </p>
+
+            <p id="call-of-duty-a2">
+                Play different game modes, improve your skills, and enjoy fast-paced combat. (Game)
+            </p>
+
+            <hr>
+        </div>
     </div>
-    <p id="coming-soon">
-        More things will be added later.
-    </p>
+    <div>
+        <p id="coming-soon">
+            More things will be added later.
+        </p>
+        <p id="all">
+            © 2026 — All rights reserved.
+        </p>
+    </div>
 
     <script>
 
@@ -348,6 +471,7 @@
         const category_count = document.getElementById("category-count");
         const category_button = document.querySelectorAll("#categories button");
         const sort_select = document.getElementById("sort-select");
+        const search_message = document.getElementById("search-message");
 
         website_count.textContent = websites.length;
         category_count.textContent = categories2.length;
@@ -384,31 +508,53 @@
 
             const text = search.value.toLowerCase().trim();
 
+            search_message.style.display = "none";
+
             if (text === "") {
+                search_message.textContent = "Please Write something to search!";
+                search_message.style.display = "block";
+
+                setTimeout(function () {
+                    search_message.style.display = "none";
+                }, 3000);
+
                 return;
             }
 
+            let found = false;
+
             for (let website of websites) {
 
-                const data =
-                    website.getAttribute("data-search").toLowerCase();
+                const data = website
+                    .getAttribute("data-search")
+                    .toLowerCase();
 
-                if (data.includes(text)) {
+                const data2 = website
+                    .getAttribute("data-id")
+                    .toLowerCase();
 
-                    website.scrollIntoView({
-                        behavior: "smooth",
-                        block: "center"
-                    });
+                if (data.includes(text) || text === data2) {
 
-                    website.classList.add("highlight");
+                    website.style.display = "";
+                    found = true;
 
-                    setTimeout(function () {
-                        website.classList.remove("highlight");
-                    }, 3000);
+                } else {
 
-                    break;
+                    website.style.display = "none";
+
                 }
             }
+
+            if (!found) {
+
+                search_message.textContent = "No website found!";
+                search_message.style.display = "block";
+
+                setTimeout(function () {
+                    search_message.style.display = "none";
+                }, 3000);
+            }
+
         });
 
         dark_mode.addEventListener("click", function () {
