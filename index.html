@@ -262,18 +262,18 @@
         <button class="category">Educational</button>
         <button class="category">AI</button>
         <button class="category">Programming</button>
-        <button class="category">Game Development</button>
+        <button class="category">Game</button>
         <button class="category">Design</button>
         <button class="category">SEO</button>
     </div>
     <select id="sort-select">
-        <option value="low-high">Low → High</option>
+        <option value="low-high" selected>Low → High</option>
         <option value="high-low">High → Low</option>
     </select>
     <div id="statistics">
         <h2>📊 CodeNest Statistics</h2>
-        <p>Total websites: <span id="website-count">0</span></p>
-        <p>Total categories: <span id="category-count">0</span></p>
+        <p>Total websites: <span id="website-count">9</span></p>
+        <p>Total categories: <span id="category-count">7</span></p>
     </div>
 
     <button id="dark-mode">🌙 Dark Mode</button>
@@ -397,7 +397,7 @@
         </div>
 
         <div class="website" data-id="7" data-search="kenney gamedev assets characters environments sprites icons"
-            data-ca="Game Development">
+            data-ca="Game">
 
             <a id="kenney" href="https://kenney.nl/assets" target="_blank" rel="noopener noreferrer">
                 7. Kenney
@@ -415,8 +415,8 @@
             <hr>
         </div>
 
-        <div class="website" data-id="8" data-search="gdevelop engine 2d 3d nocode visual events behaviors gamemaker"
-            data-ca="Game Development">
+        <div class="website" data-id="8" data-search="gdevelop engine nocode visual events behaviors gamemaker"
+            data-ca="Game">
 
             <a id="gdevelop" href="https://gdevelop.io/" target="_blank" rel="noopener noreferrer">
                 8. GDevelop
@@ -434,7 +434,7 @@
             <hr>
         </div>
         <div class="website" data-id="9" data-search="call of duty cod mobile warzone modern warfare game fps shooting"
-            data-ca="Game Development">
+            data-ca="Game">
 
             <a id="call-of-duty" href="https://www.callofduty.com/en/mobile" target="_blank" rel="noopener noreferrer">
                 9. Call of Duty
@@ -511,7 +511,7 @@
             search_message.style.display = "none";
 
             if (text === "") {
-                search_message.textContent = "Please Write something to search!";
+                search_message.textContent = "Please write something to search!";
                 search_message.style.display = "block";
 
                 setTimeout(function () {
@@ -530,23 +530,17 @@
                     .toLowerCase();
 
                 const data2 = website
-                    .getAttribute("data-id")
-                    .toLowerCase();
+                    .getAttribute("data-id");
 
                 if (data.includes(text) || text === data2) {
-
                     website.style.display = "";
                     found = true;
-
                 } else {
-
                     website.style.display = "none";
-
                 }
             }
 
             if (!found) {
-
                 search_message.textContent = "No website found!";
                 search_message.style.display = "block";
 
@@ -554,7 +548,6 @@
                     search_message.style.display = "none";
                 }, 3000);
             }
-
         });
 
         dark_mode.addEventListener("click", function () {
@@ -589,10 +582,13 @@
 
     </script>
 
-</body>
 
-</html>
-    </script>
+
+
+
+
+
+
 
 </body>
 
