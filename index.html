@@ -252,7 +252,113 @@
         .dark #translator {
             background-color: rgb(60, 60, 60);
         }
+
+        #comments-section {
+            display: none;
+            width: 700px;
+            max-width: 90%;
+            margin: 50px auto;
+            padding: 25px;
+            text-align: center;
+            background-color: rgb(189, 196, 201);
+            border-radius: 15px;
+            box-shadow: 3px 3px 10px rgb(80, 80, 80);
+            box-sizing: border-box;
+        }
+
+        #comments-section h2 {
+            margin-top: 0;
+            font-size: 30px;
+        }
+
+        #comments-section>p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        #comment-name,
+        #comment-text,
+        #site-name,
+        #site-url {
+            width: 90%;
+            padding: 12px;
+            margin: 8px;
+            font-size: 16px;
+            border: 2px solid rgb(150, 150, 150);
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        #comment-text {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        #comment-submit {
+            padding: 10px 25px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        #comment-submit:hover {
+            transform: scale(1.08);
+            background-color: blueviolet;
+            color: white;
+        }
+
+        #comment-message {
+            font-size: 16px;
+            min-height: 20px;
+        }
+
+        #comments-list {
+            margin-top: 30px;
+        }
+
+        .comment {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            text-align: left;
+            box-shadow: 2px 2px 8px rgb(120, 120, 120);
+        }
+
+        .comment h3 {
+            margin-top: 0;
+            font-size: 22px;
+        }
+
+        .comment p {
+            font-size: 17px;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+
+        .comment a {
+            color: blueviolet;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .comment a:hover {
+            text-decoration: underline;
+        }
+
+        .dark #comments-section {
+            background-color: rgb(60, 60, 60);
+        }
+
+        .dark .comment {
+            background-color: rgb(40, 40, 40);
+            color: white;
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -265,6 +371,7 @@
         <button class="category">Game</button>
         <button class="category">Design</button>
         <button class="category">SEO</button>
+        <button class="category">Comments</button>
     </div>
     <select id="sort-select">
         <option value="low-high" selected>Low → High</option>
@@ -451,6 +558,28 @@
             <hr>
         </div>
     </div>
+    <section id="comments-section" data-ca="Comments">
+
+        <h2>💬 Comments & Website Suggestions</h2>
+
+        <p>Here, you can leave comments, view others' comments, and suggest websites for us to include in future
+            versions. Your comment will be displayed after it has been approved.</p>
+
+        <input id="comment-name" type="text" placeholder="Your name">
+
+        <textarea id="comment-text" placeholder="Write your comment..."></textarea>
+
+        <input id="site-name" type="text" placeholder="Website name (optional)">
+
+        <input id="site-url" type="url" placeholder="Website URL (optional)">
+
+        <button id="comment-submit">Submit</button>
+
+        <p id="comment-message"></p>
+
+        <div id="comments-list"></div>
+
+    </section>
     <div>
         <p id="coming-soon">
             More things will be added later.
@@ -459,7 +588,6 @@
             © 2026 — All rights reserved.
         </p>
     </div>
-
     <script>
 
         const search_button = document.getElementById("search-button");
@@ -472,66 +600,143 @@
         const category_button = document.querySelectorAll("#categories button");
         const sort_select = document.getElementById("sort-select");
         const search_message = document.getElementById("search-message");
+        const SUPABASE_URL = "https://iqmsaflqplvzfvmdyrwh.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_vib0xKSHlp-04KNTM0Y1kg_hc-yjUK5";
+        const supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+        const comment_name = document.getElementById("comment-name");
+        const comment_text = document.getElementById("comment-text");
+        const site_name = document.getElementById("site-name");
+        const site_url = document.getElementById("site-url");
+        const comment_submit = document.getElementById("comment-submit");
+        const comment_message = document.getElementById("comment-message");
 
+        comment_submit.addEventListener("click", async function () {
+
+            const name = comment_name.value.trim();
+            const comment = comment_text.value.trim();
+            const siteName = site_name.value.trim();
+            const siteUrl = site_url.value.trim();
+
+            if (!name || !comment) {
+                comment_message.textContent = "Please enter your name and comment.";
+                return;
+            }
+
+            if ((siteName && !siteUrl) || (!siteName && siteUrl)) {
+                comment_message.textContent = "If you are recommending a site, both the site name and the URL must be entered.";
+                return;
+            }
+
+            const { error } = await supabaseClient
+                .from("comments")
+                .insert({
+                    name: name,
+                    comment: comment,
+                    site_name: siteName || null,
+                    site_url: siteUrl || null
+                });
+
+            if (error) {
+                console.log(error);
+                comment_message.textContent = "The send operation failed.";
+                return;
+            }
+
+            comment_message.textContent = "Your comment has been successfully submitted! It will be displayed after review.";
+
+            comment_name.value = "";
+            comment_text.value = "";
+            site_name.value = "";
+            site_url.value = "";
+        });
+        async function loadComments() {
+
+            const { data, error } = await supabaseClient
+                .from("comments")
+                .select("name, comment, site_name, site_url, created_at")
+                .eq("approved", true)
+                .order("created_at", { ascending: false });
+
+            if (error) {
+                console.log(error);
+                return;
+            }
+
+            const comments_list = document.getElementById("comments-list");
+
+            comments_list.innerHTML = "";
+
+            for (let comment of data) {
+
+                const comment_box = document.createElement("div");
+                comment_box.className = "comment";
+
+                const name = document.createElement("h3");
+                name.textContent = comment.name;
+
+                const text = document.createElement("p");
+                text.textContent = comment.comment;
+                comment_box.appendChild(name);
+                comment_box.appendChild(text);
+                if (comment.site_name && comment.site_url) {
+                    const site = document.createElement("a");
+                    site.textContent = "🌐 " + comment.site_name;
+                    site.href = comment.site_url;
+                    site.target = "_blank";
+                    site.rel = "noopener noreferrer";
+                    comment_box.appendChild(site);
+                }
+                comments_list.appendChild(comment_box);
+            }
+        }
         website_count.textContent = websites.length;
         category_count.textContent = categories2.length;
-
         category_button.forEach(function (button) {
-
             button.addEventListener("click", function () {
-
                 const category = button.textContent.toLowerCase();
-
-                for (let website of websites) {
-
-                    const data =
-                        website.getAttribute("data-ca").toLowerCase();
-
-                    if (category === "all") {
-
-                        website.style.display = "";
-
-                    } else if (data.includes(category)) {
-
-                        website.style.display = "";
-
-                    } else {
-
+                const comments_section = document.getElementById("comments-section");
+                if (category === "comments") {
+                    for (let website of websites) {
                         website.style.display = "none";
-
+                    }
+                    comments_section.style.display = "block";
+                } else {
+                    comments_section.style.display = "none";
+                    for (let website of websites) {
+                        const data =
+                            website.getAttribute("data-ca").toLowerCase();
+                        if (category === "all") {
+                            website.style.display = "";
+                        } else if (data.includes(category)) {
+                            website.style.display = "";
+                        } else {
+                            website.style.display = "none";
+                        }
                     }
                 }
             });
         });
-
         search_button.addEventListener("click", function () {
-
             const text = search.value.toLowerCase().trim();
-
             search_message.style.display = "none";
-
             if (text === "") {
                 search_message.textContent = "Please write something to search!";
                 search_message.style.display = "block";
-
                 setTimeout(function () {
                     search_message.style.display = "none";
                 }, 3000);
-
                 return;
             }
-
             let found = false;
-
             for (let website of websites) {
-
                 const data = website
                     .getAttribute("data-search")
                     .toLowerCase();
-
                 const data2 = website
                     .getAttribute("data-id");
-
                 if (data.includes(text) || text === data2) {
                     website.style.display = "";
                     found = true;
@@ -539,29 +744,20 @@
                     website.style.display = "none";
                 }
             }
-
             if (!found) {
                 search_message.textContent = "No website found!";
                 search_message.style.display = "block";
-
                 setTimeout(function () {
                     search_message.style.display = "none";
                 }, 3000);
             }
         });
-
         dark_mode.addEventListener("click", function () {
-
             document.body.classList.toggle("dark");
-
             if (document.body.classList.contains("dark")) {
-
                 dark_mode.textContent = "☀️ Light Mode";
-
             } else {
-
                 dark_mode.textContent = "🌙 Dark Mode";
-
             }
         });
         sort_select.addEventListener("change", function () {
@@ -579,17 +775,8 @@
                 container.appendChild(website);
             });
         });
-
+        loadComments();
     </script>
-
-
-
-
-
-
-
-
-
 </body>
 
 </html>
