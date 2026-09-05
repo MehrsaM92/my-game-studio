@@ -54,7 +54,7 @@
 
         #categories {
             text-align: center;
-            margin: 20px 0;
+            margin: 20px 90px 20px 0;
         }
 
         #categories button {
@@ -171,84 +171,6 @@
             display: none;
         }
 
-        #language-select {
-            padding: 10px 15px;
-            position: absolute;
-            margin: -60px 150px;
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-            background-color: rgb(189, 196, 201);
-            font-size: 16px;
-        }
-
-        #translator {
-            width: 700px;
-            max-width: 90%;
-            margin: 50px auto;
-            padding: 25px;
-            text-align: center;
-            background-color: rgb(189, 196, 201);
-            border-radius: 15px;
-            box-shadow: 3px 3px 10px rgb(80, 80, 80);
-        }
-
-        #translator h2 {
-            font-size: 30px;
-            margin-top: 0;
-        }
-
-        #translator-languages {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        #source-language,
-        #target-language {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        #translator-input,
-        #translator-output {
-            width: 90%;
-            height: 160px;
-            padding: 15px;
-            margin: 10px;
-            font-size: 18px;
-            border: 2px solid rgb(150, 150, 150);
-            border-radius: 10px;
-            resize: vertical;
-            box-sizing: border-box;
-        }
-
-        #translator button {
-            padding: 10px 20px;
-            margin: 8px 5px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        #translator button:hover {
-            transform: scale(1.08);
-            background-color: blueviolet;
-            color: white;
-        }
-
-        #translation-status {
-            min-height: 20px;
-            font-size: 16px;
-        }
-
         .dark #translator {
             background-color: rgb(60, 60, 60);
         }
@@ -357,6 +279,96 @@
             background-color: rgb(40, 40, 40);
             color: white;
         }
+
+        .admin-reply {
+            margin: 15px 0 0 30px;
+            padding: 15px;
+            background-color: rgb(230, 230, 230);
+            border-left: 4px solid blueviolet;
+            border-radius: 8px;
+        }
+
+        .admin-reply h4 {
+            margin: 0 0 8px 0;
+            color: blueviolet;
+        }
+
+        .admin-reply p {
+            margin: 0;
+        }
+
+
+        @media (max-width: 600px) {
+
+            #welcome {
+                font-size: 50px;
+                margin: 80px 0 40px 0;
+            }
+
+            #search-box {
+                position: static;
+                text-align: center;
+                margin: 20px;
+            }
+
+            #search {
+                width: 70%;
+            }
+
+            #search-button {
+                position: static;
+                margin-top: 8px;
+            }
+
+            #dark-mode {
+                position: static;
+                display: block;
+                margin: 10px auto;
+            }
+
+            #statistics {
+                width: 90%;
+                box-sizing: border-box;
+                margin: 20px auto;
+            }
+
+            #sort-select,
+            #language-select {
+                position: static;
+                margin: 10px;
+            }
+
+            .website {
+                width: 90%;
+                margin: 30px auto;
+            }
+
+            .website a {
+                font-size: 32px;
+            }
+
+            .website p {
+                font-size: 17px;
+            }
+
+            #translator,
+            #comments-section {
+                width: 90%;
+                max-width: none;
+            }
+
+            #translator-input,
+            #translator-output {
+                width: 95%;
+                margin: 10px auto;
+            }
+
+            #categories button {
+                font-size: 14px;
+                padding: 8px 10px;
+            }
+
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -372,6 +384,7 @@
         <button class="category">Design</button>
         <button class="category">SEO</button>
         <button class="category">Comments</button>
+        <button class="category">Productivity</button>
     </div>
     <select id="sort-select">
         <option value="low-high" selected>Low → High</option>
@@ -379,8 +392,10 @@
     </select>
     <div id="statistics">
         <h2>📊 CodeNest Statistics</h2>
-        <p>Total websites: <span id="website-count">9</span></p>
-        <p>Total categories: <span id="category-count">7</span></p>
+
+        <p>Total websites: <span id="website-count">0</span></p>
+        <p>Total categories: <span id="category-count">0</span></p>
+        <p>Total comments: <span id="comment-count">0</span></p>
     </div>
 
     <button id="dark-mode">🌙 Dark Mode</button>
@@ -392,11 +407,12 @@
     <p id="search-message"></p>
     <h1 id="welcome">Welcome</h1>
     <div id="websites-container">
-        <div class="website" data-id="1" data-search="kodamoz tutorials programming html css javascript python web"
+        <div class="website" data-id="1"
+            data-search="kodamoz tutorials programming html css javascript python web educational"
             data-ca="Educational Programming">
 
             <a id="kodamoz" href="https://kodamoz.com/fa/tutorials" target="_blank" rel="noopener noreferrer">
-                1. kodamoz Website
+                1. Kodamoz Website
             </a>
 
             <p id="kodamoz-a">
@@ -503,8 +519,8 @@
             <hr>
         </div>
 
-        <div class="website" data-id="7" data-search="kenney gamedev assets characters environments sprites icons"
-            data-ca="Game">
+        <div class="website" data-id="7"
+            data-search="kenney game development assets characters environments sprites icons" data-ca="Game">
 
             <a id="kenney" href="https://kenney.nl/assets" target="_blank" rel="noopener noreferrer">
                 7. Kenney
@@ -522,8 +538,8 @@
             <hr>
         </div>
 
-        <div class="website" data-id="8" data-search="gdevelop engine nocode visual events behaviors gamemaker"
-            data-ca="Game">
+        <div class="website" data-id="8"
+            data-search="gdevelop game development engine nocode visual events behaviors gamemaker" data-ca="Game">
 
             <a id="gdevelop" href="https://gdevelop.io/" target="_blank" rel="noopener noreferrer">
                 8. GDevelop
@@ -540,7 +556,7 @@
 
             <hr>
         </div>
-        <div class="website" data-id="9" data-search="call of duty cod mobile warzone modern warfare game fps shooting"
+        <div class="website" data-id="9" data-search="call of duty CODM mobile warzone modern warfare game fps shooting"
             data-ca="Game">
 
             <a id="call-of-duty" href="https://www.callofduty.com/en/mobile" target="_blank" rel="noopener noreferrer">
@@ -557,6 +573,242 @@
 
             <hr>
         </div>
+    </div>
+    <div class="website" data-id="10"
+        data-search="supabase database postgresql backend authentication auth storage realtime edge functions api javascript python ai vector"
+        data-ca="Programming">
+
+        <a id="supabase" href="https://supabase.com/dashboard/" target="_blank" rel="noopener noreferrer">
+            10. Supabase
+        </a>
+
+        <p id="supabase-a">
+            A powerful open-source platform for <strong><em>building web and mobile applications</em></strong>.
+        </p>
+
+        <p id="supabase-a2">
+            Provides PostgreSQL database, authentication, storage, realtime features,
+            APIs, and edge functions. (Backend / Development)
+        </p>
+
+        <hr>
+    </div>
+    <div class="website" data-id="11" data-search="minecraft game sandbox survival adventure building multiplayer"
+        data-ca="Game">
+
+        <a id="minecraft" href="https://www.minecraft.net/en-us" target="_blank" rel="noopener noreferrer">
+            11. Minecraft
+        </a>
+
+        <p id="minecraft-a">
+            A popular <strong><em>sandbox adventure game</em></strong> where you can explore, build, and create your own
+            worlds.
+        </p>
+
+        <p id="minecraft-a2">
+            Explore different worlds, gather resources, build structures, survive, and play with friends. (Game)
+        </p>
+
+        <hr>
+    </div>
+    <div class="website" data-id="12"
+        data-search="duolingo language learning english spanish french german languages education"
+        data-ca="Educational">
+
+        <a id="duolingo" href="https://www.duolingo.com/" target="_blank" rel="noopener noreferrer">
+            12. Duolingo
+        </a>
+
+        <p id="duolingo-a">
+            A fun platform for <strong><em>learning languages</em></strong>.
+        </p>
+
+        <p id="duolingo-a2">
+            Learn languages through interactive lessons, exercises, and practice. (Educational / Languages)
+        </p>
+
+        <hr>
+    </div>
+    <div class="website" data-id="13"
+        data-search="hugging face ai artificial intelligence machine learning models datasets tools" data-ca="AI">
+
+        <a id="hugging-face" href="https://huggingface.co/" target="_blank" rel="noopener noreferrer">
+            13. Hugging Face
+        </a>
+
+        <p id="hugging-face-a">
+            A platform for <strong><em>exploring and working with AI</em></strong>.
+        </p>
+
+        <p id="hugging-face-a2">
+            Discover AI models, datasets, demos, and tools for artificial intelligence and machine learning. (AI)
+        </p>
+
+        <hr>
+    </div>
+    <div class="website" data-id="14"
+        data-search="adobe express design graphic design poster social media presentation logo templates"
+        data-ca="Design">
+
+        <a id="adobe-express" href="https://www.adobe.com/express/" target="_blank" rel="noopener noreferrer">
+            14. Adobe Express
+        </a>
+
+        <p id="adobe-express-a">
+            A simple platform for <strong><em>creating designs</em></strong>.
+        </p>
+
+        <p id="adobe-express-a2">
+            Create posters, social media posts, presentations, logos, and more with ready-made templates and design
+            tools. (Design)
+        </p>
+
+        <hr>
+    </div>
+    <div class="website" data-id="15"
+        data-search="bing webmaster tools seo search engine website analytics indexing keywords" data-ca="SEO">
+
+        <a id="bing-webmaster" href="https://www.bing.com/webmasters/" target="_blank" rel="noopener noreferrer">
+            15. Bing Webmaster Tools
+        </a>
+
+        <p id="bing-webmaster-a">
+            A platform for <strong><em>monitoring and improving websites in search engines</em></strong>.
+        </p>
+
+        <p id="bing-webmaster-a2">
+            Check website performance, search traffic, indexing, keywords, and SEO information on Bing. (SEO)
+        </p>
+
+        <hr>
+    </div>
+    <div class="website" data-id="16"
+        data-search="stack overflow programming coding questions answers developers javascript python html css errors"
+        data-ca="Programming">
+
+        <a id="stack-overflow" href="https://stackoverflow.com/" target="_blank" rel="noopener noreferrer">
+            16. Stack Overflow
+        </a>
+
+        <p id="stack-overflow-a">
+            A popular website for <strong><em>asking and answering programming questions</em></strong>.
+        </p>
+
+        <p id="stack-overflow-a2">
+            Find solutions, learn programming concepts, and get help with coding problems. (Programming)
+        </p>
+
+        <hr>
+    </div>
+    <div class="website" data-id="17" data-search="khan academy education learning math science history english courses"
+        data-ca="Educational">
+
+        <a id="khan-academy" href="https://www.khanacademy.org/" target="_blank" rel="noopener noreferrer">
+            17. Khan Academy
+        </a>
+
+        <p id="khan-academy-a">
+            A free platform for <strong><em>learning different subjects</em></strong>.
+        </p>
+
+        <p id="khan-academy-a2">
+            Learn math, science, history, English, economics, and more through lessons and practice. (Educational)
+        </p>
+
+        <hr>
+    </div>
+
+    <div class="website" data-id="18"
+        data-search="trello productivity project management tasks boards cards organization" data-ca="Productivity">
+
+        <a id="trello" href="https://trello.com/" target="_blank" rel="noopener noreferrer">
+            18. Trello
+        </a>
+
+        <p id="trello-a">
+            A simple tool for <strong><em>organizing tasks and projects</em></strong>.
+        </p>
+
+        <p id="trello-a2">
+            Manage tasks and projects using boards, lists, and cards. (Productivity)
+        </p>
+
+        <hr>
+    </div>
+
+    <div class="website" data-id="19"
+        data-search="google scholar research academic papers articles books science education" data-ca="Educational">
+
+        <a id="google-scholar" href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer">
+            19. Google Scholar
+        </a>
+
+        <p id="google-scholar-a">
+            A search engine for <strong><em>academic research</em></strong>.
+        </p>
+
+        <p id="google-scholar-a2">
+            Find academic papers, articles, books, theses, and research from many different fields. (Educational /
+            Research)
+        </p>
+
+        <hr>
+    </div>
+
+    <div class="website" data-id="20"
+        data-search="wolfram alpha math science calculations knowledge education physics chemistry"
+        data-ca="Educational">
+
+        <a id="wolfram-alpha" href="https://www.wolframalpha.com/" target="_blank" rel="noopener noreferrer">
+            20. Wolfram|Alpha
+        </a>
+
+        <p id="wolfram-alpha-a">
+            A powerful tool for <strong><em>calculations and knowledge</em></strong>.
+        </p>
+
+        <p id="wolfram-alpha-a2">
+            Get answers and perform calculations in mathematics, science, engineering, and many other subjects.
+            (Educational)
+        </p>
+
+        <hr>
+    </div>
+    <div class="website" data-id="21" data-search="google keep notes reminders lists tasks productivity organization"
+        data-ca="Productivity">
+
+        <a id="google-keep" href="https://keep.google.com/" target="_blank" rel="noopener noreferrer">
+            21. Google Keep
+        </a>
+
+        <p id="google-keep-a">
+            A simple tool for <strong><em>taking notes and organizing ideas</em></strong>.
+        </p>
+
+        <p id="google-keep-a2">
+            Create notes, checklists, reminders, and organize your ideas easily. (Productivity)
+        </p>
+
+        <hr>
+    </div>
+    <div class="website" data-id="22"
+        data-search="google translate translator translation languages text image documents websites"
+        data-ca="Educational Productivity">
+
+        <a id="google-translate" href="https://translate.google.com/" target="_blank" rel="noopener noreferrer">
+            22. Google Translate
+        </a>
+
+        <p id="google-translate-a">
+            A powerful tool for <strong><em>translating languages</em></strong>.
+        </p>
+
+        <p id="google-translate-a2">
+            Translate text, images, documents, and websites between different languages. (Educational / Productivity)
+        </p>
+
+        <hr>
+    </div>
     </div>
     <section id="comments-section" data-ca="Comments">
 
@@ -606,12 +858,14 @@
             SUPABASE_URL,
             SUPABASE_KEY
         );
+        const ADMIN_NAME = "Admin";
         const comment_name = document.getElementById("comment-name");
         const comment_text = document.getElementById("comment-text");
         const site_name = document.getElementById("site-name");
         const site_url = document.getElementById("site-url");
         const comment_submit = document.getElementById("comment-submit");
         const comment_message = document.getElementById("comment-message");
+        const comment_count = document.getElementById("comment-count");
 
         comment_submit.addEventListener("click", async function () {
 
@@ -652,11 +906,25 @@
             site_name.value = "";
             site_url.value = "";
         });
+        async function loadTotalComments() {
+            const { count, error } = await supabaseClient
+                .from("comments")
+                .select("*", { count: "exact", head: true })
+                .eq("approved", true)
+                .is("parent_id", null);
+
+            if (error) {
+                console.log(error);
+                return;
+            }
+
+            comment_count.textContent = count;
+        }
         async function loadComments() {
 
             const { data, error } = await supabaseClient
                 .from("comments")
-                .select("name, comment, site_name, site_url, created_at")
+                .select("id, name, comment, site_name, site_url, created_at, is_admin, parent_id")
                 .eq("approved", true)
                 .order("created_at", { ascending: false });
 
@@ -668,8 +936,11 @@
             const comments_list = document.getElementById("comments-list");
 
             comments_list.innerHTML = "";
+            const main_comments = data.filter(function (comment) {
+                return comment.parent_id === null;
+            });
 
-            for (let comment of data) {
+            for (let comment of main_comments) {
 
                 const comment_box = document.createElement("div");
                 comment_box.className = "comment";
@@ -677,18 +948,54 @@
                 const name = document.createElement("h3");
                 name.textContent = comment.name;
 
+                if (comment.is_admin === true) {
+                    name.textContent = "👑 Admin";
+                }
+
                 const text = document.createElement("p");
                 text.textContent = comment.comment;
+
                 comment_box.appendChild(name);
                 comment_box.appendChild(text);
+
                 if (comment.site_name && comment.site_url) {
+
                     const site = document.createElement("a");
+
                     site.textContent = "🌐 " + comment.site_name;
                     site.href = comment.site_url;
                     site.target = "_blank";
                     site.rel = "noopener noreferrer";
+
                     comment_box.appendChild(site);
                 }
+
+                const replies = data.filter(function (reply) {
+
+                    return (
+                        reply.parent_id === comment.id &&
+                        reply.is_admin === true
+                    );
+
+                });
+
+                for (let reply of replies) {
+
+                    const reply_box = document.createElement("div");
+                    reply_box.className = "admin-reply";
+
+                    const reply_name = document.createElement("h4");
+                    reply_name.textContent = "👑 Admin";
+
+                    const reply_text = document.createElement("p");
+                    reply_text.textContent = reply.comment;
+
+                    reply_box.appendChild(reply_name);
+                    reply_box.appendChild(reply_text);
+
+                    comment_box.appendChild(reply_box);
+                }
+
                 comments_list.appendChild(comment_box);
             }
         }
@@ -776,6 +1083,7 @@
             });
         });
         loadComments();
+        loadTotalComments();
     </script>
 </body>
 
