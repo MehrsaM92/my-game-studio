@@ -149,8 +149,6 @@
 
         #sort-select {
             padding: 10px 15px;
-            position: absolute;
-            margin: -60px auto;
             cursor: pointer;
             border: none;
             border-radius: 8px;
@@ -297,27 +295,120 @@
             margin: 0;
         }
 
+        .like-box {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .like-button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        .like-button:hover {
+            transform: scale(1.08);
+        }
+
+        .like-button.liked {
+            background-color: rgb(255, 80, 80);
+            color: white;
+        }
+
+        .like-count {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        #sort-box {
+            display: flex;
+            justify-content: center;
+            margin: 20px auto;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            padding: 14px 20px;
+            border-radius: 10px;
+            background-color: rgb(40, 40, 40);
+            color: white;
+            font-size: 16px;
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         @media (max-width: 600px) {
 
+            body {
+                overflow-x: hidden;
+            }
+
             #welcome {
-                font-size: 50px;
-                margin: 80px 0 40px 0;
+                font-size: 48px;
+                margin: 80px 0 35px 0;
+                line-height: 1.1;
+            }
+
+            #categories {
+                margin: 15px 8px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 5px;
+            }
+
+            #categories button {
+                font-size: 14px;
+                padding: 8px 10px;
+                margin: 0;
+            }
+
+            #sort-box {
+                width: 100%;
+                margin: 15px auto 20px auto;
+            }
+
+            #sort-select {
+                max-width: 90%;
+                padding: 10px 12px;
+                font-size: 15px;
             }
 
             #search-box {
                 position: static;
-                text-align: center;
-                margin: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                margin: 15px;
             }
 
             #search {
-                width: 70%;
+                width: 90%;
+                max-width: 300px;
+                box-sizing: border-box;
             }
 
             #search-button {
                 position: static;
-                margin-top: 8px;
+                margin: 0;
+                padding: 8px 15px;
             }
 
             #dark-mode {
@@ -326,48 +417,93 @@
                 margin: 10px auto;
             }
 
+            #search-message {
+                position: static;
+                width: fit-content;
+                max-width: 90%;
+                margin: 10px auto;
+                text-align: center;
+            }
+
             #statistics {
                 width: 90%;
                 box-sizing: border-box;
                 margin: 20px auto;
-            }
-
-            #sort-select,
-            #language-select {
-                position: static;
-                margin: 10px;
+                font-size: 16px;
             }
 
             .website {
                 width: 90%;
-                margin: 30px auto;
+                max-width: 500px;
+                margin: 25px auto;
+                box-sizing: border-box;
             }
 
             .website a {
-                font-size: 32px;
+                font-size: 30px;
+                max-width: 100%;
+                overflow-wrap: anywhere;
             }
 
             .website p {
                 font-size: 17px;
+                line-height: 1.5;
             }
 
-            #translator,
+            .like-box {
+                flex-wrap: wrap;
+            }
+
             #comments-section {
                 width: 90%;
                 max-width: none;
+                padding: 18px;
+                margin: 35px auto;
             }
 
+            #comments-section h2 {
+                font-size: 24px;
+            }
+
+            #comments-section>p {
+                font-size: 16px;
+            }
+
+            #comment-name,
+            #comment-text,
+            #site-name,
+            #site-url {
+                width: 100%;
+                margin: 8px 0;
+            }
+
+            .comment {
+                padding: 15px;
+            }
+
+            .admin-reply {
+                margin-left: 10px;
+            }
+
+            #translator,
             #translator-input,
             #translator-output {
                 width: 95%;
-                margin: 10px auto;
+                box-sizing: border-box;
             }
 
-            #categories button {
-                font-size: 14px;
-                padding: 8px 10px;
+            #coming-soon,
+            #all {
+                font-size: 16px;
+                padding: 0 15px;
             }
 
+            .toast {
+                top: 15px;
+                right: 10px;
+                left: 10px;
+                text-align: center;
+            }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -383,19 +519,27 @@
         <button class="category">Game</button>
         <button class="category">Design</button>
         <button class="category">SEO</button>
-        <button class="category">Comments</button>
         <button class="category">Productivity</button>
+        <button class="category">Comments</button>
     </div>
-    <select id="sort-select">
-        <option value="low-high" selected>Low → High</option>
-        <option value="high-low">High → Low</option>
-    </select>
+    <div id="sort-box">
+
+        <select id="sort-select">
+            <option value="low-high" selected>Low → High</option>
+            <option value="high-low">High → Low</option>
+            <option value="likes-low-high">Likes: Low → High</option>
+            <option value="likes-high-low">Likes: High → Low</option>
+            <option value="liked-only">❤️ Liked Websites</option>
+        </select>
+
+    </div>
     <div id="statistics">
         <h2>📊 CodeNest Statistics</h2>
 
         <p>Total websites: <span id="website-count">0</span></p>
         <p>Total categories: <span id="category-count">0</span></p>
         <p>Total comments: <span id="comment-count">0</span></p>
+        <p>Total likes: <span id="like-count-total">0</span></p>
     </div>
 
     <button id="dark-mode">🌙 Dark Mode</button>
@@ -422,7 +566,14 @@
             <p id="kodamoz-a2">
                 HTML - CSS - JavaScript - Python... (Educational)
             </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
             <hr>
         </div>
 
@@ -440,7 +591,14 @@
             <p id="chatgpt-a2">
                 Learn and get help with AI. (AI)
             </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
             <hr>
         </div>
 
@@ -458,7 +616,14 @@
             <p id="GitHub-a2">
                 Store and share your projects. (Development)
             </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
             <hr>
         </div>
 
@@ -477,7 +642,14 @@
             <p id="google-search-console-a2">
                 Monitor your website's search performance. (SEO)
             </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
             <hr>
         </div>
 
@@ -497,7 +669,14 @@
                 Create beautiful designs easily for school, projects, social media,
                 and presentations. (Design)
             </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
             <hr>
         </div>
 
@@ -515,7 +694,14 @@
             <p id="file-manager-a2">
                 Browse folders and manage files. (Python)
             </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
             <hr>
         </div>
 
@@ -534,7 +720,14 @@
                 Find characters, environments, UI elements, icons, and more for game development.
                 (Game Development / Assets)
             </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
             <hr>
         </div>
 
@@ -553,7 +746,14 @@
                 Create games with visual events, ready-made behaviors,
                 and optional JavaScript. (Game Development)
             </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
             <hr>
         </div>
         <div class="website" data-id="9" data-search="call of duty CODM mobile warzone modern warfare game fps shooting"
@@ -570,245 +770,345 @@
             <p id="call-of-duty-a2">
                 Play different game modes, improve your skills, and enjoy fast-paced combat. (Game)
             </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
             <hr>
         </div>
-    </div>
-    <div class="website" data-id="10"
-        data-search="supabase database postgresql backend authentication auth storage realtime edge functions api javascript python ai vector"
-        data-ca="Programming">
+        <div class="website" data-id="10"
+            data-search="supabase database postgresql backend authentication auth storage realtime edge functions api javascript python ai vector"
+            data-ca="Programming">
 
-        <a id="supabase" href="https://supabase.com/dashboard/" target="_blank" rel="noopener noreferrer">
-            10. Supabase
-        </a>
+            <a id="supabase" href="https://supabase.com/dashboard/" target="_blank" rel="noopener noreferrer">
+                10. Supabase
+            </a>
 
-        <p id="supabase-a">
-            A powerful open-source platform for <strong><em>building web and mobile applications</em></strong>.
-        </p>
+            <p id="supabase-a">
+                A powerful open-source platform for <strong><em>building web and mobile applications</em></strong>.
+            </p>
 
-        <p id="supabase-a2">
-            Provides PostgreSQL database, authentication, storage, realtime features,
-            APIs, and edge functions. (Backend / Development)
-        </p>
+            <p id="supabase-a2">
+                Provides PostgreSQL database, authentication, storage, realtime features,
+                APIs, and edge functions. (Backend / Development)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
-    <div class="website" data-id="11" data-search="minecraft game sandbox survival adventure building multiplayer"
-        data-ca="Game">
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
+        <div class="website" data-id="11" data-search="minecraft game sandbox survival adventure building multiplayer"
+            data-ca="Game">
 
-        <a id="minecraft" href="https://www.minecraft.net/en-us" target="_blank" rel="noopener noreferrer">
-            11. Minecraft
-        </a>
+            <a id="minecraft" href="https://www.minecraft.net/en-us" target="_blank" rel="noopener noreferrer">
+                11. Minecraft
+            </a>
 
-        <p id="minecraft-a">
-            A popular <strong><em>sandbox adventure game</em></strong> where you can explore, build, and create your own
-            worlds.
-        </p>
+            <p id="minecraft-a">
+                A popular <strong><em>sandbox adventure game</em></strong> where you can explore, build, and create your
+                own
+                worlds.
+            </p>
 
-        <p id="minecraft-a2">
-            Explore different worlds, gather resources, build structures, survive, and play with friends. (Game)
-        </p>
+            <p id="minecraft-a2">
+                Explore different worlds, gather resources, build structures, survive, and play with friends. (Game)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
-    <div class="website" data-id="12"
-        data-search="duolingo language learning english spanish french german languages education"
-        data-ca="Educational">
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
+        <div class="website" data-id="12"
+            data-search="duolingo language learning english spanish french german languages education"
+            data-ca="Educational">
 
-        <a id="duolingo" href="https://www.duolingo.com/" target="_blank" rel="noopener noreferrer">
-            12. Duolingo
-        </a>
+            <a id="duolingo" href="https://www.duolingo.com/" target="_blank" rel="noopener noreferrer">
+                12. Duolingo
+            </a>
 
-        <p id="duolingo-a">
-            A fun platform for <strong><em>learning languages</em></strong>.
-        </p>
+            <p id="duolingo-a">
+                A fun platform for <strong><em>learning languages</em></strong>.
+            </p>
 
-        <p id="duolingo-a2">
-            Learn languages through interactive lessons, exercises, and practice. (Educational / Languages)
-        </p>
+            <p id="duolingo-a2">
+                Learn languages through interactive lessons, exercises, and practice. (Educational / Languages)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
-    <div class="website" data-id="13"
-        data-search="hugging face ai artificial intelligence machine learning models datasets tools" data-ca="AI">
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
+        <div class="website" data-id="13"
+            data-search="hugging face ai artificial intelligence machine learning models datasets tools" data-ca="AI">
 
-        <a id="hugging-face" href="https://huggingface.co/" target="_blank" rel="noopener noreferrer">
-            13. Hugging Face
-        </a>
+            <a id="hugging-face" href="https://huggingface.co/" target="_blank" rel="noopener noreferrer">
+                13. Hugging Face
+            </a>
 
-        <p id="hugging-face-a">
-            A platform for <strong><em>exploring and working with AI</em></strong>.
-        </p>
+            <p id="hugging-face-a">
+                A platform for <strong><em>exploring and working with AI</em></strong>.
+            </p>
 
-        <p id="hugging-face-a2">
-            Discover AI models, datasets, demos, and tools for artificial intelligence and machine learning. (AI)
-        </p>
+            <p id="hugging-face-a2">
+                Discover AI models, datasets, demos, and tools for artificial intelligence and machine learning. (AI)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
-    <div class="website" data-id="14"
-        data-search="adobe express design graphic design poster social media presentation logo templates"
-        data-ca="Design">
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
+        <div class="website" data-id="14"
+            data-search="adobe express design graphic design poster social media presentation logo templates"
+            data-ca="Design">
 
-        <a id="adobe-express" href="https://www.adobe.com/express/" target="_blank" rel="noopener noreferrer">
-            14. Adobe Express
-        </a>
+            <a id="adobe-express" href="https://www.adobe.com/express/" target="_blank" rel="noopener noreferrer">
+                14. Adobe Express
+            </a>
 
-        <p id="adobe-express-a">
-            A simple platform for <strong><em>creating designs</em></strong>.
-        </p>
+            <p id="adobe-express-a">
+                A simple platform for <strong><em>creating designs</em></strong>.
+            </p>
 
-        <p id="adobe-express-a2">
-            Create posters, social media posts, presentations, logos, and more with ready-made templates and design
-            tools. (Design)
-        </p>
+            <p id="adobe-express-a2">
+                Create posters, social media posts, presentations, logos, and more with ready-made templates and design
+                tools. (Design)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
-    <div class="website" data-id="15"
-        data-search="bing webmaster tools seo search engine website analytics indexing keywords" data-ca="SEO">
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
+        <div class="website" data-id="15"
+            data-search="bing webmaster tools seo search engine website analytics indexing keywords" data-ca="SEO">
 
-        <a id="bing-webmaster" href="https://www.bing.com/webmasters/" target="_blank" rel="noopener noreferrer">
-            15. Bing Webmaster Tools
-        </a>
+            <a id="bing-webmaster" href="https://www.bing.com/webmasters/" target="_blank" rel="noopener noreferrer">
+                15. Bing Webmaster Tools
+            </a>
 
-        <p id="bing-webmaster-a">
-            A platform for <strong><em>monitoring and improving websites in search engines</em></strong>.
-        </p>
+            <p id="bing-webmaster-a">
+                A platform for <strong><em>monitoring and improving websites in search engines</em></strong>.
+            </p>
 
-        <p id="bing-webmaster-a2">
-            Check website performance, search traffic, indexing, keywords, and SEO information on Bing. (SEO)
-        </p>
+            <p id="bing-webmaster-a2">
+                Check website performance, search traffic, indexing, keywords, and SEO information on Bing. (SEO)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
-    <div class="website" data-id="16"
-        data-search="stack overflow programming coding questions answers developers javascript python html css errors"
-        data-ca="Programming">
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
+        <div class="website" data-id="16"
+            data-search="stack overflow programming coding questions answers developers javascript python html css errors"
+            data-ca="Programming">
 
-        <a id="stack-overflow" href="https://stackoverflow.com/" target="_blank" rel="noopener noreferrer">
-            16. Stack Overflow
-        </a>
+            <a id="stack-overflow" href="https://stackoverflow.com/" target="_blank" rel="noopener noreferrer">
+                16. Stack Overflow
+            </a>
 
-        <p id="stack-overflow-a">
-            A popular website for <strong><em>asking and answering programming questions</em></strong>.
-        </p>
+            <p id="stack-overflow-a">
+                A popular website for <strong><em>asking and answering programming questions</em></strong>.
+            </p>
 
-        <p id="stack-overflow-a2">
-            Find solutions, learn programming concepts, and get help with coding problems. (Programming)
-        </p>
+            <p id="stack-overflow-a2">
+                Find solutions, learn programming concepts, and get help with coding problems. (Programming)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
-    <div class="website" data-id="17" data-search="khan academy education learning math science history english courses"
-        data-ca="Educational">
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
+        <div class="website" data-id="17"
+            data-search="khan academy education learning math science history english courses" data-ca="Educational">
 
-        <a id="khan-academy" href="https://www.khanacademy.org/" target="_blank" rel="noopener noreferrer">
-            17. Khan Academy
-        </a>
+            <a id="khan-academy" href="https://www.khanacademy.org/" target="_blank" rel="noopener noreferrer">
+                17. Khan Academy
+            </a>
 
-        <p id="khan-academy-a">
-            A free platform for <strong><em>learning different subjects</em></strong>.
-        </p>
+            <p id="khan-academy-a">
+                A free platform for <strong><em>learning different subjects</em></strong>.
+            </p>
 
-        <p id="khan-academy-a2">
-            Learn math, science, history, English, economics, and more through lessons and practice. (Educational)
-        </p>
+            <p id="khan-academy-a2">
+                Learn math, science, history, English, economics, and more through lessons and practice. (Educational)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
 
-    <div class="website" data-id="18"
-        data-search="trello productivity project management tasks boards cards organization" data-ca="Productivity">
+        <div class="website" data-id="18"
+            data-search="trello productivity project management tasks boards cards organization" data-ca="Productivity">
 
-        <a id="trello" href="https://trello.com/" target="_blank" rel="noopener noreferrer">
-            18. Trello
-        </a>
+            <a id="trello" href="https://trello.com/" target="_blank" rel="noopener noreferrer">
+                18. Trello
+            </a>
 
-        <p id="trello-a">
-            A simple tool for <strong><em>organizing tasks and projects</em></strong>.
-        </p>
+            <p id="trello-a">
+                A simple tool for <strong><em>organizing tasks and projects</em></strong>.
+            </p>
 
-        <p id="trello-a2">
-            Manage tasks and projects using boards, lists, and cards. (Productivity)
-        </p>
+            <p id="trello-a2">
+                Manage tasks and projects using boards, lists, and cards. (Productivity)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
 
-    <div class="website" data-id="19"
-        data-search="google scholar research academic papers articles books science education" data-ca="Educational">
+        <div class="website" data-id="19"
+            data-search="google scholar research academic papers articles books science education"
+            data-ca="Educational">
 
-        <a id="google-scholar" href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer">
-            19. Google Scholar
-        </a>
+            <a id="google-scholar" href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer">
+                19. Google Scholar
+            </a>
 
-        <p id="google-scholar-a">
-            A search engine for <strong><em>academic research</em></strong>.
-        </p>
+            <p id="google-scholar-a">
+                A search engine for <strong><em>academic research</em></strong>.
+            </p>
 
-        <p id="google-scholar-a2">
-            Find academic papers, articles, books, theses, and research from many different fields. (Educational /
-            Research)
-        </p>
+            <p id="google-scholar-a2">
+                Find academic papers, articles, books, theses, and research from many different fields. (Educational /
+                Research)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
 
-    <div class="website" data-id="20"
-        data-search="wolfram alpha math science calculations knowledge education physics chemistry"
-        data-ca="Educational">
+        <div class="website" data-id="20"
+            data-search="wolfram alpha math science calculations knowledge education physics chemistry"
+            data-ca="Educational">
 
-        <a id="wolfram-alpha" href="https://www.wolframalpha.com/" target="_blank" rel="noopener noreferrer">
-            20. Wolfram|Alpha
-        </a>
+            <a id="wolfram-alpha" href="https://www.wolframalpha.com/" target="_blank" rel="noopener noreferrer">
+                20. Wolfram|Alpha
+            </a>
 
-        <p id="wolfram-alpha-a">
-            A powerful tool for <strong><em>calculations and knowledge</em></strong>.
-        </p>
+            <p id="wolfram-alpha-a">
+                A powerful tool for <strong><em>calculations and knowledge</em></strong>.
+            </p>
 
-        <p id="wolfram-alpha-a2">
-            Get answers and perform calculations in mathematics, science, engineering, and many other subjects.
-            (Educational)
-        </p>
+            <p id="wolfram-alpha-a2">
+                Get answers and perform calculations in mathematics, science, engineering, and many other subjects.
+                (Educational)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
-    <div class="website" data-id="21" data-search="google keep notes reminders lists tasks productivity organization"
-        data-ca="Productivity">
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
+        <div class="website" data-id="21"
+            data-search="google keep notes reminders lists tasks productivity organization" data-ca="Productivity">
 
-        <a id="google-keep" href="https://keep.google.com/" target="_blank" rel="noopener noreferrer">
-            21. Google Keep
-        </a>
+            <a id="google-keep" href="https://keep.google.com/" target="_blank" rel="noopener noreferrer">
+                21. Google Keep
+            </a>
 
-        <p id="google-keep-a">
-            A simple tool for <strong><em>taking notes and organizing ideas</em></strong>.
-        </p>
+            <p id="google-keep-a">
+                A simple tool for <strong><em>taking notes and organizing ideas</em></strong>.
+            </p>
 
-        <p id="google-keep-a2">
-            Create notes, checklists, reminders, and organize your ideas easily. (Productivity)
-        </p>
+            <p id="google-keep-a2">
+                Create notes, checklists, reminders, and organize your ideas easily. (Productivity)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
-    <div class="website" data-id="22"
-        data-search="google translate translator translation languages text image documents websites"
-        data-ca="Educational Productivity">
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
+        <div class="website" data-id="22"
+            data-search="google translate translator translation languages text image documents websites"
+            data-ca="Educational Productivity">
 
-        <a id="google-translate" href="https://translate.google.com/" target="_blank" rel="noopener noreferrer">
-            22. Google Translate
-        </a>
+            <a id="google-translate" href="https://translate.google.com/" target="_blank" rel="noopener noreferrer">
+                22. Google Translate
+            </a>
 
-        <p id="google-translate-a">
-            A powerful tool for <strong><em>translating languages</em></strong>.
-        </p>
+            <p id="google-translate-a">
+                A powerful tool for <strong><em>translating languages</em></strong>.
+            </p>
 
-        <p id="google-translate-a2">
-            Translate text, images, documents, and websites between different languages. (Educational / Productivity)
-        </p>
+            <p id="google-translate-a2">
+                Translate text, images, documents, and websites between different languages. (Educational /
+                Productivity)
+            </p>
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
 
-        <hr>
-    </div>
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+            <hr>
+        </div>
     </div>
     <section id="comments-section" data-ca="Comments">
 
@@ -866,7 +1166,217 @@
         const comment_submit = document.getElementById("comment-submit");
         const comment_message = document.getElementById("comment-message");
         const comment_count = document.getElementById("comment-count");
+        const like_count_total = document.getElementById("like-count-total");
+        function showToast(message) {
 
+            const toast = document.getElementById("toast");
+
+            toast.textContent = message;
+
+            toast.classList.add("show");
+
+            setTimeout(function () {
+                toast.classList.remove("show");
+            }, 2500);
+        }
+        async function loadLikes() {
+
+            const { data, error } = await supabaseClient
+                .from("website_likes")
+                .select("website_id, likes");
+
+            if (error) {
+                console.log("Load likes error:", error);
+                return;
+            }
+
+            for (let website of websites) {
+
+                const websiteId = Number(
+                    website.getAttribute("data-id")
+                );
+
+                const result = data.find(function (item) {
+                    return Number(item.website_id) === websiteId;
+                });
+
+                const likeCount = website.querySelector(".like-count");
+
+                if (result) {
+                    likeCount.textContent = result.likes;
+                } else {
+                    likeCount.textContent = "0";
+                }
+            }
+
+            let totalLikes = 0;
+
+            for (let item of data) {
+                totalLikes += Number(item.likes);
+            }
+
+            like_count_total.textContent = totalLikes;
+        }
+
+
+        async function likeWebsite(website) {
+
+            const websiteId = Number(
+                website.getAttribute("data-id")
+            );
+
+            const likedKey = "liked_website_" + websiteId;
+
+            const button = website.querySelector(".like-button");
+            const likeCount = website.querySelector(".like-count");
+
+            const isLiked = localStorage.getItem(likedKey);
+
+            let error;
+
+            if (isLiked) {
+
+                const result = await supabaseClient.rpc(
+                    "decrement_website_like",
+                    {
+                        p_website_id: websiteId
+                    }
+                );
+
+                error = result.error;
+
+            } else {
+
+                const result = await supabaseClient.rpc(
+                    "increment_website_like",
+                    {
+                        p_website_id: websiteId
+                    }
+                );
+
+                error = result.error;
+            }
+
+            if (error) {
+                console.log("Like error:", error);
+                return;
+            }
+
+            const { data, error: loadError } = await supabaseClient
+                .from("website_likes")
+                .select("likes")
+                .eq("website_id", websiteId)
+                .single();
+
+            if (loadError) {
+                console.log("Load updated like error:", loadError);
+                return;
+            }
+
+            likeCount.textContent = data.likes;
+
+            if (isLiked) {
+
+                localStorage.removeItem(likedKey);
+
+                button.classList.remove("liked");
+                button.textContent = "❤️ Like";
+                showToast("Unliked!");
+
+            } else {
+
+                localStorage.setItem(likedKey, "true");
+
+                button.classList.add("liked");
+                button.textContent = "❤️ Liked";
+                showToast("Liked!");
+            }
+
+            updateTotalLikes();
+        }
+        websites.forEach(function (website) {
+
+            const button = website.querySelector(".like-button");
+
+            button.addEventListener("click", function () {
+                likeWebsite(website);
+            });
+
+        });
+        function loadLikedStatus() {
+
+            for (let website of websites) {
+
+                const websiteId =
+                    website.getAttribute("data-id");
+
+                const likedKey =
+                    "liked_website_" + websiteId;
+
+                const button =
+                    website.querySelector(".like-button");
+
+                if (localStorage.getItem(likedKey)) {
+
+                    button.classList.add("liked");
+                    button.textContent = "❤️ Liked";
+
+                } else {
+
+                    button.classList.remove("liked");
+                    button.textContent = "❤️ Like";
+                }
+            }
+        }
+        async function updateTotalLikes() {
+
+            const { data, error } = await supabaseClient
+                .from("website_likes")
+                .select("likes");
+
+            if (error) {
+                console.log("Total likes error:", error);
+                return;
+            }
+
+            let totalLikes = 0;
+
+            for (let item of data) {
+                totalLikes += Number(item.likes);
+            }
+
+            like_count_total.textContent = totalLikes;
+        }
+        supabaseClient
+            .channel("website-likes-realtime")
+            .on(
+                "postgres_changes",
+                {
+                    event: "UPDATE",
+                    schema: "public",
+                    table: "website_likes"
+                },
+                function (payload) {
+
+                    const websiteId = Number(payload.new.website_id);
+                    const newLikes = payload.new.likes;
+
+                    const website = document.querySelector(
+                        `.website[data-id="${websiteId}"]`
+                    );
+
+                    if (!website) {
+                        return;
+                    }
+
+                    const likeCount = website.querySelector(".like-count");
+
+                    likeCount.textContent = newLikes;
+
+                    updateTotalLikes();
+                }
+            )
+            .subscribe();
         comment_submit.addEventListener("click", async function () {
 
             const name = comment_name.value.trim();
@@ -899,8 +1409,7 @@
                 return;
             }
 
-            comment_message.textContent = "Your comment has been successfully submitted! It will be displayed after review.";
-
+            showToast("Your comment has been submitted!");
             comment_name.value = "";
             comment_text.value = "";
             site_name.value = "";
@@ -936,6 +1445,7 @@
             const comments_list = document.getElementById("comments-list");
 
             comments_list.innerHTML = "";
+
             const main_comments = data.filter(function (comment) {
                 return comment.parent_id === null;
             });
@@ -955,8 +1465,19 @@
                 const text = document.createElement("p");
                 text.textContent = comment.comment;
 
+                const date = document.createElement("small");
+
+                const commentDate = new Date(comment.created_at);
+
+                date.textContent = commentDate.toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric"
+                });
+
                 comment_box.appendChild(name);
                 comment_box.appendChild(text);
+                comment_box.appendChild(date);
 
                 if (comment.site_name && comment.site_url) {
 
@@ -990,8 +1511,19 @@
                     const reply_text = document.createElement("p");
                     reply_text.textContent = reply.comment;
 
+                    const reply_date = document.createElement("small");
+
+                    const replyDate = new Date(reply.created_at);
+
+                    reply_date.textContent = replyDate.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric"
+                    });
+
                     reply_box.appendChild(reply_name);
                     reply_box.appendChild(reply_text);
+                    reply_box.appendChild(reply_date);
 
                     comment_box.appendChild(reply_box);
                 }
@@ -1060,31 +1592,131 @@
             }
         });
         dark_mode.addEventListener("click", function () {
+
             document.body.classList.toggle("dark");
+
             if (document.body.classList.contains("dark")) {
+
                 dark_mode.textContent = "☀️ Light Mode";
+
+                localStorage.setItem("darkMode", "true");
+
             } else {
+
                 dark_mode.textContent = "🌙 Dark Mode";
+
+                localStorage.setItem("darkMode", "false");
             }
         });
+        const savedDarkMode = localStorage.getItem("darkMode");
+
+        if (savedDarkMode === "true") {
+
+            document.body.classList.add("dark");
+
+            dark_mode.textContent = "☀️ Light Mode";
+        }
+
+        supabaseClient
+            .channel("comments-realtime")
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+                    schema: "public",
+                    table: "comments"
+                },
+                async function (payload) {
+
+                    await loadComments();
+                    await loadTotalComments();
+
+                }
+            )
+            .subscribe();
         sort_select.addEventListener("change", function () {
+
             const container = document.getElementById("websites-container");
             const website_array = Array.from(websites);
+
+            if (sort_select.value === "liked-only") {
+
+                for (let website of website_array) {
+
+                    const websiteId = website.getAttribute("data-id");
+                    const likedKey = "liked_website_" + websiteId;
+
+                    if (localStorage.getItem(likedKey)) {
+                        website.style.display = "";
+                    } else {
+                        website.style.display = "none";
+                    }
+                }
+
+                return;
+            }
+
+            for (let website of website_array) {
+                website.style.display = "";
+            }
+
             website_array.sort(function (a, b) {
-                const id_a = Number(a.getAttribute("data-id"));
-                const id_b = Number(b.getAttribute("data-id"));
+
                 if (sort_select.value === "low-high") {
+
+                    const id_a = Number(a.getAttribute("data-id"));
+                    const id_b = Number(b.getAttribute("data-id"));
+
                     return id_a - id_b;
-                };
-                return id_b - id_a;
+                }
+
+                if (sort_select.value === "high-low") {
+
+                    const id_a = Number(a.getAttribute("data-id"));
+                    const id_b = Number(b.getAttribute("data-id"));
+
+                    return id_b - id_a;
+                }
+
+                if (sort_select.value === "likes-low-high") {
+
+                    const likes_a = Number(
+                        a.querySelector(".like-count").textContent
+                    );
+
+                    const likes_b = Number(
+                        b.querySelector(".like-count").textContent
+                    );
+
+                    return likes_a - likes_b;
+                }
+
+                if (sort_select.value === "likes-high-low") {
+
+                    const likes_a = Number(
+                        a.querySelector(".like-count").textContent
+                    );
+
+                    const likes_b = Number(
+                        b.querySelector(".like-count").textContent
+                    );
+
+                    return likes_b - likes_a;
+                }
+
             });
+
             website_array.forEach(function (website) {
                 container.appendChild(website);
             });
+
         });
         loadComments();
         loadTotalComments();
+        loadLikes();
+        loadLikedStatus();
     </script>
+    <div id="toast" class="toast"></div>
 </body>
 
 </html>
