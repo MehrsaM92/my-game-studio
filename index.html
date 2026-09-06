@@ -363,7 +363,108 @@
             color: rgb(220, 220, 220);
         }
 
+        .review-popup {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+
+            width: 340px;
+            padding: 25px;
+
+            background: white;
+            border-radius: 20px;
+
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+
+            z-index: 9999;
+
+            display: none;
+
+            box-sizing: border-box;
+        }
+
+        .review-popup.show {
+            display: block;
+            animation: reviewPopupShow 0.4s ease;
+        }
+
+        .review-popup h3 {
+            margin: 0 0 10px;
+            font-size: 22px;
+        }
+
+        .review-popup p {
+            margin: 0;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        .close-review {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+
+            border: none;
+            background: transparent;
+
+            font-size: 25px;
+
+            cursor: pointer;
+        }
+
+        .review-popup-buttons {
+            display: flex;
+            gap: 10px;
+
+            margin-top: 20px;
+        }
+
+        .review-popup-buttons button {
+            flex: 1;
+
+            padding: 11px 14px;
+
+            border: none;
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+        }
+
+        #go-comments {
+            background: #222;
+            color: white;
+        }
+
+        #dismiss-review {
+            background: #eeeeee;
+            color: #222;
+        }
+
+        @keyframes reviewPopupShow {
+
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
         @media (max-width: 600px) {
+
+            .review-popup {
+                left: 15px;
+                right: 15px;
+                bottom: 15px;
+
+                width: auto;
+            }
 
             body {
                 overflow-x: hidden;
@@ -548,11 +649,11 @@
     <div id="statistics">
         <h2>📊 CodeNest Statistics</h2>
 
-        <p>Total websites: <span id="website-count">0</span></p>
-        <p>Total categories: <span id="category-count">0</span></p>
-        <p>Total comments: <span id="comment-count">0</span></p>
-        <p>Total likes: <span id="like-count-total">0</span></p>
-        <p>Total visits: <span id="visit-count">0</span></p>
+        <p>Total websites: <span id="website-count">25</span></p>
+        <p>Total categories: <span id="category-count">9</span></p>
+        <p>Total comments: <span id="comment-count">2</span></p>
+        <p>Total likes: <span id="like-count-total">3</span></p>
+        <p>Total visits: <span id="visit-count">7</span></p>
     </div>
 
     <button id="dark-mode">🌙 Dark Mode</button>
@@ -579,10 +680,9 @@
             <p id="kodamoz-a2">
                 HTML - CSS - JavaScript - Python... (Educational)
             </p>
+            <p class="website-date">📅 Added: Sep 1, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -604,12 +704,11 @@
             <p id="chatgpt-a2">
                 Learn and get help with AI. (AI)
             </p>
+            <p class="website-date">📅 Added: Sep 1, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
-                <span class="like-count">0</span>
+                <span class="like-count">1</span>
                 <span>Likes</span>
             </div>
             <hr>
@@ -629,10 +728,9 @@
             <p id="GitHub-a2">
                 Store and share your projects. (Development)
             </p>
+            <p class="website-date">📅 Added: Sep 1, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -655,10 +753,9 @@
             <p id="google-search-console-a2">
                 Monitor your website's search performance. (SEO)
             </p>
+            <p class="website-date">📅 Added: Sep 2, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -682,10 +779,9 @@
                 Create beautiful designs easily for school, projects, social media,
                 and presentations. (Design)
             </p>
+            <p class="website-date">📅 Added: Sep 2, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -707,10 +803,9 @@
             <p id="file-manager-a2">
                 Browse folders and manage files. (Python)
             </p>
+            <p class="website-date">📅 Added: Sep 2, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -733,10 +828,9 @@
                 Find characters, environments, UI elements, icons, and more for game development.
                 (Game Development / Assets)
             </p>
+            <p class="website-date">📅 Added: Sep 3, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -759,10 +853,9 @@
                 Create games with visual events, ready-made behaviors,
                 and optional JavaScript. (Game Development)
             </p>
+            <p class="website-date">📅 Added: Sep 3, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -783,12 +876,11 @@
             <p id="call-of-duty-a2">
                 Play different game modes, improve your skills, and enjoy fast-paced combat. (Game)
             </p>
+            <p class="website-date">📅 Added: Sep 3, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
-                <span class="like-count">0</span>
+                <span class="like-count">1</span>
                 <span>Likes</span>
             </div>
             <hr>
@@ -809,10 +901,9 @@
                 Provides PostgreSQL database, authentication, storage, realtime features,
                 APIs, and edge functions. (Backend / Development)
             </p>
+            <p class="website-date">📅 Added: Sep 4, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -835,12 +926,11 @@
             <p id="minecraft-a2">
                 Explore different worlds, gather resources, build structures, survive, and play with friends. (Game)
             </p>
+            <p class="website-date">📅 Added: Sep 4, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
-                <span class="like-count">0</span>
+                <span class="like-count">1</span>
                 <span>Likes</span>
             </div>
             <hr>
@@ -860,10 +950,9 @@
             <p id="duolingo-a2">
                 Learn languages through interactive lessons, exercises, and practice. (Educational / Languages)
             </p>
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -884,10 +973,9 @@
             <p id="hugging-face-a2">
                 Discover AI models, datasets, demos, and tools for artificial intelligence and machine learning. (AI)
             </p>
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -910,10 +998,9 @@
                 Create posters, social media posts, presentations, logos, and more with ready-made templates and design
                 tools. (Design)
             </p>
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -934,10 +1021,9 @@
             <p id="bing-webmaster-a2">
                 Check website performance, search traffic, indexing, keywords, and SEO information on Bing. (SEO)
             </p>
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -959,10 +1045,9 @@
             <p id="stack-overflow-a2">
                 Find solutions, learn programming concepts, and get help with coding problems. (Programming)
             </p>
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -983,10 +1068,9 @@
             <p id="khan-academy-a2">
                 Learn math, science, history, English, economics, and more through lessons and practice. (Educational)
             </p>
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -1008,10 +1092,9 @@
             <p id="trello-a2">
                 Manage tasks and projects using boards, lists, and cards. (Productivity)
             </p>
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -1035,10 +1118,9 @@
                 Find academic papers, articles, books, theses, and research from many different fields. (Educational /
                 Research)
             </p>
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -1062,10 +1144,9 @@
                 Get answers and perform calculations in mathematics, science, engineering, and many other subjects.
                 (Educational)
             </p>
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -1086,10 +1167,9 @@
             <p id="google-keep-a2">
                 Create notes, checklists, reminders, and organize your ideas easily. (Productivity)
             </p>
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -1112,10 +1192,9 @@
                 Translate text, images, documents, and websites between different languages. (Educational /
                 Productivity)
             </p>
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -1139,10 +1218,9 @@
                 (Programming / Web Development)
             </p>
 
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -1168,10 +1246,9 @@
                 and explore topics through conversations. (AI / Research)
             </p>
 
+            <p class="website-date">📅 Added: Sep 5, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -1195,10 +1272,9 @@
                 (Game)
             </p>
 
+            <p class="website-date">📅 Added: Sep 6, 2026</p>
             <div class="like-box">
-                <button class="like-button">
-                    ❤️ Like
-                </button>
+                <button class="like-button">❤️ Like</button>
 
                 <span class="like-count">0</span>
                 <span>Likes</span>
@@ -1206,6 +1282,31 @@
 
             <hr>
         </div>
+    </div>
+    <div id="review-popup" class="review-popup">
+
+        <button id="close-review" class="close-review">
+            ×
+        </button>
+
+        <h3>What do you think about CodeNest?</h3>
+
+        <p>
+            You've been here for a while. We'd love to hear your opinion!
+        </p>
+
+        <div class="review-popup-buttons">
+
+            <button id="go-comments">
+                💬 Leave a comment
+            </button>
+
+            <button id="dismiss-review">
+                Maybe later
+            </button>
+
+        </div>
+
     </div>
     <section id="comments-section" data-ca="Comments">
 
@@ -1549,12 +1650,18 @@
             const siteUrl = site_url.value.trim();
 
             if (!name || !comment) {
-                comment_message.textContent = "Please enter your name and comment.";
+
+                comment_message.textContent =
+                    "Please enter your name and comment.";
+
                 return;
             }
 
             if ((siteName && !siteUrl) || (!siteName && siteUrl)) {
-                comment_message.textContent = "If you are recommending a site, both the site name and the URL must be entered.";
+
+                comment_message.textContent =
+                    "If you are recommending a site, both the site name and the URL must be entered.";
+
                 return;
             }
 
@@ -1568,16 +1675,27 @@
                 });
 
             if (error) {
+
                 console.log(error);
-                comment_message.textContent = "The send operation failed.";
+
+                comment_message.textContent =
+                    "The send operation failed.";
+
                 return;
             }
 
+            localStorage.setItem(
+                REVIEW_COMMENTED_KEY,
+                "true"
+            );
+
             showToast("Your comment has been submitted!");
+
             comment_name.value = "";
             comment_text.value = "";
             site_name.value = "";
             site_url.value = "";
+
         });
         async function loadTotalComments() {
             const { count, error } = await supabaseClient
@@ -1975,6 +2093,86 @@
 
             visit_count.textContent = count;
         }
+        const REVIEW_DISMISSED_KEY = "codenest_review_dismissed";
+        const REVIEW_COMMENTED_KEY = "codenest_review_commented";
+
+        const reviewPopup = document.getElementById("review-popup");
+        const closeReview = document.getElementById("close-review");
+        const dismissReview = document.getElementById("dismiss-review");
+        const goComments = document.getElementById("go-comments");
+
+        const reviewWasDismissed =
+            localStorage.getItem(REVIEW_DISMISSED_KEY) === "true";
+
+        const reviewWasCommented =
+            localStorage.getItem(REVIEW_COMMENTED_KEY) === "true";
+
+
+        // Show popup after one minute / 2
+        if (!reviewWasDismissed && !reviewWasCommented) {
+
+            setTimeout(function () {
+
+                reviewPopup.classList.add("show");
+
+            }, 30000);
+        }
+
+
+        // Close button
+        closeReview.addEventListener("click", function () {
+
+            localStorage.setItem(
+                REVIEW_DISMISSED_KEY,
+                "true"
+            );
+
+            reviewPopup.classList.remove("show");
+
+        });
+
+
+        // Maybe later button
+        dismissReview.addEventListener("click", function () {
+
+            localStorage.setItem(
+                REVIEW_DISMISSED_KEY,
+                "true"
+            );
+
+            reviewPopup.classList.remove("show");
+
+        });
+
+
+        // Leave a comment
+        goComments.addEventListener("click", function () {
+
+            reviewPopup.classList.remove("show");
+
+            const commentsSection =
+                document.getElementById("comments-section");
+
+            // Hide all websites
+            for (let website of websites) {
+
+                website.style.display = "none";
+
+            }
+
+            // Show comments category
+            if (commentsSection) {
+
+                commentsSection.style.display = "block";
+
+                commentsSection.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }
+
+        });
         loadComments();
         loadTotalComments();
         loadLikes();
@@ -1983,6 +2181,9 @@
         registerUniqueVisit();
     </script>
     <div id="toast" class="toast"></div>
+
+
+
 </body>
 
 </html>
