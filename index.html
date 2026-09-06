@@ -353,6 +353,16 @@
             transform: translateY(0);
         }
 
+        .website-date {
+            font-size: 16px !important;
+            color: rgb(90, 90, 90);
+            margin: 8px 0 !important;
+        }
+
+        .dark .website-date {
+            color: rgb(220, 220, 220);
+        }
+
         @media (max-width: 600px) {
 
             body {
@@ -529,6 +539,8 @@
             <option value="high-low">High → Low</option>
             <option value="likes-low-high">Likes: Low → High</option>
             <option value="likes-high-low">Likes: High → Low</option>
+            <option value="newest">🆕 Newest → Oldest</option>
+            <option value="oldest">📅 Oldest → Newest</option>
             <option value="liked-only">❤️ Liked Websites</option>
         </select>
 
@@ -1167,6 +1179,33 @@
 
             <hr>
         </div>
+        <div class="website" data-id="25"
+            data-search="ign games video games reviews news walkthrough xbox playstation pc nintendo" data-ca="Game">
+
+            <a id="ign" href="https://www.ign.com/" target="_blank" rel="noopener noreferrer">
+                25. IGN
+            </a>
+
+            <p id="ign-a">
+                A popular website for <strong><em>discovering and learning about video games</em></strong>.
+            </p>
+
+            <p id="ign-a2">
+                Find game reviews, news, guides, videos, and information about popular games.
+                (Game)
+            </p>
+
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
+
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+
+            <hr>
+        </div>
     </div>
     <section id="comments-section" data-ca="Comments">
 
@@ -1226,6 +1265,8 @@
         const comment_message = document.getElementById("comment-message");
         const comment_count = document.getElementById("comment-count");
         const like_count_total = document.getElementById("like-count-total");
+        let websiteDates = [];
+
         function showToast(message) {
 
             const toast = document.getElementById("toast");
@@ -1237,6 +1278,55 @@
             setTimeout(function () {
                 toast.classList.remove("show");
             }, 2500);
+        }
+        async function loadWebsiteDates() {
+
+            const { data, error } = await supabaseClient
+                .from("website_dates")
+                .select("website_id, added_at");
+
+            if (error) {
+                console.log("Load website dates error:", error);
+                return;
+            }
+
+            websiteDates = data;
+
+            for (let website of websites) {
+
+                const websiteId = Number(
+                    website.getAttribute("data-id")
+                );
+
+                const result = data.find(function (item) {
+                    return Number(item.website_id) === websiteId;
+                });
+
+                if (!result) {
+                    continue;
+                }
+
+                let dateElement = website.querySelector(".website-date");
+
+                if (!dateElement) {
+                    dateElement = document.createElement("p");
+                    dateElement.className = "website-date";
+
+                    const likeBox = website.querySelector(".like-box");
+
+                    website.insertBefore(dateElement, likeBox);
+                }
+
+                const date = new Date(result.added_at);
+
+                dateElement.textContent =
+                    "📅 Added: " +
+                    date.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric"
+                    });
+            }
         }
         async function loadLikes() {
 
@@ -1711,6 +1801,7 @@
         sort_select.addEventListener("change", function () {
 
             const container = document.getElementById("websites-container");
+
             const website_array = Array.from(websites);
 
             if (sort_select.value === "liked-only") {
@@ -1718,7 +1809,9 @@
                 for (let website of website_array) {
 
                     const websiteId = website.getAttribute("data-id");
-                    const likedKey = "liked_website_" + websiteId;
+
+                    const likedKey =
+                        "liked_website_" + websiteId;
 
                     if (localStorage.getItem(likedKey)) {
                         website.style.display = "";
@@ -1738,52 +1831,108 @@
 
                 if (sort_select.value === "low-high") {
 
-                    const id_a = Number(a.getAttribute("data-id"));
-                    const id_b = Number(b.getAttribute("data-id"));
+                    const id_a =
+                        Number(a.getAttribute("data-id"));
+
+                    const id_b =
+                        Number(b.getAttribute("data-id"));
 
                     return id_a - id_b;
                 }
 
                 if (sort_select.value === "high-low") {
 
-                    const id_a = Number(a.getAttribute("data-id"));
-                    const id_b = Number(b.getAttribute("data-id"));
+                    const id_a =
+                        Number(a.getAttribute("data-id"));
+
+                    const id_b =
+                        Number(b.getAttribute("data-id"));
 
                     return id_b - id_a;
                 }
 
                 if (sort_select.value === "likes-low-high") {
 
-                    const likes_a = Number(
-                        a.querySelector(".like-count").textContent
-                    );
+                    const likes_a =
+                        Number(
+                            a.querySelector(".like-count").textContent
+                        );
 
-                    const likes_b = Number(
-                        b.querySelector(".like-count").textContent
-                    );
+                    const likes_b =
+                        Number(
+                            b.querySelector(".like-count").textContent
+                        );
 
                     return likes_a - likes_b;
                 }
 
                 if (sort_select.value === "likes-high-low") {
 
-                    const likes_a = Number(
-                        a.querySelector(".like-count").textContent
-                    );
+                    const likes_a =
+                        Number(
+                            a.querySelector(".like-count").textContent
+                        );
 
-                    const likes_b = Number(
-                        b.querySelector(".like-count").textContent
-                    );
+                    const likes_b =
+                        Number(
+                            b.querySelector(".like-count").textContent
+                        );
 
                     return likes_b - likes_a;
                 }
 
+                if (sort_select.value === "newest") {
+
+                    const id_a =
+                        Number(a.getAttribute("data-id"));
+
+                    const id_b =
+                        Number(b.getAttribute("data-id"));
+
+                    const date_a = websiteDates.find(function (item) {
+                        return Number(item.website_id) === id_a;
+                    });
+
+                    const date_b = websiteDates.find(function (item) {
+                        return Number(item.website_id) === id_b;
+                    });
+
+                    if (!date_a) return 1;
+                    if (!date_b) return -1;
+
+                    return new Date(date_b.added_at) -
+                        new Date(date_a.added_at);
+                }
+
+                if (sort_select.value === "oldest") {
+
+                    const id_a =
+                        Number(a.getAttribute("data-id"));
+
+                    const id_b =
+                        Number(b.getAttribute("data-id"));
+
+                    const date_a = websiteDates.find(function (item) {
+                        return Number(item.website_id) === id_a;
+                    });
+
+                    const date_b = websiteDates.find(function (item) {
+                        return Number(item.website_id) === id_b;
+                    });
+
+                    if (!date_a) return 1;
+                    if (!date_b) return -1;
+
+                    return new Date(date_a.added_at) -
+                        new Date(date_b.added_at);
+                }
+
+                return 0;
             });
 
             website_array.forEach(function (website) {
                 container.appendChild(website);
             });
-
         });
         async function registerUniqueVisit() {
 
@@ -1830,6 +1979,7 @@
         loadTotalComments();
         loadLikes();
         loadLikedStatus();
+        loadWebsiteDates();
         registerUniqueVisit();
     </script>
     <div id="toast" class="toast"></div>
