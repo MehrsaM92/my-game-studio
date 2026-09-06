@@ -334,13 +334,13 @@
 
         .toast {
             position: fixed;
-            top: 20px;
+            top: 120px;
             right: 20px;
             z-index: 9999;
             padding: 14px 20px;
             border-radius: 10px;
-            background-color: rgb(40, 40, 40);
-            color: white;
+            background-color: rgb(51, 255, 0);
+            color: rgb(0, 0, 0);
             font-size: 16px;
             opacity: 0;
             transform: translateY(-20px);
@@ -540,6 +540,7 @@
         <p>Total categories: <span id="category-count">0</span></p>
         <p>Total comments: <span id="comment-count">0</span></p>
         <p>Total likes: <span id="like-count-total">0</span></p>
+        <p>Total visits: <span id="visit-count">0</span></p>
     </div>
 
     <button id="dark-mode">🌙 Dark Mode</button>
@@ -1109,6 +1110,63 @@
             </div>
             <hr>
         </div>
+        <div class="website" data-id="23"
+            data-search="the odin project web development programming html css javascript ruby react full stack"
+            data-ca="Programming Educational">
+
+            <a id="the-odin-project" href="https://www.theodinproject.com/" target="_blank" rel="noopener noreferrer">
+                23. The Odin Project
+            </a>
+
+            <p id="the-odin-project-a">
+                A free platform for <strong><em>learning full-stack web development</em></strong>.
+            </p>
+
+            <p id="the-odin-project-a2">
+                Learn HTML, CSS, JavaScript, React, Node.js, databases, and build real-world projects.
+                (Programming / Web Development)
+            </p>
+
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
+
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+
+            <hr>
+        </div>
+        <div class="website" data-id="24"
+            data-search="perplexity ai search artificial intelligence answers sources research chatbot"
+            data-ca="AI Educational">
+
+            <a id="perplexity" href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer">
+                24. Perplexity
+            </a>
+
+            <p id="perplexity-a">
+                An AI-powered search engine for <strong><em>finding information and getting intelligent
+                        answers</em></strong>.
+            </p>
+
+            <p id="perplexity-a2">
+                Search with AI, get answers with sources, summarize information,
+                and explore topics through conversations. (AI / Research)
+            </p>
+
+            <div class="like-box">
+                <button class="like-button">
+                    ❤️ Like
+                </button>
+
+                <span class="like-count">0</span>
+                <span>Likes</span>
+            </div>
+
+            <hr>
+        </div>
     </div>
     <section id="comments-section" data-ca="Comments">
 
@@ -1149,6 +1207,7 @@
         const dark_mode = document.getElementById("dark-mode");
         const website_count = document.getElementById("website-count");
         const category_count = document.getElementById("category-count");
+        const visit_count = document.getElementById("visit-count");
         const category_button = document.querySelectorAll("#categories button");
         const sort_select = document.getElementById("sort-select");
         const search_message = document.getElementById("search-message");
@@ -1347,6 +1406,7 @@
 
             like_count_total.textContent = totalLikes;
         }
+
         supabaseClient
             .channel("website-likes-realtime")
             .on(
@@ -1374,6 +1434,20 @@
                     likeCount.textContent = newLikes;
 
                     updateTotalLikes();
+                }
+            )
+            .subscribe();
+        supabaseClient
+            .channel("site-visitors-realtime")
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "site_visitors"
+                },
+                function () {
+                    loadVisitorCount();
                 }
             )
             .subscribe();
@@ -1711,10 +1785,52 @@
             });
 
         });
+        async function registerUniqueVisit() {
+
+            let visitorId = localStorage.getItem("codenest_visitor_id");
+
+            if (!visitorId) {
+                visitorId = crypto.randomUUID();
+                localStorage.setItem("codenest_visitor_id", visitorId);
+            }
+
+            const { error } = await supabaseClient.rpc(
+                "register_unique_visitor",
+                {
+                    p_visitor_id: visitorId
+                }
+            );
+
+            if (error) {
+                console.log("Visitor error:", error);
+                return;
+            }
+
+            loadVisitorCount();
+        }
+
+
+        async function loadVisitorCount() {
+
+            const { count, error } = await supabaseClient
+                .from("site_visitors")
+                .select("*", {
+                    count: "exact",
+                    head: true
+                });
+
+            if (error) {
+                console.log("Visitor count error:", error);
+                return;
+            }
+
+            visit_count.textContent = count;
+        }
         loadComments();
         loadTotalComments();
         loadLikes();
         loadLikedStatus();
+        registerUniqueVisit();
     </script>
     <div id="toast" class="toast"></div>
 </body>
