@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,77 +51,93 @@
             transform: scale(1.05);
         }
 
+        #game-section {
+            width: min(900px, 94vw);
+            margin: 50px auto;
+            padding: 40px 25px;
+            text-align: center;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #game-section h2 {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        #flappy-intro {
+            font-size: 18px;
+            line-height: 1.7;
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+
+        #start-game-button {
+            border: none;
+            padding: 15px 30px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        #start-game-button:hover {
+            transform: translateY(-2px) scale(1.02);
+        }
+
         #leaderboard {
-            width: 100%;
-            max-width: 600px;
-
-            margin: 30px auto 0;
-
-            padding: 20px;
-
-            border-radius: 18px;
-
-            background: white;
-
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-
-            box-sizing: border-box;
+            width: min(650px, 100%);
+            margin: 40px auto 0;
         }
 
         #leaderboard h3 {
-            margin-top: 0;
-            margin-bottom: 20px;
-
-            font-size: 22px;
+            font-size: 25px;
+            margin-bottom: 5px;
         }
 
-        #leaderboard-list {
-            display: flex;
-            flex-direction: column;
-
-            gap: 10px;
+        .leaderboard-subtitle {
+            opacity: 0.65;
+            margin-bottom: 20px;
         }
 
         .leaderboard-row {
-            display: flex;
-
+            display: grid;
+            grid-template-columns: 60px 1fr 120px 90px;
             align-items: center;
-
-            padding: 12px 15px;
-
+            gap: 10px;
+            padding: 14px 18px;
+            margin-bottom: 8px;
             border-radius: 12px;
-
-            background: #f5f5f5;
-
-            font-size: 16px;
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .leaderboard-rank {
-            width: 45px;
-
-            font-weight: bold;
-
-            text-align: center;
+            font-weight: 800;
+            text-align: left;
         }
 
         .leaderboard-name {
-            flex: 1;
-
             text-align: left;
-
-            font-weight: bold;
-
+            font-weight: 600;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
+        .leaderboard-player-rank {
+            text-align: center;
+            font-weight: 800;
+        }
+
         .leaderboard-score {
-            min-width: 70px;
-
             text-align: right;
+            font-weight: 800;
+        }
 
-            font-weight: bold;
+        .leaderboard-row:nth-child(1) {
+            font-size: 18px;
         }
 
         #dark-mode {
@@ -176,98 +192,6 @@
             transform: scale(1.08);
             background-color: blueviolet;
             color: white;
-        }
-
-        #game-section {
-            width: 90%;
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 25px;
-            text-align: center;
-
-            border-radius: 20px;
-            background: #f5f5f5;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        #game-section h2 {
-            margin-bottom: 10px;
-        }
-
-        #game-description {
-            margin-bottom: 20px;
-        }
-
-        #game-info {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 20px;
-
-            font-size: 18px;
-        }
-
-        #start-game-button {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 12px;
-
-            background: #222;
-            color: white;
-
-            font-size: 16px;
-            font-weight: bold;
-
-            cursor: pointer;
-        }
-
-        #start-game-button:hover {
-            transform: scale(1.05);
-        }
-
-        #game-area {
-            position: relative;
-
-            width: 100%;
-            height: 400px;
-
-            margin-top: 25px;
-
-            border-radius: 15px;
-            border: 2px solid #ccc;
-
-            background: white;
-
-            overflow: hidden;
-        }
-
-        #target-button {
-            position: absolute;
-
-            display: none;
-
-            padding: 12px 20px;
-
-            border: none;
-            border-radius: 10px;
-
-            background: #222;
-            color: white;
-
-            font-size: 16px;
-            font-weight: bold;
-
-            cursor: pointer;
-        }
-
-        #target-button:hover {
-            transform: scale(1.05);
-        }
-
-        #game-result {
-            font-size: 20px;
-            font-weight: bold;
-            margin-top: 20px;
         }
 
         #search-box {
@@ -655,15 +579,21 @@
         @media (max-width: 600px) {
 
             #game-section {
-                width: 95%;
-
-                padding: 15px;
-
-                margin: 20px auto;
+                padding: 30px 15px;
             }
 
             #game-section h2 {
-                font-size: 22px;
+                font-size: 27px;
+            }
+
+            #flappy-intro {
+                font-size: 16px;
+            }
+
+            .leaderboard-row {
+                grid-template-columns: 45px 1fr 90px 65px;
+                padding: 10px;
+                gap: 6px;
             }
 
             #game-description {
@@ -690,11 +620,6 @@
                 padding: 12px;
             }
 
-            #target-button {
-                font-size: 14px;
-
-                padding: 10px 16px;
-            }
 
             #leaderboard {
                 padding: 15px;
@@ -742,6 +667,19 @@
 
             body {
                 overflow-x: hidden;
+            }
+
+            #game-section {
+                margin: 30px 12px;
+                padding: 28px 18px;
+            }
+
+            #game-section h2 {
+                font-size: 24px;
+            }
+
+            #start-game-button {
+                width: 100%;
             }
 
             #welcome {
@@ -912,7 +850,7 @@
 <body>
 
     <select id="language-select">
-        <option value="en">English</option>
+        <option value="en" selected>English</option>
         <option value="fa">فارسی</option>
         <option value="zh">中文</option>
         <option value="ar">العربية</option>
@@ -933,46 +871,30 @@
     <div id="sort-box">
         <select id="sort-select">
 
-            <option value="low-high" selected data-i18n="lowHigh">
-                Low → High
-            </option>
+            <option value="low-high" selected data-i18n="lowHigh">Low → High</option>
 
-            <option value="high-low" data-i18n="highLow">
-                High → Low
-            </option>
+            <option value="high-low" data-i18n="highLow">High → Low</option>
 
-            <option value="likes-low-high" data-i18n="likesLowHigh">
-                Likes: Low → High
-            </option>
+            <option value="likes-low-high" data-i18n="likesLowHigh">Likes: Low → High</option>
 
-            <option value="likes-high-low" data-i18n="likesHighLow">
-                Likes: High → Low
-            </option>
+            <option value="likes-high-low" data-i18n="likesHighLow">Likes: High → Low</option>
 
-            <option value="newest" data-i18n="newest">
-                🆕 Newest → Oldest
-            </option>
+            <option value="newest" data-i18n="newest">🆕 Newest → Oldest</option>
 
-            <option value="oldest" data-i18n="oldest">
-                📅 Oldest → Newest
-            </option>
+            <option value="oldest" data-i18n="oldest">📅 Oldest → Newest</option>
 
-            <option value="liked-only" data-i18n="likedOnly">
-                ❤️ Liked Websites
-            </option>
+            <option value="liked-only" data-i18n="likedOnly">❤️ Liked Websites</option>
 
         </select>
     </div>
 
     <div id="statistics">
 
-        <h2 data-i18n="statistics">
-            📊 CodeNest Statistics
-        </h2>
+        <h2 data-i18n="statistics">📊 CodeNest Statistics</h2>
 
         <p>
             <span data-i18n="totalWebsites">Total websites</span>:
-            <span id="website-count">25</span>
+            <span id="website-count">26</span>
         </p>
 
         <p>
@@ -982,12 +904,12 @@
 
         <p>
             <span data-i18n="totalComments">Total comments</span>:
-            <span id="comment-count">2</span>
+            <span id="comment-count">1</span>
         </p>
 
         <p>
             <span data-i18n="totalLikes">Total likes</span>:
-            <span id="like-count-total">3</span>
+            <span id="like-count-total">2</span>
         </p>
 
         <p>
@@ -1003,9 +925,7 @@
 
         <input type="text" id="search" data-i18n-placeholder="search" placeholder="Search (English only)...">
 
-        <button id="search-button" data-i18n="searchButton">
-            Search
-        </button>
+        <button id="search-button" data-i18n="searchButton">Search</button>
 
     </div>
 
@@ -1016,30 +936,34 @@
     <div id="websites-container">
         <section id="game-section">
 
-            <h2>🎮 CodeNest Reflex</h2>
+            <h2>🐦 CodeNest Flappy Bird</h2>
 
-            <p id="game-description">
-                Click the button before it disappears!
+            <p id="flappy-intro">
+                🔥 Just one more flight...
+                <br>
+                See how far you can go and climb the leaderboard!
             </p>
 
-            <div id="game-info">
-                <span>Time: <strong id="game-time">30</strong></span>
-                <span>🏆 Score: <strong id="game-score">0</strong></span>
-            </div>
-
-            <button id="start-game-button">
-                Start Game
+            <button id="start-game-button" onclick="window.location.href='flappy-bird.html'">
+                🚀 Start Game
             </button>
 
-            <div id="game-area">
-                <button id="target-button">CLICK!</button>
-            </div>
-
-            <p id="game-result"></p>
-            <!-- Leaderboard -->
             <div id="leaderboard">
 
-                <h3>🏆 Top 10 Players</h3>
+                <h3>🏆 Global Top 10</h3>
+
+                <p class="leaderboard-subtitle">
+                    NOOB: 1-10 &nbsp; | &nbsp;
+                    PRO: 11-25 &nbsp; | &nbsp;
+                    LEGEND: 26-35 &nbsp; | &nbsp;
+                    GOD: 36-45 &nbsp; | &nbsp;
+                    IMMORTAL: +45
+                </p>
+
+                <p class="leaderboard-subtitle">
+                    35+ is where the real challenge begins.
+                    50+ is reserved for the best pilots.
+                </p>
 
                 <div id="leaderboard-list">
                     <p>Loading leaderboard...</p>
@@ -1095,7 +1019,7 @@
 
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-                <span class="like-count">1</span>
+                <span class="like-count">0</span>
                 <span class="likes-text">Likes</span>
             </div>
 
@@ -1784,23 +1708,15 @@
             ×
         </button>
 
-        <h3 data-i18n="reviewTitle">
-            What do you think about CodeNest?
-        </h3>
+        <h3 data-i18n="reviewTitle">What do you think about CodeNest?</h3>
 
-        <p data-i18n="reviewText">
-            You've been here for a while. We'd love to hear your opinion!
-        </p>
+        <p data-i18n="reviewText">You&#39;ve been here for a while. We&#39;d love to hear your opinion!</p>
 
         <div class="review-popup-buttons">
 
-            <button id="go-comments" data-i18n="leaveComment">
-                💬 Leave a comment
-            </button>
+            <button id="go-comments" data-i18n="leaveComment">💬 Leave a comment</button>
 
-            <button id="dismiss-review" data-i18n="maybeLater">
-                Maybe later
-            </button>
+            <button id="dismiss-review" data-i18n="maybeLater">Maybe later</button>
 
         </div>
 
@@ -1809,14 +1725,10 @@
 
     <section id="comments-section" data-ca="Comments">
 
-        <h2 data-i18n="commentsTitle">
-            💬 Comments & Website Suggestions
-        </h2>
+        <h2 data-i18n="commentsTitle">💬 Comments &amp; Website Suggestions</h2>
 
-        <p data-i18n="commentsDescription">
-            Here, you can leave comments, view others' comments, and suggest websites for us to include in future
-            versions. Your comment will be displayed after it has been approved.
-        </p>
+        <p data-i18n="commentsDescription">Here, you can leave comments, view others&#39; comments, and suggest websites
+            for us to include in future versions. Your comment will be displayed after it has been approved.</p>
 
         <input id="comment-name" type="text" placeholder="Your name" data-i18n-placeholder="yourName">
 
@@ -1826,26 +1738,31 @@
 
         <input id="site-url" type="url" placeholder="Website URL (optional)" data-i18n-placeholder="websiteURL">
 
-        <button id="comment-submit" data-i18n="submit">
-            Submit
-        </button>
+        <button id="comment-submit" data-i18n="submit">Submit</button>
 
         <p id="comment-message"></p>
 
-        <div id="comments-list"></div>
+        <div id="comments-list">
+            <div class="comment">
+                <h3>Mehrsam</h3>
+                <p>Hello. This is a great site because it introduces useful websites. Please feature more gaming-related
+                    sites.</p><small>Sep 4, 2026</small>
+                <div class="admin-reply">
+                    <h4>👑 Admin</h4>
+                    <p>Hello Mehrsam. Thank you very much for your comment. We are working on expanding the number of
+                        gaming-related sites.</p><small>Sep 4, 2026</small>
+                </div>
+            </div>
+        </div>
 
     </section>
 
 
     <div>
 
-        <p id="coming-soon" data-i18n="moreThings">
-            More things will be added later.
-        </p>
+        <p id="coming-soon" data-i18n="moreThings">More things will be added later.</p>
 
-        <p id="all" data-i18n="allRights">
-            © 2026 — All rights reserved.
-        </p>
+        <p id="all" data-i18n="allRights">© 2026 — All rights reserved.</p>
 
     </div>
 
@@ -1882,79 +1799,7 @@
         const comment_message = document.getElementById("comment-message");
         const comment_count = document.getElementById("comment-count");
         const like_count_total = document.getElementById("like-count-total");
-        const startGameButton = document.getElementById("start-game-button");
-        const targetButton = document.getElementById("target-button");
 
-        const gameArea = document.getElementById("game-area");
-
-        const gameTime = document.getElementById("game-time");
-        const gameScore = document.getElementById("game-score");
-
-        const gameResult = document.getElementById("game-result");
-        const leaderboardList =
-            document.getElementById("leaderboard-list");
-
-
-        async function loadLeaderboard() {
-
-            leaderboardList.innerHTML =
-                "<p>Loading leaderboard...</p>";
-
-            const { data, error } = await supabaseClient
-                .from("game_scores")
-                .select("player_name, score, created_at")
-                .order("score", { ascending: false })
-                .limit(10);
-
-            if (error) {
-
-                console.error("Leaderboard error:", error);
-
-                leaderboardList.innerHTML =
-                    "<p>Could not load leaderboard.</p>";
-
-                return;
-            }
-
-            if (!data || data.length === 0) {
-
-                leaderboardList.innerHTML =
-                    "<p>No scores yet. Be the first!</p>";
-
-                return;
-            }
-
-            leaderboardList.innerHTML = "";
-
-            data.forEach(function (player, index) {
-
-                const row = document.createElement("div");
-
-                row.className = "leaderboard-row";
-
-                let rank = `${index + 1}.`;
-
-                if (index === 0) rank = "🥇";
-                else if (index === 1) rank = "🥈";
-                else if (index === 2) rank = "🥉";
-
-                row.innerHTML = `
-        <span class="leaderboard-rank">
-            ${rank}
-        </span>
-
-        <span class="leaderboard-name">
-            ${escapeHTML(player.player_name)}
-        </span>
-
-        <span class="leaderboard-score">
-            ${player.score}
-        </span>
-    `;
-
-                leaderboardList.appendChild(row);
-            });
-        }
         function escapeHTML(text) {
 
             const div = document.createElement("div");
@@ -1963,174 +1808,7 @@
 
             return div.innerHTML;
         }
-        async function saveScore(playerName, playerScore) {
 
-            const { data, error } = await supabaseClient
-                .from("game_scores")
-                .insert([
-                    {
-                        player_name: playerName,
-                        score: playerScore
-                    }
-                ])
-                .select();
-
-            if (error) {
-
-                console.error("Save score error:", error);
-
-                return false;
-            }
-
-            return true;
-        }
-        let score = 0;
-        let timeLeft = 30;
-
-        let gameRunning = false;
-
-        let gameTimer;
-        let buttonTimer;
-
-
-        startGameButton.addEventListener("click", startGame);
-
-
-        function startGame() {
-
-            if (gameRunning) return;
-
-            score = 0;
-            timeLeft = 30;
-
-            gameRunning = true;
-
-            gameScore.textContent = score;
-            gameTime.textContent = timeLeft;
-
-            gameResult.textContent = "";
-
-            startGameButton.disabled = true;
-            startGameButton.textContent = "Playing...";
-
-            showTarget();
-
-            gameTimer = setInterval(() => {
-
-                timeLeft--;
-
-                gameTime.textContent = timeLeft;
-
-                if (timeLeft <= 0) {
-                    endGame();
-                }
-
-            }, 1000);
-        }
-
-
-        function showTarget() {
-            if (!gameRunning) return;
-
-            clearTimeout(buttonTimer);
-
-            targetButton.style.display = "block";
-
-            const areaWidth = gameArea.clientWidth;
-            const areaHeight = gameArea.clientHeight;
-
-            const buttonWidth = targetButton.offsetWidth;
-            const buttonHeight = targetButton.offsetHeight;
-
-            const maxX = areaWidth - buttonWidth;
-            const maxY = areaHeight - buttonHeight;
-
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
-
-            targetButton.style.left = `${randomX}px`;
-            targetButton.style.top = `${randomY}px`;
-
-            const targetTime = timeLeft <= 10 ? 500 : 1000;
-
-            buttonTimer = setTimeout(() => {
-                targetButton.style.display = "none";
-                showTarget();
-            }, targetTime);
-        }
-
-
-        targetButton.addEventListener("click", () => {
-
-            if (!gameRunning) return;
-
-
-            score++;
-
-            gameScore.textContent = score;
-
-
-            clearTimeout(buttonTimer);
-
-            targetButton.style.display = "none";
-
-
-            showTarget();
-        });
-
-
-        async function endGame() {
-
-            gameRunning = false;
-
-
-            clearInterval(gameTimer);
-            clearTimeout(buttonTimer);
-
-
-            targetButton.style.display = "none";
-
-
-            startGameButton.disabled = false;
-
-            startGameButton.textContent = "Play Again";
-
-
-            gameResult.textContent =
-                `🎉 Game Over! Your score: ${score}`;
-
-
-            const playerName = prompt(
-                "Enter your name for the leaderboard:"
-            );
-
-
-            if (playerName && playerName.trim()) {
-
-                const name =
-                    playerName.trim().slice(0, 20);
-
-
-                const saved =
-                    await saveScore(name, score);
-
-
-                if (saved) {
-
-                    gameResult.textContent =
-                        `🎉 Score saved! Your score: ${score}`;
-
-                    loadLeaderboard();
-
-                } else {
-
-                    gameResult.textContent =
-                        `Your score: ${score} — Could not save score.`;
-
-                }
-
-            }
-        }
 
         let websiteDates = [];
 
@@ -2146,6 +1824,137 @@
             setTimeout(function () {
                 toast.classList.remove("show");
             }, 2500);
+        }
+        function getLeaderboardRank(score) {
+
+            if (score < 10) {
+
+                return "NOOB";
+
+            }
+
+            if (score < 25) {
+
+                return "PRO";
+
+            }
+
+            if (score < 35) {
+
+                return "LEGEND";
+
+            }
+
+            if (score < 45) {
+
+                return "GOD";
+
+            }
+
+            return "IMMORTAL";
+
+        }
+        async function loadFlappyLeaderboard() {
+
+            const leaderboardList =
+                document.getElementById(
+                    "leaderboard-list"
+                );
+
+            if (!leaderboardList) {
+                return;
+            }
+
+            leaderboardList.innerHTML =
+                "<p>Loading leaderboard...</p>";
+
+            const { data, error } =
+                await supabaseClient.rpc(
+                    "get_flappy_leaderboard"
+                );
+
+            if (error) {
+
+                console.error(
+                    "Leaderboard error:",
+                    error
+                );
+
+                leaderboardList.innerHTML =
+                    "<p>Unable to load leaderboard.</p>";
+
+                return;
+            }
+
+            if (!data || data.length === 0) {
+
+                leaderboardList.innerHTML =
+                    "<p>No scores yet. Be the first!</p>";
+
+                return;
+            }
+
+            leaderboardList.innerHTML = "";
+
+            data.forEach(function (player) {
+
+                const row =
+                    document.createElement("div");
+
+                row.className =
+                    "leaderboard-row";
+
+                row.innerHTML = `
+
+        <div class="leaderboard-rank">
+            #${player.rank_position}
+        </div>
+
+        <div class="leaderboard-name">
+            ${escapeHtml(
+                    player.player_name
+                )}
+        </div>
+
+        <div class="leaderboard-player-rank">
+    ${getLeaderboardRank(player.best_score)}
+</div>
+
+        <div class="leaderboard-score">
+            ${player.best_score}
+        </div>
+
+                `;
+
+                leaderboardList.appendChild(row);
+            });
+        }
+
+
+        function escapeHtml(value) {
+
+            const div =
+                document.createElement("div");
+
+            div.textContent = value;
+
+            return div.innerHTML;
+        }
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            loadFlappyLeaderboard
+        );
+
+        function escapeLeaderboardText(text) {
+
+            return String(text)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
 
@@ -3116,34 +2925,12 @@
             }
         });
 
-        // ===============================
-        // SUPABASE REALTIME
-        // ===============================
-
-        supabaseClient
-            .channel("game-scores-realtime")
-            .on(
-                "postgres_changes",
-                {
-                    event: "INSERT",
-                    schema: "public",
-                    table: "game_scores"
-                },
-                function (payload) {
-                    console.log("New score:", payload.new);
-
-                    loadLeaderboard();
-                }
-            )
-            .subscribe();
-
         loadComments();
         loadTotalComments();
         loadLikes();
         loadLikedStatus();
         loadWebsiteDates();
         registerUniqueVisit();
-        loadLeaderboard();
 
     </script>
 
@@ -3793,6 +3580,9 @@
         applyTranslations();
 
     </script>
+
+
+
 
 </body>
 
