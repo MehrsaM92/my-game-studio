@@ -3,9 +3,10 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeNest Studio — Useful Websites for Programming, AI & Web Development</title>
+    <link rel="icon" type="image/png" href="Bug.png">
     <meta name="description"
-        content="A collection of useful websites for learning, programming, AI, web development and downloading apps.">
-    <title>CodeNest Studio</title>
+        content="Discover useful websites for programming, AI, web development, education, design, SEO and productivity. CodeNest Studio brings helpful tools and resources together in one place.">
 
     <style>
         body {
@@ -18,6 +19,109 @@
             color: rgb(124, 88, 40);
             font-size: 100px;
             text-shadow: 3px 3px 5px rgb(80, 80, 80);
+        }
+
+        #language-select {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+
+            width: 160px;
+            height: 50px;
+
+            border-radius: 15px;
+            border: 2px solid rgb(100, 100, 100);
+
+            background-color: white;
+            color: black;
+
+            font-size: 17px;
+            font-weight: bold;
+
+            text-align: center;
+            direction: ltr;
+
+            cursor: pointer;
+            z-index: 9999;
+
+            transition: 0.25s;
+        }
+
+        #language-select:hover {
+            transform: scale(1.05);
+        }
+
+        #leaderboard {
+            width: 100%;
+            max-width: 600px;
+
+            margin: 30px auto 0;
+
+            padding: 20px;
+
+            border-radius: 18px;
+
+            background: white;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+            box-sizing: border-box;
+        }
+
+        #leaderboard h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+
+            font-size: 22px;
+        }
+
+        #leaderboard-list {
+            display: flex;
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+        .leaderboard-row {
+            display: flex;
+
+            align-items: center;
+
+            padding: 12px 15px;
+
+            border-radius: 12px;
+
+            background: #f5f5f5;
+
+            font-size: 16px;
+        }
+
+        .leaderboard-rank {
+            width: 45px;
+
+            font-weight: bold;
+
+            text-align: center;
+        }
+
+        .leaderboard-name {
+            flex: 1;
+
+            text-align: left;
+
+            font-weight: bold;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .leaderboard-score {
+            min-width: 70px;
+
+            text-align: right;
+
+            font-weight: bold;
         }
 
         #dark-mode {
@@ -72,6 +176,98 @@
             transform: scale(1.08);
             background-color: blueviolet;
             color: white;
+        }
+
+        #game-section {
+            width: 90%;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 25px;
+            text-align: center;
+
+            border-radius: 20px;
+            background: #f5f5f5;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        #game-section h2 {
+            margin-bottom: 10px;
+        }
+
+        #game-description {
+            margin-bottom: 20px;
+        }
+
+        #game-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+
+            font-size: 18px;
+        }
+
+        #start-game-button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 12px;
+
+            background: #222;
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        #start-game-button:hover {
+            transform: scale(1.05);
+        }
+
+        #game-area {
+            position: relative;
+
+            width: 100%;
+            height: 400px;
+
+            margin-top: 25px;
+
+            border-radius: 15px;
+            border: 2px solid #ccc;
+
+            background: white;
+
+            overflow: hidden;
+        }
+
+        #target-button {
+            position: absolute;
+
+            display: none;
+
+            padding: 12px 20px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #222;
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        #target-button:hover {
+            transform: scale(1.05);
+        }
+
+        #game-result {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
         }
 
         #search-box {
@@ -458,12 +654,90 @@
 
         @media (max-width: 600px) {
 
+            #game-section {
+                width: 95%;
+
+                padding: 15px;
+
+                margin: 20px auto;
+            }
+
+            #game-section h2 {
+                font-size: 22px;
+            }
+
+            #game-description {
+                font-size: 14px;
+            }
+
+            #game-info {
+                gap: 15px;
+
+                font-size: 15px;
+
+                flex-wrap: wrap;
+            }
+
+            #game-area {
+                height: 320px;
+
+                margin-top: 20px;
+            }
+
+            #start-game-button {
+                width: 100%;
+
+                padding: 12px;
+            }
+
+            #target-button {
+                font-size: 14px;
+
+                padding: 10px 16px;
+            }
+
+            #leaderboard {
+                padding: 15px;
+
+                margin-top: 20px;
+            }
+
+            #leaderboard h3 {
+                font-size: 19px;
+            }
+
+            .leaderboard-row {
+                padding: 10px;
+
+                font-size: 14px;
+            }
+
+            .leaderboard-rank {
+                width: 35px;
+            }
+
+            .leaderboard-score {
+                min-width: 55px;
+            }
+
+
+
             .review-popup {
                 left: 15px;
                 right: 15px;
                 bottom: 15px;
 
                 width: auto;
+            }
+
+            #language-select {
+                top: 10px;
+                left: 10px;
+
+                width: 130px;
+                height: 42px;
+
+                font-size: 14px;
             }
 
             body {
@@ -617,54 +891,163 @@
             }
         }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        const lang = navigator.language.toLowerCase();
+
+        let currentLang = "en";
+
+        if (lang.startsWith("fa")) currentLang = "fa";
+        else if (lang.startsWith("zh")) currentLang = "zh";
+        else if (lang.startsWith("ar")) currentLang = "ar";
+
+        document.documentElement.lang = currentLang;
+        document.documentElement.dir =
+            (currentLang === "fa" || currentLang === "ar") ? "rtl" : "ltr";
+    </script>
 </head>
 
 <body>
 
+    <select id="language-select">
+        <option value="en">English</option>
+        <option value="fa">فارسی</option>
+        <option value="zh">中文</option>
+        <option value="ar">العربية</option>
+    </select>
+
     <div id="categories">
-        <button class="category">All</button>
-        <button class="category">Educational</button>
-        <button class="category">AI</button>
-        <button class="category">Programming</button>
-        <button class="category">Game</button>
-        <button class="category">Design</button>
-        <button class="category">SEO</button>
-        <button class="category">Productivity</button>
-        <button class="category">Comments</button>
+        <button class="category" data-category="all" data-i18n="all">All</button>
+        <button class="category" data-category="educational" data-i18n="educational">Educational</button>
+        <button class="category" data-category="ai" data-i18n="ai">AI</button>
+        <button class="category" data-category="programming" data-i18n="programming">Programming</button>
+        <button class="category" data-category="game" data-i18n="game">Game</button>
+        <button class="category" data-category="design" data-i18n="design">Design</button>
+        <button class="category" data-category="seo" data-i18n="seo">SEO</button>
+        <button class="category" data-category="productivity" data-i18n="productivity">Productivity</button>
+        <button class="category" data-category="comments" data-i18n="comments">Comments</button>
     </div>
+
     <div id="sort-box">
-
         <select id="sort-select">
-            <option value="low-high" selected>Low → High</option>
-            <option value="high-low">High → Low</option>
-            <option value="likes-low-high">Likes: Low → High</option>
-            <option value="likes-high-low">Likes: High → Low</option>
-            <option value="newest">🆕 Newest → Oldest</option>
-            <option value="oldest">📅 Oldest → Newest</option>
-            <option value="liked-only">❤️ Liked Websites</option>
+
+            <option value="low-high" selected data-i18n="lowHigh">
+                Low → High
+            </option>
+
+            <option value="high-low" data-i18n="highLow">
+                High → Low
+            </option>
+
+            <option value="likes-low-high" data-i18n="likesLowHigh">
+                Likes: Low → High
+            </option>
+
+            <option value="likes-high-low" data-i18n="likesHighLow">
+                Likes: High → Low
+            </option>
+
+            <option value="newest" data-i18n="newest">
+                🆕 Newest → Oldest
+            </option>
+
+            <option value="oldest" data-i18n="oldest">
+                📅 Oldest → Newest
+            </option>
+
+            <option value="liked-only" data-i18n="likedOnly">
+                ❤️ Liked Websites
+            </option>
+
         </select>
-
     </div>
-    <div id="statistics">
-        <h2>📊 CodeNest Statistics</h2>
 
-        <p>Total websites: <span id="website-count">25</span></p>
-        <p>Total categories: <span id="category-count">9</span></p>
-        <p>Total comments: <span id="comment-count">2</span></p>
-        <p>Total likes: <span id="like-count-total">3</span></p>
-        <p>Total visits: <span id="visit-count">7</span></p>
+    <div id="statistics">
+
+        <h2 data-i18n="statistics">
+            📊 CodeNest Statistics
+        </h2>
+
+        <p>
+            <span data-i18n="totalWebsites">Total websites</span>:
+            <span id="website-count">25</span>
+        </p>
+
+        <p>
+            <span data-i18n="totalCategories">Total categories</span>:
+            <span id="category-count">9</span>
+        </p>
+
+        <p>
+            <span data-i18n="totalComments">Total comments</span>:
+            <span id="comment-count">2</span>
+        </p>
+
+        <p>
+            <span data-i18n="totalLikes">Total likes</span>:
+            <span id="like-count-total">3</span>
+        </p>
+
+        <p>
+            <span data-i18n="totalVisits">Total visits</span>:
+            <span id="visit-count">7</span>
+        </p>
+
     </div>
 
     <button id="dark-mode">🌙 Dark Mode</button>
 
     <div id="search-box">
-        <input type="text" id="search" placeholder="Search">
-        <button id="search-button">Search</button>
+
+        <input type="text" id="search" data-i18n-placeholder="search" placeholder="Search (English only)...">
+
+        <button id="search-button" data-i18n="searchButton">
+            Search
+        </button>
+
     </div>
+
     <p id="search-message"></p>
-    <h1 id="welcome">Welcome</h1>
+
+    <h1 id="welcome" data-i18n="welcome">Welcome</h1>
+
     <div id="websites-container">
+        <section id="game-section">
+
+            <h2>🎮 CodeNest Reflex</h2>
+
+            <p id="game-description">
+                Click the button before it disappears!
+            </p>
+
+            <div id="game-info">
+                <span>Time: <strong id="game-time">30</strong></span>
+                <span>🏆 Score: <strong id="game-score">0</strong></span>
+            </div>
+
+            <button id="start-game-button">
+                Start Game
+            </button>
+
+            <div id="game-area">
+                <button id="target-button">CLICK!</button>
+            </div>
+
+            <p id="game-result"></p>
+            <!-- Leaderboard -->
+            <div id="leaderboard">
+
+                <h3>🏆 Top 10 Players</h3>
+
+                <div id="leaderboard-list">
+                    <p>Loading leaderboard...</p>
+                </div>
+
+            </div>
+
+        </section>
         <div class="website" data-id="1"
             data-search="kodamoz tutorials programming html css javascript python web educational"
             data-ca="Educational Programming">
@@ -680,15 +1063,18 @@
             <p id="kodamoz-a2">
                 HTML - CSS - JavaScript - Python... (Educational)
             </p>
+
             <p class="website-date">📅 Added: Sep 1, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
 
         <div class="website" data-id="2" data-search="chatgpt ai artificial intelligence questions answers assistant"
             data-ca="AI">
@@ -704,15 +1090,18 @@
             <p id="chatgpt-a2">
                 Learn and get help with AI. (AI)
             </p>
+
             <p class="website-date">📅 Added: Sep 1, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">1</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
 
         <div class="website" data-id="3" data-search="github development repository coding projects sourcecode"
             data-ca="Programming">
@@ -728,15 +1117,18 @@
             <p id="GitHub-a2">
                 Store and share your projects. (Development)
             </p>
+
             <p class="website-date">📅 Added: Sep 1, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
 
         <div class="website" data-id="4" data-search="google seo monitoring indexing performance analytics"
             data-ca="SEO">
@@ -753,15 +1145,18 @@
             <p id="google-search-console-a2">
                 Monitor your website's search performance. (SEO)
             </p>
+
             <p class="website-date">📅 Added: Sep 2, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
 
         <div class="website" data-id="5" data-search="canva design graphics presentations posters creativity"
             data-ca="Design">
@@ -779,15 +1174,18 @@
                 Create beautiful designs easily for school, projects, social media,
                 and presentations. (Design)
             </p>
+
             <p class="website-date">📅 Added: Sep 2, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
 
         <div class="website" data-id="6" data-search="filemanager python folders files windows explorer download"
             data-ca="Programming">
@@ -803,15 +1201,18 @@
             <p id="file-manager-a2">
                 Browse folders and manage files. (Python)
             </p>
+
             <p class="website-date">📅 Added: Sep 2, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
 
         <div class="website" data-id="7"
             data-search="kenney game development assets characters environments sprites icons" data-ca="Game">
@@ -828,15 +1229,18 @@
                 Find characters, environments, UI elements, icons, and more for game development.
                 (Game Development / Assets)
             </p>
+
             <p class="website-date">📅 Added: Sep 3, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
 
         <div class="website" data-id="8"
             data-search="gdevelop game development engine nocode visual events behaviors gamemaker" data-ca="Game">
@@ -853,15 +1257,19 @@
                 Create games with visual events, ready-made behaviors,
                 and optional JavaScript. (Game Development)
             </p>
+
             <p class="website-date">📅 Added: Sep 3, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
+
         <div class="website" data-id="9" data-search="call of duty CODM mobile warzone modern warfare game fps shooting"
             data-ca="Game">
 
@@ -876,15 +1284,19 @@
             <p id="call-of-duty-a2">
                 Play different game modes, improve your skills, and enjoy fast-paced combat. (Game)
             </p>
+
             <p class="website-date">📅 Added: Sep 3, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">1</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
+
         <div class="website" data-id="10"
             data-search="supabase database postgresql backend authentication auth storage realtime edge functions api javascript python ai vector"
             data-ca="Programming">
@@ -901,15 +1313,19 @@
                 Provides PostgreSQL database, authentication, storage, realtime features,
                 APIs, and edge functions. (Backend / Development)
             </p>
+
             <p class="website-date">📅 Added: Sep 4, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
+
         <div class="website" data-id="11" data-search="minecraft game sandbox survival adventure building multiplayer"
             data-ca="Game">
 
@@ -919,22 +1335,25 @@
 
             <p id="minecraft-a">
                 A popular <strong><em>sandbox adventure game</em></strong> where you can explore, build, and create your
-                own
-                worlds.
+                own worlds.
             </p>
 
             <p id="minecraft-a2">
                 Explore different worlds, gather resources, build structures, survive, and play with friends. (Game)
             </p>
+
             <p class="website-date">📅 Added: Sep 4, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">1</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
+
         <div class="website" data-id="12"
             data-search="duolingo language learning english spanish french german languages education"
             data-ca="Educational">
@@ -950,15 +1369,19 @@
             <p id="duolingo-a2">
                 Learn languages through interactive lessons, exercises, and practice. (Educational / Languages)
             </p>
+
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
+
         <div class="website" data-id="13"
             data-search="hugging face ai artificial intelligence machine learning models datasets tools" data-ca="AI">
 
@@ -973,15 +1396,19 @@
             <p id="hugging-face-a2">
                 Discover AI models, datasets, demos, and tools for artificial intelligence and machine learning. (AI)
             </p>
+
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
+
         <div class="website" data-id="14"
             data-search="adobe express design graphic design poster social media presentation logo templates"
             data-ca="Design">
@@ -998,15 +1425,19 @@
                 Create posters, social media posts, presentations, logos, and more with ready-made templates and design
                 tools. (Design)
             </p>
+
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
+
         <div class="website" data-id="15"
             data-search="bing webmaster tools seo search engine website analytics indexing keywords" data-ca="SEO">
 
@@ -1021,15 +1452,19 @@
             <p id="bing-webmaster-a2">
                 Check website performance, search traffic, indexing, keywords, and SEO information on Bing. (SEO)
             </p>
+
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
+
         <div class="website" data-id="16"
             data-search="stack overflow programming coding questions answers developers javascript python html css errors"
             data-ca="Programming">
@@ -1045,15 +1480,19 @@
             <p id="stack-overflow-a2">
                 Find solutions, learn programming concepts, and get help with coding problems. (Programming)
             </p>
+
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
+
         <div class="website" data-id="17"
             data-search="khan academy education learning math science history english courses" data-ca="Educational">
 
@@ -1068,15 +1507,18 @@
             <p id="khan-academy-a2">
                 Learn math, science, history, English, economics, and more through lessons and practice. (Educational)
             </p>
+
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
 
         <div class="website" data-id="18"
             data-search="trello productivity project management tasks boards cards organization" data-ca="Productivity">
@@ -1092,15 +1534,18 @@
             <p id="trello-a2">
                 Manage tasks and projects using boards, lists, and cards. (Productivity)
             </p>
+
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
 
         <div class="website" data-id="19"
             data-search="google scholar research academic papers articles books science education"
@@ -1118,15 +1563,18 @@
                 Find academic papers, articles, books, theses, and research from many different fields. (Educational /
                 Research)
             </p>
+
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
 
         <div class="website" data-id="20"
             data-search="wolfram alpha math science calculations knowledge education physics chemistry"
@@ -1144,15 +1592,19 @@
                 Get answers and perform calculations in mathematics, science, engineering, and many other subjects.
                 (Educational)
             </p>
+
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
+
         <div class="website" data-id="21"
             data-search="google keep notes reminders lists tasks productivity organization" data-ca="Productivity">
 
@@ -1167,15 +1619,19 @@
             <p id="google-keep-a2">
                 Create notes, checklists, reminders, and organize your ideas easily. (Productivity)
             </p>
+
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
+
         <div class="website" data-id="22"
             data-search="google translate translator translation languages text image documents websites"
             data-ca="Educational Productivity">
@@ -1192,15 +1648,19 @@
                 Translate text, images, documents, and websites between different languages. (Educational /
                 Productivity)
             </p>
+
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
+
             <hr>
         </div>
+
+
         <div class="website" data-id="23"
             data-search="the odin project web development programming html css javascript ruby react full stack"
             data-ca="Programming Educational">
@@ -1219,15 +1679,17 @@
             </p>
 
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
 
             <hr>
         </div>
+
+
         <div class="website" data-id="24"
             data-search="perplexity ai search artificial intelligence answers sources research chatbot"
             data-ca="AI Educational">
@@ -1247,15 +1709,17 @@
             </p>
 
             <p class="website-date">📅 Added: Sep 5, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
             </div>
 
             <hr>
         </div>
+
+
         <div class="website" data-id="25"
             data-search="ign games video games reviews news walkthrough xbox playstation pc nintendo" data-ca="Game">
 
@@ -1273,71 +1737,119 @@
             </p>
 
             <p class="website-date">📅 Added: Sep 6, 2026</p>
+
             <div class="like-box">
                 <button class="like-button">❤️ Like</button>
-
                 <span class="like-count">0</span>
-                <span>Likes</span>
+                <span class="likes-text">Likes</span>
+            </div>
+
+            <hr>
+        </div>
+
+        <div class="website" data-id="26"
+            data-search="brilliant interactive learning math computer science programming ai science problem solving"
+            data-ca="Educational">
+
+            <a id="brilliant" href="https://brilliant.org/" target="_blank" rel="noopener noreferrer">
+                26. Brilliant
+            </a>
+
+            <p id="brilliant-a">
+                A popular platform for <strong><em>interactive learning and problem solving</em></strong>.
+            </p>
+
+            <p id="brilliant-a2">
+                Learn math, computer science, programming, AI, and science through interactive lessons, visual
+                explanations, and hands-on problem solving.
+                (Educational)
+            </p>
+
+            <p class="website-date">📅 Added: Sep 7, 2026</p>
+
+            <div class="like-box">
+                <button class="like-button">❤️ Like</button>
+                <span class="like-count">0</span>
+                <span class="likes-text">Likes</span>
             </div>
 
             <hr>
         </div>
     </div>
+
+
     <div id="review-popup" class="review-popup">
 
         <button id="close-review" class="close-review">
             ×
         </button>
 
-        <h3>What do you think about CodeNest?</h3>
+        <h3 data-i18n="reviewTitle">
+            What do you think about CodeNest?
+        </h3>
 
-        <p>
+        <p data-i18n="reviewText">
             You've been here for a while. We'd love to hear your opinion!
         </p>
 
         <div class="review-popup-buttons">
 
-            <button id="go-comments">
+            <button id="go-comments" data-i18n="leaveComment">
                 💬 Leave a comment
             </button>
 
-            <button id="dismiss-review">
+            <button id="dismiss-review" data-i18n="maybeLater">
                 Maybe later
             </button>
 
         </div>
 
     </div>
+
+
     <section id="comments-section" data-ca="Comments">
 
-        <h2>💬 Comments & Website Suggestions</h2>
+        <h2 data-i18n="commentsTitle">
+            💬 Comments & Website Suggestions
+        </h2>
 
-        <p>Here, you can leave comments, view others' comments, and suggest websites for us to include in future
-            versions. Your comment will be displayed after it has been approved.</p>
+        <p data-i18n="commentsDescription">
+            Here, you can leave comments, view others' comments, and suggest websites for us to include in future
+            versions. Your comment will be displayed after it has been approved.
+        </p>
 
-        <input id="comment-name" type="text" placeholder="Your name">
+        <input id="comment-name" type="text" placeholder="Your name" data-i18n-placeholder="yourName">
 
-        <textarea id="comment-text" placeholder="Write your comment..."></textarea>
+        <textarea id="comment-text" placeholder="Write your comment..." data-i18n-placeholder="writeComment"></textarea>
 
-        <input id="site-name" type="text" placeholder="Website name (optional)">
+        <input id="site-name" type="text" placeholder="Website name (optional)" data-i18n-placeholder="websiteName">
 
-        <input id="site-url" type="url" placeholder="Website URL (optional)">
+        <input id="site-url" type="url" placeholder="Website URL (optional)" data-i18n-placeholder="websiteURL">
 
-        <button id="comment-submit">Submit</button>
+        <button id="comment-submit" data-i18n="submit">
+            Submit
+        </button>
 
         <p id="comment-message"></p>
 
         <div id="comments-list"></div>
 
     </section>
+
+
     <div>
-        <p id="coming-soon">
+
+        <p id="coming-soon" data-i18n="moreThings">
             More things will be added later.
         </p>
-        <p id="all">
+
+        <p id="all" data-i18n="allRights">
             © 2026 — All rights reserved.
         </p>
+
     </div>
+
+
     <script>
 
         const search_button = document.getElementById("search-button");
@@ -1351,13 +1863,17 @@
         const category_button = document.querySelectorAll("#categories button");
         const sort_select = document.getElementById("sort-select");
         const search_message = document.getElementById("search-message");
+
         const SUPABASE_URL = "https://iqmsaflqplvzfvmdyrwh.supabase.co";
         const SUPABASE_KEY = "sb_publishable_vib0xKSHlp-04KNTM0Y1kg_hc-yjUK5";
+
         const supabaseClient = window.supabase.createClient(
             SUPABASE_URL,
             SUPABASE_KEY
         );
+
         const ADMIN_NAME = "Admin";
+
         const comment_name = document.getElementById("comment-name");
         const comment_text = document.getElementById("comment-text");
         const site_name = document.getElementById("site-name");
@@ -1366,7 +1882,258 @@
         const comment_message = document.getElementById("comment-message");
         const comment_count = document.getElementById("comment-count");
         const like_count_total = document.getElementById("like-count-total");
+        const startGameButton = document.getElementById("start-game-button");
+        const targetButton = document.getElementById("target-button");
+
+        const gameArea = document.getElementById("game-area");
+
+        const gameTime = document.getElementById("game-time");
+        const gameScore = document.getElementById("game-score");
+
+        const gameResult = document.getElementById("game-result");
+        const leaderboardList =
+            document.getElementById("leaderboard-list");
+
+
+        async function loadLeaderboard() {
+
+            leaderboardList.innerHTML =
+                "<p>Loading leaderboard...</p>";
+
+            const { data, error } = await supabaseClient
+                .from("game_scores")
+                .select("player_name, score, created_at")
+                .order("score", { ascending: false })
+                .limit(10);
+
+            if (error) {
+
+                console.error("Leaderboard error:", error);
+
+                leaderboardList.innerHTML =
+                    "<p>Could not load leaderboard.</p>";
+
+                return;
+            }
+
+            if (!data || data.length === 0) {
+
+                leaderboardList.innerHTML =
+                    "<p>No scores yet. Be the first!</p>";
+
+                return;
+            }
+
+            leaderboardList.innerHTML = "";
+
+            data.forEach(function (player, index) {
+
+                const row = document.createElement("div");
+
+                row.className = "leaderboard-row";
+
+                let rank = `${index + 1}.`;
+
+                if (index === 0) rank = "🥇";
+                else if (index === 1) rank = "🥈";
+                else if (index === 2) rank = "🥉";
+
+                row.innerHTML = `
+        <span class="leaderboard-rank">
+            ${rank}
+        </span>
+
+        <span class="leaderboard-name">
+            ${escapeHTML(player.player_name)}
+        </span>
+
+        <span class="leaderboard-score">
+            ${player.score}
+        </span>
+    `;
+
+                leaderboardList.appendChild(row);
+            });
+        }
+        function escapeHTML(text) {
+
+            const div = document.createElement("div");
+
+            div.textContent = text;
+
+            return div.innerHTML;
+        }
+        async function saveScore(playerName, playerScore) {
+
+            const { data, error } = await supabaseClient
+                .from("game_scores")
+                .insert([
+                    {
+                        player_name: playerName,
+                        score: playerScore
+                    }
+                ])
+                .select();
+
+            if (error) {
+
+                console.error("Save score error:", error);
+
+                return false;
+            }
+
+            return true;
+        }
+        let score = 0;
+        let timeLeft = 30;
+
+        let gameRunning = false;
+
+        let gameTimer;
+        let buttonTimer;
+
+
+        startGameButton.addEventListener("click", startGame);
+
+
+        function startGame() {
+
+            if (gameRunning) return;
+
+            score = 0;
+            timeLeft = 30;
+
+            gameRunning = true;
+
+            gameScore.textContent = score;
+            gameTime.textContent = timeLeft;
+
+            gameResult.textContent = "";
+
+            startGameButton.disabled = true;
+            startGameButton.textContent = "Playing...";
+
+            showTarget();
+
+            gameTimer = setInterval(() => {
+
+                timeLeft--;
+
+                gameTime.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+
+            }, 1000);
+        }
+
+
+        function showTarget() {
+            if (!gameRunning) return;
+
+            clearTimeout(buttonTimer);
+
+            targetButton.style.display = "block";
+
+            const areaWidth = gameArea.clientWidth;
+            const areaHeight = gameArea.clientHeight;
+
+            const buttonWidth = targetButton.offsetWidth;
+            const buttonHeight = targetButton.offsetHeight;
+
+            const maxX = areaWidth - buttonWidth;
+            const maxY = areaHeight - buttonHeight;
+
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            targetButton.style.left = `${randomX}px`;
+            targetButton.style.top = `${randomY}px`;
+
+            const targetTime = timeLeft <= 10 ? 500 : 1000;
+
+            buttonTimer = setTimeout(() => {
+                targetButton.style.display = "none";
+                showTarget();
+            }, targetTime);
+        }
+
+
+        targetButton.addEventListener("click", () => {
+
+            if (!gameRunning) return;
+
+
+            score++;
+
+            gameScore.textContent = score;
+
+
+            clearTimeout(buttonTimer);
+
+            targetButton.style.display = "none";
+
+
+            showTarget();
+        });
+
+
+        async function endGame() {
+
+            gameRunning = false;
+
+
+            clearInterval(gameTimer);
+            clearTimeout(buttonTimer);
+
+
+            targetButton.style.display = "none";
+
+
+            startGameButton.disabled = false;
+
+            startGameButton.textContent = "Play Again";
+
+
+            gameResult.textContent =
+                `🎉 Game Over! Your score: ${score}`;
+
+
+            const playerName = prompt(
+                "Enter your name for the leaderboard:"
+            );
+
+
+            if (playerName && playerName.trim()) {
+
+                const name =
+                    playerName.trim().slice(0, 20);
+
+
+                const saved =
+                    await saveScore(name, score);
+
+
+                if (saved) {
+
+                    gameResult.textContent =
+                        `🎉 Score saved! Your score: ${score}`;
+
+                    loadLeaderboard();
+
+                } else {
+
+                    gameResult.textContent =
+                        `Your score: ${score} — Could not save score.`;
+
+                }
+
+            }
+        }
+
         let websiteDates = [];
+
 
         function showToast(message) {
 
@@ -1380,6 +2147,8 @@
                 toast.classList.remove("show");
             }, 2500);
         }
+
+
         async function loadWebsiteDates() {
 
             const { data, error } = await supabaseClient
@@ -1410,6 +2179,7 @@
                 let dateElement = website.querySelector(".website-date");
 
                 if (!dateElement) {
+
                     dateElement = document.createElement("p");
                     dateElement.className = "website-date";
 
@@ -1420,15 +2190,27 @@
 
                 const date = new Date(result.added_at);
 
+                const localeMap = {
+                    en: "en-US",
+                    fa: "fa-IR",
+                    zh: "zh-CN",
+                    ar: "ar-SA"
+                };
+
                 dateElement.textContent =
-                    "📅 Added: " +
-                    date.toLocaleDateString("en-US", {
+                    "📅 " +
+                    (window.t ? window.t("added") : "Added") +
+                    ": " +
+                    date.toLocaleDateString(localeMap[currentLang], {
+                        calendar: "gregory",
                         year: "numeric",
                         month: "short",
                         day: "numeric"
                     });
             }
         }
+
+
         async function loadLikes() {
 
             const { data, error } = await supabaseClient
@@ -1530,20 +2312,34 @@
                 localStorage.removeItem(likedKey);
 
                 button.classList.remove("liked");
-                button.textContent = "❤️ Like";
-                showToast("Unliked!");
+
+                button.textContent =
+                    "❤️ " +
+                    (window.t ? window.t("like") : "Like");
+
+                showToast(
+                    window.t ? window.t("unliked") : "Unliked!"
+                );
 
             } else {
 
                 localStorage.setItem(likedKey, "true");
 
                 button.classList.add("liked");
-                button.textContent = "❤️ Liked";
-                showToast("Liked!");
+
+                button.textContent =
+                    "❤️ " +
+                    (window.t ? window.t("liked") : "Liked");
+
+                showToast(
+                    window.t ? window.t("likedMessage") : "Liked!"
+                );
             }
 
             updateTotalLikes();
         }
+
+
         websites.forEach(function (website) {
 
             const button = website.querySelector(".like-button");
@@ -1553,6 +2349,8 @@
             });
 
         });
+
+
         function loadLikedStatus() {
 
             for (let website of websites) {
@@ -1569,15 +2367,23 @@
                 if (localStorage.getItem(likedKey)) {
 
                     button.classList.add("liked");
-                    button.textContent = "❤️ Liked";
+
+                    button.textContent =
+                        "❤️ " +
+                        (window.t ? window.t("liked") : "Liked");
 
                 } else {
 
                     button.classList.remove("liked");
-                    button.textContent = "❤️ Like";
+
+                    button.textContent =
+                        "❤️ " +
+                        (window.t ? window.t("like") : "Like");
                 }
             }
         }
+
+
         async function updateTotalLikes() {
 
             const { data, error } = await supabaseClient
@@ -1597,6 +2403,7 @@
 
             like_count_total.textContent = totalLikes;
         }
+
 
         supabaseClient
             .channel("website-likes-realtime")
@@ -1628,6 +2435,8 @@
                 }
             )
             .subscribe();
+
+
         supabaseClient
             .channel("site-visitors-realtime")
             .on(
@@ -1642,6 +2451,8 @@
                 }
             )
             .subscribe();
+
+
         comment_submit.addEventListener("click", async function () {
 
             const name = comment_name.value.trim();
@@ -1652,7 +2463,9 @@
             if (!name || !comment) {
 
                 comment_message.textContent =
-                    "Please enter your name and comment.";
+                    window.t
+                        ? window.t("enterNameComment")
+                        : "Please enter your name and comment.";
 
                 return;
             }
@@ -1660,7 +2473,9 @@
             if ((siteName && !siteUrl) || (!siteName && siteUrl)) {
 
                 comment_message.textContent =
-                    "If you are recommending a site, both the site name and the URL must be entered.";
+                    window.t
+                        ? window.t("siteNameUrl")
+                        : "If you are recommending a site, both the site name and the URL must be entered.";
 
                 return;
             }
@@ -1679,7 +2494,9 @@
                 console.log(error);
 
                 comment_message.textContent =
-                    "The send operation failed.";
+                    window.t
+                        ? window.t("sendFailed")
+                        : "The send operation failed.";
 
                 return;
             }
@@ -1689,7 +2506,11 @@
                 "true"
             );
 
-            showToast("Your comment has been submitted!");
+            showToast(
+                window.t
+                    ? window.t("commentSubmitted")
+                    : "Your comment has been submitted!"
+            );
 
             comment_name.value = "";
             comment_text.value = "";
@@ -1697,7 +2518,10 @@
             site_url.value = "";
 
         });
+
+
         async function loadTotalComments() {
+
             const { count, error } = await supabaseClient
                 .from("comments")
                 .select("*", { count: "exact", head: true })
@@ -1711,6 +2535,8 @@
 
             comment_count.textContent = count;
         }
+
+
         async function loadComments() {
 
             const { data, error } = await supabaseClient
@@ -1741,7 +2567,11 @@
                 name.textContent = comment.name;
 
                 if (comment.is_admin === true) {
-                    name.textContent = "👑 Admin";
+
+                    name.textContent =
+                        window.t
+                            ? window.t("admin")
+                            : "👑 Admin";
                 }
 
                 const text = document.createElement("p");
@@ -1751,11 +2581,22 @@
 
                 const commentDate = new Date(comment.created_at);
 
-                date.textContent = commentDate.toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric"
-                });
+                const localeMap = {
+                    en: "en-US",
+                    fa: "fa-IR",
+                    zh: "zh-CN",
+                    ar: "ar-SA"
+                };
+
+                date.textContent = commentDate.toLocaleDateString(
+                    localeMap[currentLang],
+                    {
+                        calendar: "gregory",
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric"
+                    }
+                );
 
                 comment_box.appendChild(name);
                 comment_box.appendChild(text);
@@ -1788,7 +2629,11 @@
                     reply_box.className = "admin-reply";
 
                     const reply_name = document.createElement("h4");
-                    reply_name.textContent = "👑 Admin";
+
+                    reply_name.textContent =
+                        window.t
+                            ? window.t("admin")
+                            : "👑 Admin";
 
                     const reply_text = document.createElement("p");
                     reply_text.textContent = reply.comment;
@@ -1797,11 +2642,16 @@
 
                     const replyDate = new Date(reply.created_at);
 
-                    reply_date.textContent = replyDate.toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric"
-                    });
+                    reply_date.textContent =
+                        replyDate.toLocaleDateString(
+                            localeMap[currentLang],
+                            {
+                                calendar: "gregory",
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric"
+                            }
+                        );
 
                     reply_box.appendChild(reply_name);
                     reply_box.appendChild(reply_text);
@@ -1813,91 +2663,153 @@
                 comments_list.appendChild(comment_box);
             }
         }
+
+
         website_count.textContent = websites.length;
         category_count.textContent = categories2.length;
+
+
         category_button.forEach(function (button) {
+
             button.addEventListener("click", function () {
-                const category = button.textContent.toLowerCase();
-                const comments_section = document.getElementById("comments-section");
+
+                const category =
+                    button.getAttribute("data-category").toLowerCase();
+
+                const comments_section =
+                    document.getElementById("comments-section");
+
                 if (category === "comments") {
+
                     for (let website of websites) {
                         website.style.display = "none";
                     }
+
                     comments_section.style.display = "block";
+
                 } else {
+
                     comments_section.style.display = "none";
+
                     for (let website of websites) {
+
                         const data =
                             website.getAttribute("data-ca").toLowerCase();
+
                         if (category === "all") {
+
                             website.style.display = "";
+
                         } else if (data.includes(category)) {
+
                             website.style.display = "";
+
                         } else {
+
                             website.style.display = "none";
                         }
                     }
                 }
             });
         });
+
+
         search_button.addEventListener("click", function () {
+
             const text = search.value.toLowerCase().trim();
+
             search_message.style.display = "none";
+
             if (text === "") {
-                search_message.textContent = "Please write something to search!";
+
+                search_message.textContent =
+                    window.t
+                        ? window.t("noSearch")
+                        : "Please write something to search!";
+
                 search_message.style.display = "block";
+
                 setTimeout(function () {
                     search_message.style.display = "none";
                 }, 3000);
+
                 return;
             }
+
             let found = false;
+
             for (let website of websites) {
-                const data = website
-                    .getAttribute("data-search")
-                    .toLowerCase();
-                const data2 = website
-                    .getAttribute("data-id");
+
+                const data =
+                    website
+                        .getAttribute("data-search")
+                        .toLowerCase();
+
+                const data2 =
+                    website.getAttribute("data-id");
+
                 if (data.includes(text) || text === data2) {
+
                     website.style.display = "";
                     found = true;
+
                 } else {
+
                     website.style.display = "none";
                 }
             }
+
             if (!found) {
-                search_message.textContent = "No website found!";
+
+                search_message.textContent =
+                    window.t
+                        ? window.t("noWebsite")
+                        : "No website found!";
+
                 search_message.style.display = "block";
+
                 setTimeout(function () {
                     search_message.style.display = "none";
                 }, 3000);
             }
         });
+
+
         dark_mode.addEventListener("click", function () {
 
             document.body.classList.toggle("dark");
 
             if (document.body.classList.contains("dark")) {
 
-                dark_mode.textContent = "☀️ Light Mode";
+                dark_mode.textContent =
+                    "☀️ " +
+                    (window.t ? window.t("lightMode") : "Light Mode");
 
                 localStorage.setItem("darkMode", "true");
 
             } else {
 
-                dark_mode.textContent = "🌙 Dark Mode";
+                dark_mode.textContent =
+                    "🌙 " +
+                    (window.t ? window.t("darkMode") : "Dark Mode");
 
                 localStorage.setItem("darkMode", "false");
             }
         });
-        const savedDarkMode = localStorage.getItem("darkMode");
+
+
+        const savedDarkMode =
+            localStorage.getItem("darkMode");
 
         if (savedDarkMode === "true") {
 
             document.body.classList.add("dark");
 
-            dark_mode.textContent = "☀️ Light Mode";
+            dark_mode.textContent =
+                "☀️ " +
+                (window.t ? window.t("lightMode") : "Light Mode");
         }
+
 
         supabaseClient
             .channel("comments-realtime")
@@ -1916,17 +2828,22 @@
                 }
             )
             .subscribe();
+
+
         sort_select.addEventListener("change", function () {
 
-            const container = document.getElementById("websites-container");
+            const container =
+                document.getElementById("websites-container");
 
-            const website_array = Array.from(websites);
+            const website_array =
+                Array.from(websites);
 
             if (sort_select.value === "liked-only") {
 
                 for (let website of website_array) {
 
-                    const websiteId = website.getAttribute("data-id");
+                    const websiteId =
+                        website.getAttribute("data-id");
 
                     const likedKey =
                         "liked_website_" + websiteId;
@@ -2007,13 +2924,15 @@
                     const id_b =
                         Number(b.getAttribute("data-id"));
 
-                    const date_a = websiteDates.find(function (item) {
-                        return Number(item.website_id) === id_a;
-                    });
+                    const date_a =
+                        websiteDates.find(function (item) {
+                            return Number(item.website_id) === id_a;
+                        });
 
-                    const date_b = websiteDates.find(function (item) {
-                        return Number(item.website_id) === id_b;
-                    });
+                    const date_b =
+                        websiteDates.find(function (item) {
+                            return Number(item.website_id) === id_b;
+                        });
 
                     if (!date_a) return 1;
                     if (!date_b) return -1;
@@ -2030,13 +2949,15 @@
                     const id_b =
                         Number(b.getAttribute("data-id"));
 
-                    const date_a = websiteDates.find(function (item) {
-                        return Number(item.website_id) === id_a;
-                    });
+                    const date_a =
+                        websiteDates.find(function (item) {
+                            return Number(item.website_id) === id_a;
+                        });
 
-                    const date_b = websiteDates.find(function (item) {
-                        return Number(item.website_id) === id_b;
-                    });
+                    const date_b =
+                        websiteDates.find(function (item) {
+                            return Number(item.website_id) === id_b;
+                        });
 
                     if (!date_a) return 1;
                     if (!date_b) return -1;
@@ -2052,23 +2973,33 @@
                 container.appendChild(website);
             });
         });
+
+
         async function registerUniqueVisit() {
 
-            let visitorId = localStorage.getItem("codenest_visitor_id");
+            let visitorId =
+                localStorage.getItem("codenest_visitor_id");
 
             if (!visitorId) {
+
                 visitorId = crypto.randomUUID();
-                localStorage.setItem("codenest_visitor_id", visitorId);
+
+                localStorage.setItem(
+                    "codenest_visitor_id",
+                    visitorId
+                );
             }
 
-            const { error } = await supabaseClient.rpc(
-                "register_unique_visitor",
-                {
-                    p_visitor_id: visitorId
-                }
-            );
+            const { error } =
+                await supabaseClient.rpc(
+                    "register_unique_visitor",
+                    {
+                        p_visitor_id: visitorId
+                    }
+                );
 
             if (error) {
+
                 console.log("Visitor error:", error);
                 return;
             }
@@ -2079,27 +3010,47 @@
 
         async function loadVisitorCount() {
 
-            const { count, error } = await supabaseClient
-                .from("site_visitors")
-                .select("*", {
-                    count: "exact",
-                    head: true
-                });
+            const { count, error } =
+                await supabaseClient
+                    .from("site_visitors")
+                    .select("*", {
+                        count: "exact",
+                        head: true
+                    });
 
             if (error) {
-                console.log("Visitor count error:", error);
+
+                console.log(
+                    "Visitor count error:",
+                    error
+                );
+
                 return;
             }
 
             visit_count.textContent = count;
         }
-        const REVIEW_DISMISSED_KEY = "codenest_review_dismissed";
-        const REVIEW_COMMENTED_KEY = "codenest_review_commented";
 
-        const reviewPopup = document.getElementById("review-popup");
-        const closeReview = document.getElementById("close-review");
-        const dismissReview = document.getElementById("dismiss-review");
-        const goComments = document.getElementById("go-comments");
+
+        const REVIEW_DISMISSED_KEY =
+            "codenest_review_dismissed";
+
+        const REVIEW_COMMENTED_KEY =
+            "codenest_review_commented";
+
+
+        const reviewPopup =
+            document.getElementById("review-popup");
+
+        const closeReview =
+            document.getElementById("close-review");
+
+        const dismissReview =
+            document.getElementById("dismiss-review");
+
+        const goComments =
+            document.getElementById("go-comments");
+
 
         const reviewWasDismissed =
             localStorage.getItem(REVIEW_DISMISSED_KEY) === "true";
@@ -2108,7 +3059,6 @@
             localStorage.getItem(REVIEW_COMMENTED_KEY) === "true";
 
 
-        // Show popup after one minute / 2
         if (!reviewWasDismissed && !reviewWasCommented) {
 
             setTimeout(function () {
@@ -2119,7 +3069,6 @@
         }
 
 
-        // Close button
         closeReview.addEventListener("click", function () {
 
             localStorage.setItem(
@@ -2132,7 +3081,6 @@
         });
 
 
-        // Maybe later button
         dismissReview.addEventListener("click", function () {
 
             localStorage.setItem(
@@ -2145,7 +3093,6 @@
         });
 
 
-        // Leave a comment
         goComments.addEventListener("click", function () {
 
             reviewPopup.classList.remove("show");
@@ -2153,14 +3100,11 @@
             const commentsSection =
                 document.getElementById("comments-section");
 
-            // Hide all websites
             for (let website of websites) {
 
                 website.style.display = "none";
-
             }
 
-            // Show comments category
             if (commentsSection) {
 
                 commentsSection.style.display = "block";
@@ -2169,20 +3113,686 @@
                     behavior: "smooth",
                     block: "start"
                 });
-
             }
-
         });
+
+        // ===============================
+        // SUPABASE REALTIME
+        // ===============================
+
+        supabaseClient
+            .channel("game-scores-realtime")
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "game_scores"
+                },
+                function (payload) {
+                    console.log("New score:", payload.new);
+
+                    loadLeaderboard();
+                }
+            )
+            .subscribe();
+
         loadComments();
         loadTotalComments();
         loadLikes();
         loadLikedStatus();
         loadWebsiteDates();
         registerUniqueVisit();
+        loadLeaderboard();
+
     </script>
+
+
     <div id="toast" class="toast"></div>
 
 
+    <!-- ========================= -->
+    <!-- COMPLETE TRANSLATION SYSTEM -->
+    <!-- ========================= -->
+
+    <script>
+
+        const translations = {
+
+            en: {
+
+                welcome: "Welcome",
+
+                searchButton: "Search",
+
+                all: "All",
+                educational: "Educational",
+                ai: "AI",
+                programming: "Programming",
+                game: "Game",
+                design: "Design",
+                seo: "SEO",
+                productivity: "Productivity",
+                comments: "Comments",
+
+                lowHigh: "Low → High",
+                highLow: "High → Low",
+                likesLowHigh: "Likes: Low → High",
+                likesHighLow: "Likes: High → Low",
+                newest: "🆕 Newest → Oldest",
+                oldest: "📅 Oldest → Newest",
+                likedOnly: "❤️ Liked Websites",
+
+                statistics: "📊 CodeNest Statistics",
+                totalWebsites: "Total websites",
+                totalCategories: "Total categories",
+                totalComments: "Total comments",
+                totalLikes: "Total likes",
+                totalVisits: "Total visits",
+
+                darkMode: "Dark Mode",
+                lightMode: "Light Mode",
+
+                like: "Like",
+                liked: "Liked",
+                unliked: "Unliked!",
+                likedMessage: "Liked!",
+                likes: "Likes",
+                added: "Added",
+
+                noSearch: "Please write something to search!",
+                noWebsite: "No website found!",
+
+                reviewTitle: "What do you think about CodeNest?",
+                reviewText: "You've been here for a while. We'd love to hear your opinion!",
+                leaveComment: "💬 Leave a comment",
+                maybeLater: "Maybe later",
+
+                commentsTitle: "💬 Comments & Website Suggestions",
+
+                commentsDescription:
+                    "Here, you can leave comments, view others' comments, and suggest websites for us to include in future versions. Your comment will be displayed after it has been approved.",
+
+                yourName: "Your name",
+                writeComment: "Write your comment...",
+                websiteName: "Website name (optional)",
+                websiteURL: "Website URL (optional)",
+
+                submit: "Submit",
+
+                enterNameComment:
+                    "Please enter your name and comment.",
+
+                siteNameUrl:
+                    "If you are recommending a site, both the site name and the URL must be entered.",
+
+                sendFailed:
+                    "The send operation failed.",
+
+                commentSubmitted:
+                    "Your comment has been submitted!",
+
+                admin: "👑 Admin",
+
+                moreThings:
+                    "More things will be added later.",
+
+                search: "Search (English only)...",
+
+                allRights:
+                    "© 2026 — All rights reserved."
+            },
+
+
+            fa: {
+
+                welcome: "خوش آمدید",
+
+                searchButton: "جستجو",
+
+                all: "همه",
+                educational: "آموزشی",
+                ai: "هوش مصنوعی",
+                programming: "برنامه‌نویسی",
+                game: "بازی",
+                design: "طراحی",
+                seo: "سئو",
+                productivity: "بهره‌وری",
+                comments: "نظرات",
+
+                lowHigh: "کم → زیاد",
+                highLow: "زیاد → کم",
+                likesLowHigh: "لایک: کم → زیاد",
+                likesHighLow: "لایک: زیاد → کم",
+                newest: "🆕 جدیدترین → قدیمی‌ترین",
+                oldest: "📅 قدیمی‌ترین → جدیدترین",
+                likedOnly: "❤️ سایت‌های لایک‌شده",
+
+                statistics: "📊 آمار CodeNest",
+                totalWebsites: "تعداد سایت‌ها",
+                totalCategories: "تعداد دسته‌بندی‌ها",
+                totalComments: "تعداد نظرات",
+                totalLikes: "تعداد لایک‌ها",
+                totalVisits: "تعداد بازدیدها",
+
+                darkMode: "حالت تاریک",
+                lightMode: "حالت روشن",
+
+                like: "لایک",
+                liked: "لایک شد",
+                unliked: "لایک برداشته شد!",
+                likedMessage: "لایک شد!",
+                likes: "لایک",
+                added: "اضافه شده",
+
+                noSearch: "لطفاً چیزی برای جستجو بنویسید!",
+                noWebsite: "هیچ سایتی پیدا نشد!",
+
+                reviewTitle: "نظرت درباره ی سایت ما چیه؟",
+
+                reviewText:
+                    "مدتیه اینجا هستی. خوشحال می‌شیم نظرت رو با ما در میون بذاری!",
+
+                leaveComment: "💬 نظر بده",
+                maybeLater: "بعداً",
+
+                commentsTitle:
+                    "💬 نظرات و پیشنهاد سایت",
+
+                commentsDescription:
+                    "اینجا می‌تونی نظر بدی، نظرات دیگران رو ببینی و سایت‌هایی رو که دوست داری در نسخه‌های آینده اضافه کنیم پیشنهاد بدی. نظر شما بعد از تأیید نمایش داده می‌شود.",
+
+                yourName: "نام شما",
+
+                writeComment:
+                    "نظر خود را بنویسید...",
+
+                websiteName:
+                    "نام سایت (اختیاری)",
+
+                websiteURL:
+                    "آدرس سایت (اختیاری)",
+
+                submit: "ارسال",
+
+                enterNameComment:
+                    "لطفاً نام و نظر خود را وارد کنید.",
+
+                siteNameUrl:
+                    "اگر می‌خواهید سایتی پیشنهاد دهید، باید هم نام سایت و هم آدرس آن را وارد کنید.",
+
+                sendFailed:
+                    "ارسال انجام نشد.",
+
+                commentSubmitted:
+                    "نظر شما با موفقیت ارسال شد!",
+
+                admin: "👑 مدیر",
+
+                moreThings:
+                    "موارد بیشتری در آینده اضافه خواهد شد.",
+
+                search: "جستجو (فقط انگلیسی)...",
+
+                allRights:
+                    "© 2026 — تمامی حقوق محفوظ است."
+            },
+
+
+            zh: {
+
+                welcome: "欢迎",
+
+                searchButton: "搜索",
+
+                all: "全部",
+                educational: "教育",
+                ai: "人工智能",
+                programming: "编程",
+                game: "游戏",
+                design: "设计",
+                seo: "SEO",
+                productivity: "效率",
+                comments: "评论",
+
+                lowHigh: "低 → 高",
+                highLow: "高 → 低",
+                likesLowHigh: "点赞：低 → 高",
+                likesHighLow: "点赞：高 → 低",
+                newest: "🆕 最新 → 最旧",
+                oldest: "📅 最旧 → 最新",
+                likedOnly: "❤️ 已点赞的网站",
+
+                statistics: "📊 CodeNest 统计",
+                totalWebsites: "网站总数",
+                totalCategories: "分类总数",
+                totalComments: "评论总数",
+                totalLikes: "点赞总数",
+                totalVisits: "访问总数",
+
+                darkMode: "深色模式",
+                lightMode: "浅色模式",
+
+                like: "点赞",
+                liked: "已点赞",
+                unliked: "已取消点赞！",
+                likedMessage: "已点赞！",
+                likes: "点赞",
+                added: "添加于",
+
+                noSearch: "请输入搜索内容！",
+                noWebsite: "没有找到网站！",
+
+                reviewTitle:
+                    "你觉得 CodeNest 怎么样？",
+
+                reviewText:
+                    "你已经在这里待了一段时间。我们很想听听你的意见！",
+
+                leaveComment:
+                    "💬 发表评论",
+
+                maybeLater:
+                    "以后再说",
+
+                commentsTitle:
+                    "💬 评论与网站建议",
+
+                commentsDescription:
+                    "你可以在这里发表评论、查看其他人的评论，并推荐我们在未来版本中添加的网站。你的评论将在审核后显示。",
+
+                yourName:
+                    "你的名字",
+
+                writeComment:
+                    "写下你的评论...",
+
+                websiteName:
+                    "网站名称（可选）",
+
+                websiteURL:
+                    "网站网址（可选）",
+
+                submit:
+                    "提交",
+
+                enterNameComment:
+                    "请输入你的名字和评论。",
+
+                siteNameUrl:
+                    "如果你要推荐网站，必须填写网站名称和网址。",
+
+                sendFailed:
+                    "发送失败。",
+
+                commentSubmitted:
+                    "你的评论已提交！",
+
+                admin:
+                    "👑 管理员",
+
+                moreThings:
+                    "未来将添加更多内容。",
+
+                search: "搜索（仅限英语）...",
+
+                allRights:
+                    "© 2026 — 版权所有。"
+            },
+
+
+            ar: {
+
+                welcome: "مرحباً",
+
+                searchButton: "بحث",
+
+                all: "الكل",
+                educational: "تعليمي",
+                ai: "الذكاء الاصطناعي",
+                programming: "البرمجة",
+                game: "ألعاب",
+                design: "التصميم",
+                seo: "تحسين محركات البحث",
+                productivity: "الإنتاجية",
+                comments: "التعليقات",
+
+                lowHigh: "من الأقل → الأعلى",
+                highLow: "من الأعلى → الأقل",
+                likesLowHigh: "الإعجابات: الأقل → الأعلى",
+                likesHighLow: "الإعجابات: الأعلى → الأقل",
+                newest: "🆕 الأحدث → الأقدم",
+                oldest: "📅 الأقدم → الأحدث",
+                likedOnly: "❤️ المواقع التي أعجبتني",
+
+                statistics: "📊 إحصائيات CodeNest",
+                totalWebsites: "إجمالي المواقع",
+                totalCategories: "إجمالي الفئات",
+                totalComments: "إجمالي التعليقات",
+                totalLikes: "إجمالي الإعجابات",
+                totalVisits: "إجمالي الزيارات",
+
+                darkMode: "الوضع الداكن",
+                lightMode: "الوضع الفاتح",
+
+                like: "إعجاب",
+                liked: "تم الإعجاب",
+                unliked: "تم إلغاء الإعجاب!",
+                likedMessage: "تم الإعجاب!",
+                likes: "إعجابات",
+                added: "أضيف في",
+
+                noSearch:
+                    "يرجى كتابة شيء للبحث!",
+
+                noWebsite:
+                    "لم يتم العثور على أي موقع!",
+
+                reviewTitle:
+                    "ما رأيك في CodeNest؟",
+
+                reviewText:
+                    "لقد بقيت هنا لفترة من الوقت. يسعدنا معرفة رأيك!",
+
+                leaveComment:
+                    "💬 أضف تعليقاً",
+
+                maybeLater:
+                    "ربما لاحقاً",
+
+                commentsTitle:
+                    "💬 التعليقات واقتراحات المواقع",
+
+                commentsDescription:
+                    "يمكنك هنا كتابة التعليقات، وقراءة تعليقات الآخرين، واقتراح مواقع لإضافتها في الإصدارات القادمة. سيظهر تعليقك بعد الموافقة عليه.",
+
+                yourName:
+                    "اسمك",
+
+                writeComment:
+                    "اكتب تعليقك...",
+
+                websiteName:
+                    "اسم الموقع (اختياري)",
+
+                websiteURL:
+                    "رابط الموقع (اختياري)",
+
+                submit:
+                    "إرسال",
+
+                enterNameComment:
+                    "يرجى إدخال اسمك وتعليقك.",
+
+                siteNameUrl:
+                    "إذا كنت تقترح موقعاً، يجب إدخال اسم الموقع والرابط.",
+
+                sendFailed:
+                    "فشل الإرسال.",
+
+                commentSubmitted:
+                    "تم إرسال تعليقك!",
+
+                admin:
+                    "👑 المدير",
+
+                moreThings:
+                    "سيتم إضافة المزيد من الأشياء لاحقاً.",
+
+                search: "بحث (بالإنجليزية فقط)...",
+
+                allRights:
+                    "© 2026 — جميع الحقوق محفوظة."
+            }
+        };
+
+
+        function t(key) {
+
+            if (
+                translations[currentLang] &&
+                translations[currentLang][key]
+            ) {
+                return translations[currentLang][key];
+            }
+
+            return translations.en[key] || key;
+        }
+
+
+        window.t = t;
+
+
+        function applyTranslations() {
+
+            document.querySelectorAll("[data-i18n]").forEach(function (el) {
+
+                const key =
+                    el.getAttribute("data-i18n");
+
+                el.textContent = t(key);
+
+            });
+
+
+            document.querySelectorAll("[data-i18n-placeholder]").forEach(function (el) {
+
+                const key =
+                    el.getAttribute("data-i18n-placeholder");
+
+                el.placeholder = t(key);
+
+            });
+
+
+            document.querySelectorAll(".likes-text").forEach(function (el) {
+
+                el.textContent = t("likes");
+
+            });
+
+
+            loadLikedStatus();
+            loadWebsiteDates();
+
+
+            for (let website of websites) {
+
+                const dateElement =
+                    website.querySelector(".website-date");
+
+                if (dateElement) {
+
+                    const websiteId =
+                        Number(
+                            website.getAttribute("data-id")
+                        );
+
+                    const result =
+                        websiteDates.find(function (item) {
+
+                            return Number(item.website_id) === websiteId;
+
+                        });
+
+                    if (result) {
+
+                        const date =
+                            new Date(result.added_at);
+
+                        const localeMap = {
+                            en: "en-US",
+                            fa: "fa-IR",
+                            zh: "zh-CN",
+                            ar: "ar-SA"
+                        };
+
+                        dateElement.textContent =
+                            "📅 " +
+                            t("added") +
+                            ": " +
+                            date.toLocaleDateString(
+                                localeMap[currentLang],
+                                {
+                                    calendar: "gregory",
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric"
+                                }
+                            );
+                    }
+                }
+            }
+
+
+            const darkSaved =
+                localStorage.getItem("darkMode") === "true";
+
+            if (darkSaved) {
+
+                dark_mode.textContent =
+                    "☀️ " +
+                    t("lightMode");
+
+            } else {
+
+                dark_mode.textContent =
+                    "🌙 " +
+                    t("darkMode");
+            }
+
+
+            const sortTranslations = {
+
+                "low-high": "lowHigh",
+                "high-low": "highLow",
+                "likes-low-high": "likesLowHigh",
+                "likes-high-low": "likesHighLow",
+                "newest": "newest",
+                "oldest": "oldest",
+                "liked-only": "likedOnly"
+
+            };
+
+
+            sort_select.querySelectorAll("option").forEach(function (option) {
+
+                const key =
+                    sortTranslations[option.value];
+
+                if (key) {
+                    option.textContent = t(key);
+                }
+
+            });
+
+
+            const languageSelect =
+                document.getElementById("language-select");
+
+            languageSelect.value =
+                currentLang;
+
+
+            if (currentLang === "fa") {
+
+                languageSelect.options[0].textContent =
+                    "انگلیسی";
+
+                languageSelect.options[1].textContent =
+                    "فارسی";
+
+                languageSelect.options[2].textContent =
+                    "چینی";
+
+                languageSelect.options[3].textContent =
+                    "عربی";
+
+            } else if (currentLang === "zh") {
+
+                languageSelect.options[0].textContent =
+                    "英语";
+
+                languageSelect.options[1].textContent =
+                    "波斯语";
+
+                languageSelect.options[2].textContent =
+                    "中文";
+
+                languageSelect.options[3].textContent =
+                    "阿拉伯语";
+
+            } else if (currentLang === "ar") {
+
+                languageSelect.options[0].textContent =
+                    "الإنجليزية";
+
+                languageSelect.options[1].textContent =
+                    "الفارسية";
+
+                languageSelect.options[2].textContent =
+                    "الصينية";
+
+                languageSelect.options[3].textContent =
+                    "العربية";
+
+            } else {
+
+                languageSelect.options[0].textContent =
+                    "English";
+
+                languageSelect.options[1].textContent =
+                    "فارسی";
+
+                languageSelect.options[2].textContent =
+                    "中文";
+
+                languageSelect.options[3].textContent =
+                    "العربية";
+            }
+
+
+            loadComments();
+
+        }
+
+
+        const languageSelect =
+            document.getElementById("language-select");
+
+
+        languageSelect.value =
+            currentLang;
+
+
+        languageSelect.addEventListener(
+            "change",
+            function () {
+
+                currentLang =
+                    this.value;
+
+                document.documentElement.lang =
+                    currentLang;
+
+                document.documentElement.dir =
+                    (
+                        currentLang === "fa" ||
+                        currentLang === "ar"
+                    )
+                        ? "rtl"
+                        : "ltr";
+
+
+                applyTranslations();
+
+            }
+        );
+
+
+        applyTranslations();
+
+    </script>
 
 </body>
 
