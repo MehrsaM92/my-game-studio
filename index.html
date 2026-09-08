@@ -2870,11 +2870,14 @@
 
         if (!reviewWasDismissed && !reviewWasCommented) {
 
-            setTimeout(function () {
+            if (sessionStorage.getItem("gameJustExited") === "true") {
+
+                sessionStorage.removeItem("gameJustExited");
 
                 reviewPopup.classList.add("show");
 
-            }, 30000);
+            }
+
         }
 
 
