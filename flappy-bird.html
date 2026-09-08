@@ -549,10 +549,8 @@
 
         <div class="top-bar">
 
-            <button class="back-button" onclick="window.location.href='index.html'">
-
+            <button class="back-button" onclick="exitGame()">
                 ← Back
-
             </button>
 
             <h1 class="title">
@@ -2807,42 +2805,37 @@
             }
         );
 
+        function exitGame() {
+
+            sessionStorage.setItem("gameJustExited", "true");
+
+            window.location.href = "index.html";
+        }
 
         /* =========================
            CONTROLS
         ========================= */
 
-        canvas.addEventListener(
-            "pointerdown",
-            function (event) {
+        function handleGameInput(event) {
+            event.preventDefault();
+            flap();
+        }
 
+        canvas.addEventListener("pointerdown", handleGameInput, {
+            passive: false
+        });
+
+        startOverlay.addEventListener("pointerdown", handleGameInput, {
+            passive: false
+        });
+
+        // Space
+        window.addEventListener("keydown", function (event) {
+            if (event.code === "Space") {
                 event.preventDefault();
-
                 flap();
-
             }
-        );
-
-
-        window.addEventListener(
-            "keydown",
-            function (event) {
-
-                if (
-                    event.code ===
-                    "Space"
-                ) {
-
-                    event.preventDefault();
-
-                    flap();
-
-                }
-
-            }
-        );
-
-
+        });
         /* =========================
            FLAP SOUND
         ========================= */
