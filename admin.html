@@ -1,0 +1,3452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeNest Studio — Admin Editor</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Inter, Arial, sans-serif;
+            background: #0b1020;
+            color: #fff;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        button {
+            border: 0;
+            cursor: pointer;
+        }
+
+        #app {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* =========================================================
+   TOP BAR
+   ========================================================= */
+
+        #topbar {
+            height: 62px;
+            flex: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #11182d;
+            border-bottom: 1px solid #26304c;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 18px;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tool-btn {
+            height: 40px;
+            min-width: 40px;
+            padding: 0 12px;
+            border-radius: 9px;
+            background: #1a2440;
+            color: #fff;
+            border: 1px solid #2b3758;
+            transition: .15s;
+        }
+
+        .tool-btn:hover {
+            background: #243152;
+        }
+
+        .tool-btn.active {
+            background: #3268ff;
+            border-color: #4d7bff;
+        }
+
+        .tool-btn.save {
+            background: #16a34a;
+            border-color: #22c55e;
+            font-weight: 700;
+        }
+
+        .tool-btn.save:hover {
+            background: #15803d;
+        }
+
+        .device-select {
+            height: 40px;
+            border-radius: 9px;
+            border: 1px solid #2b3758;
+            background: #1a2440;
+            color: #fff;
+            padding: 0 10px;
+            outline: none;
+        }
+
+        .status {
+            margin-left: auto;
+            font-size: 13px;
+            color: #91a0c5;
+            white-space: nowrap;
+        }
+
+        /* =========================================================
+   WORKSPACE
+   ========================================================= */
+
+        #workspace {
+            flex: 1;
+            min-height: 0;
+            position: relative;
+            overflow: hidden;
+            background: #080c17;
+        }
+
+        #canvas-scroll {
+            position: absolute;
+            inset: 0;
+            overflow: auto;
+            padding: 30px;
+        }
+
+        #canvas {
+            position: relative;
+            margin: auto;
+            background: #202020;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, .5),
+                0 0 0 1px #30384e;
+        }
+
+        #site-frame {
+            display: block;
+            border: 0;
+            background: #fff;
+        }
+
+        /* =========================================================
+   SELECTION OVERLAY
+   ========================================================= */
+
+        #overlay {
+            position: absolute;
+            pointer-events: none;
+            border: 2px solid #4d7cff;
+            background: rgba(77, 124, 255, .06);
+            z-index: 500;
+            display: none;
+        }
+
+        #overlay-label {
+            position: absolute;
+            left: -2px;
+            top: -25px;
+            background: #4d7cff;
+            color: #fff;
+            padding: 4px 7px;
+            border-radius: 5px 5px 0 0;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        #move-hint {
+            position: absolute;
+            left: 50%;
+            bottom: 18px;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, .9);
+            border: 1px solid #334155;
+            color: #cbd5e1;
+            padding: 8px 13px;
+            border-radius: 9px;
+            font-size: 12px;
+            z-index: 600;
+            pointer-events: none;
+        }
+
+        /* =========================================================
+   INSPECTOR
+   ========================================================= */
+
+        #inspector {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 320px;
+            max-height: calc(100% - 24px);
+            overflow: auto;
+            background: rgba(15, 23, 42, .98);
+            border: 1px solid #334155;
+            border-radius: 14px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .45);
+            z-index: 800;
+            display: none;
+        }
+
+        .inspector-head {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px;
+            background: #111827;
+            border-bottom: 1px solid #293449;
+        }
+
+        .inspector-title {
+            font-weight: 700;
+            max-width: 240px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .close-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+            background: #1f2937;
+            color: #fff;
+        }
+
+        .inspector-body {
+            padding: 13px;
+        }
+
+        .field {
+            margin-bottom: 13px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 12px;
+            color: #9ca9c4;
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            background: #0b1222;
+            border: 1px solid #334155;
+            color: #fff;
+            border-radius: 8px;
+            outline: none;
+            padding: 9px;
+        }
+
+        .field textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .field input:focus,
+        .field textarea:focus,
+        .field select:focus {
+            border-color: #4d7cff;
+        }
+
+        .two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .color-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .color-row input[type="color"] {
+            width: 48px;
+            padding: 3px;
+        }
+
+        .small-btn {
+            width: 100%;
+            height: 36px;
+            border-radius: 8px;
+            background: #1e293b;
+            color: #fff;
+            border: 1px solid #334155;
+        }
+
+        .small-btn:hover {
+            background: #29364b;
+        }
+
+        .danger {
+            background: #3a1720;
+            border-color: #6b2535;
+        }
+
+        .danger:hover {
+            background: #4b1d28;
+        }
+
+        /* =========================================================
+   ADD MENU
+   ========================================================= */
+
+        #add-menu {
+            position: absolute;
+            top: 58px;
+            left: 120px;
+            width: 190px;
+            padding: 7px;
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .4);
+            z-index: 1200;
+            display: none;
+        }
+
+        .add-item {
+            width: 100%;
+            padding: 10px;
+            border-radius: 7px;
+            background: transparent;
+            color: #fff;
+            text-align: left;
+        }
+
+        .add-item:hover {
+            background: #1e293b;
+        }
+
+        /* =========================================================
+   LOGIN
+   ========================================================= */
+
+        #login-screen {
+            position: fixed;
+            inset: 0;
+            background: #070b15;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+        }
+
+        .login-box {
+            width: min(400px, 92vw);
+            background: #111827;
+            border: 1px solid #334155;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .5);
+        }
+
+        .login-box h1 {
+            margin: 0 0 7px;
+        }
+
+        .login-box p {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #0b1222;
+            color: #fff;
+            border: 1px solid #334155;
+            border-radius: 9px;
+            outline: none;
+        }
+
+        .login-box button {
+            width: 100%;
+            height: 44px;
+            background: #3268ff;
+            color: #fff;
+            border-radius: 9px;
+            font-weight: 700;
+        }
+
+        #login-error {
+            color: #f87171;
+            font-size: 13px;
+            margin-top: 10px;
+            min-height: 18px;
+        }
+
+        /* =========================================================
+   MOBILE ADMIN
+   ========================================================= */
+
+        @media(max-width:800px) {
+
+            .logo {
+                display: none;
+            }
+
+            #topbar {
+                overflow-x: auto;
+            }
+
+            .status {
+                display: none;
+            }
+
+            #inspector {
+                width: min(320px, calc(100% - 24px));
+            }
+
+            #canvas-scroll {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="login-screen">
+
+        <div class="login-box">
+
+            <h1>CodeNest Admin</h1>
+
+            <p>
+                Login to edit the real CodeNest website.
+            </p>
+
+            <input id="email" type="email" placeholder="Email" autocomplete="username">
+
+            <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+
+            <button id="login-btn">
+                Login
+            </button>
+
+            <div id="login-error"></div>
+
+        </div>
+
+    </div>
+
+
+    <div id="app">
+
+        <div id="topbar">
+
+            <div class="logo">
+                CodeNest Admin
+            </div>
+
+            <div class="toolbar-group">
+
+                <button class="tool-btn" id="add-btn">
+                    ＋ Add
+                </button>
+
+                <button class="tool-btn" id="undo-btn" title="Undo">
+                    ↶
+                </button>
+
+                <button class="tool-btn" id="redo-btn" title="Redo">
+                    ↷
+                </button>
+
+            </div>
+
+            <div class="toolbar-group">
+
+                <button class="tool-btn device active" data-device="desktop">
+                    🖥 Desktop
+                </button>
+
+                <button class="tool-btn device" data-device="tablet">
+                    ▣ Tablet
+                </button>
+
+                <button class="tool-btn device" data-device="mobile">
+                    📱 Mobile
+                </button>
+
+            </div>
+
+            <div class="toolbar-group">
+
+                <select id="language-preview" class="device-select">
+                    <option value="en">English</option>
+                    <option value="fa">فارسی</option>
+                </select>
+
+            </div>
+
+            <button class="tool-btn save" id="save-btn">
+                💾 Save
+            </button>
+
+            <div class="status" id="status">
+                Loading...
+            </div>
+
+        </div>
+
+
+        <div id="workspace">
+
+            <div id="canvas-scroll">
+
+                <div id="canvas">
+
+                    <iframe id="site-frame" src="./index.html"></iframe>
+
+                    <div id="overlay">
+
+                        <div id="overlay-label">
+                            Element
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="move-hint">
+                Click an element to select • Drag to move • Double-click text to edit
+            </div>
+
+
+            <div id="inspector">
+
+                <div class="inspector-head">
+
+                    <div class="inspector-title" id="inspector-title">
+                        Element
+                    </div>
+
+                    <button class="close-btn" id="close-inspector">
+                        ×
+                    </button>
+
+                </div>
+
+                <div class="inspector-body">
+
+                    <div class="field">
+
+                        <label>
+                            Text / HTML
+                        </label>
+
+                        <textarea id="prop-text"></textarea>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Color
+                        </label>
+
+                        <div class="color-row">
+
+                            <input type="color" id="prop-color-picker">
+
+                            <input type="text" id="prop-color" placeholder="#ffffff">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="two">
+
+                        <div class="field">
+
+                            <label>
+                                Font size
+                            </label>
+
+                            <input id="prop-font-size" type="number" min="1" max="300">
+
+                        </div>
+
+                        <div class="field">
+
+                            <label>
+                                Font weight
+                            </label>
+
+                            <select id="prop-font-weight">
+
+                                <option value="normal">
+                                    Normal
+                                </option>
+
+                                <option value="500">
+                                    500
+                                </option>
+
+                                <option value="600">
+                                    600
+                                </option>
+
+                                <option value="700">
+                                    Bold
+                                </option>
+
+                                <option value="800">
+                                    800
+                                </option>
+
+                                <option value="900">
+                                    900
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Text align
+                        </label>
+
+                        <select id="prop-align">
+
+                            <option value="left">
+                                Left
+                            </option>
+
+                            <option value="center">
+                                Center
+                            </option>
+
+                            <option value="right">
+                                Right
+                            </option>
+
+                            <option value="justify">
+                                Justify
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="two">
+
+                        <div class="field">
+
+                            <label>
+                                Width
+                            </label>
+
+                            <input id="prop-width" type="text" placeholder="auto">
+
+                        </div>
+
+                        <div class="field">
+
+                            <label>
+                                Height
+                            </label>
+
+                            <input id="prop-height" type="text" placeholder="auto">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="two">
+
+                        <div class="field">
+
+                            <label>
+                                Margin
+                            </label>
+
+                            <input id="prop-margin" type="text">
+
+                        </div>
+
+                        <div class="field">
+
+                            <label>
+                                Padding
+                            </label>
+
+                            <input id="prop-padding" type="text">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Position X / Y
+                        </label>
+
+                        <div class="two">
+
+                            <input id="prop-x" type="number">
+
+                            <input id="prop-y" type="number">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <button class="small-btn" id="reset-position">
+                            Reset position
+                        </button>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <button class="small-btn danger" id="hide-element">
+                            Hide element
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div id="add-menu">
+
+                <button class="add-item" data-add="text">
+                    T&nbsp; Text
+                </button>
+
+                <button class="add-item" data-add="heading">
+                    H&nbsp; Heading
+                </button>
+
+                <button class="add-item" data-add="button">
+                    ▣ Button
+                </button>
+
+                <button class="add-item" data-add="box">
+                    □ Box
+                </button>
+
+                <button class="add-item" data-add="divider">
+                    ━ Divider
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* =========================================================
+           SUPABASE
+           ========================================================= */
+
+        const SUPABASE_URL =
+            "https://iqmsaflqplvzfvmdyrwh.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_vib0xKSHlp-04KNTM0Y1kg_hc-yjUK5";
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        /* =========================================================
+           ELEMENTS
+           ========================================================= */
+
+        const frame =
+            document.getElementById("site-frame");
+
+        const canvas =
+            document.getElementById("canvas");
+
+        const scrollArea =
+            document.getElementById("canvas-scroll");
+
+        const overlay =
+            document.getElementById("overlay");
+
+        const overlayLabel =
+            document.getElementById("overlay-label");
+
+        const inspector =
+            document.getElementById("inspector");
+
+        const statusEl =
+            document.getElementById("status");
+
+        const addMenu =
+            document.getElementById("add-menu");
+
+
+        /* =========================================================
+           DEVICE SIZES
+           ========================================================= */
+
+        const DEVICES = {
+
+            desktop: {
+                width: 1440,
+                height: 900
+            },
+
+            tablet: {
+                width: 768,
+                height: 1024
+            },
+
+            mobile: {
+                width: 390,
+                height: 844
+            }
+
+        };
+
+
+        /* =========================================================
+           PROTECTED AREAS
+           ========================================================= */
+
+        const PROTECTED_SELECTOR = [
+
+            "#leaderboard",
+
+            "#comments-section",
+
+            ".like-box",
+
+            ".like-button",
+
+            ".like-count",
+
+            ".likes-text",
+
+            ".review-popup"
+
+        ].join(",");
+
+
+        function isProtected(element) {
+
+            if (!element) return true;
+
+            return !!element.closest(
+                PROTECTED_SELECTOR
+            );
+
+        }
+
+
+        /* =========================================================
+           STATE
+           ========================================================= */
+
+        let currentDevice = "desktop";
+
+        let selectedElement = null;
+
+        let selectedData = null;
+
+        let settingsId = null;
+
+        let addingType = null;
+
+        let dragState = null;
+
+        let history = [];
+
+        let historyIndex = -1;
+
+
+        /*
+        editor structure:
+        
+        {
+            version: 3,
+        
+            elements: {
+                id: {
+                    selector: "...",
+                    text: "...",
+                    color: "...",
+                    fontSize: 20,
+                    fontWeight: "700",
+                    textAlign: "center",
+                    width: "...",
+                    height: "...",
+                    margin: "...",
+                    padding: "...",
+        
+                    positions:{
+                        desktop:{x:0,y:0},
+                        tablet:{x:0,y:0},
+                        mobile:{x:0,y:0}
+                    },
+        
+                    hidden:false
+                }
+            },
+        
+            customElements:[
+                {
+                    id,
+                    type,
+                    text,
+                    x,
+                    y,
+                    width,
+                    height,
+                    color,
+                    fontSize,
+                    fontWeight,
+                    textAlign,
+                    background,
+                    padding
+                }
+            ]
+        }
+        */
+
+        let editor = {
+
+            version: 3,
+
+            elements: {},
+
+            customElements: []
+
+        };
+
+
+        /* =========================================================
+           HELPERS
+           ========================================================= */
+
+        function setStatus(text) {
+
+            statusEl.textContent = text;
+
+        }
+
+
+        function deepClone(value) {
+
+            return JSON.parse(
+                JSON.stringify(value)
+            );
+
+        }
+
+
+        function wait(ms) {
+
+            return new Promise(
+                resolve => setTimeout(resolve, ms)
+            );
+
+        }
+
+
+        /* =========================================================
+           STABLE SELECTOR
+           ========================================================= */
+
+        function cssEscape(value) {
+
+            if (
+                window.CSS &&
+                CSS.escape
+            ) {
+
+                return CSS.escape(value);
+
+            }
+
+            return String(value)
+                .replace(/([ !"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g, "\\$1");
+
+        }
+
+
+        function getSelector(element) {
+
+            if (!element) return null;
+
+            if (element.id) {
+
+                return "#" +
+                    cssEscape(element.id);
+
+            }
+
+            if (
+                element.hasAttribute(
+                    "data-id"
+                )
+            ) {
+
+                return `[data-id="${cssEscape(
+                    element.getAttribute("data-id")
+                )}"]`;
+
+            }
+
+            const parts = [];
+
+            let current = element;
+
+            while (
+                current &&
+                current.nodeType === 1 &&
+                current.tagName.toLowerCase() !== "html"
+            ) {
+
+                let part =
+                    current.tagName.toLowerCase();
+
+                if (
+                    current.classList &&
+                    current.classList.length
+                ) {
+
+                    const usefulClass =
+                        [...current.classList]
+                            .filter(c =>
+                                ![
+                                    "like-box",
+                                    "like-button",
+                                    "like-count",
+                                    "likes-text"
+                                ].includes(c)
+                            )
+                            .slice(0, 2);
+
+                    if (usefulClass.length) {
+
+                        part += "." +
+                            usefulClass
+                                .map(cssEscape)
+                                .join(".");
+
+                    }
+
+                }
+
+                const parent =
+                    current.parentElement;
+
+                if (parent) {
+
+                    const same =
+                        [...parent.children]
+                            .filter(
+                                x =>
+                                    x.tagName ===
+                                    current.tagName
+                            );
+
+                    if (same.length > 1) {
+
+                        const index =
+                            same.indexOf(current) + 1;
+
+                        part +=
+                            `:nth-of-type(${index})`;
+
+                    }
+
+                }
+
+                parts.unshift(part);
+
+                current = parent;
+
+            }
+
+            return parts.join(" > ");
+
+        }
+
+
+        /* =========================================================
+           DISCOVER REAL INDEX.HTML
+           ========================================================= */
+
+        function discoverPage() {
+
+            const doc =
+                frame.contentDocument;
+
+            if (!doc) return;
+
+            const all =
+                [...doc.body.querySelectorAll("*")];
+
+            all.forEach(element => {
+
+                if (isProtected(element))
+                    return;
+
+                /*
+                Don't select scripts/styles.
+                */
+
+                const tag =
+                    element.tagName.toLowerCase();
+
+                if (
+                    tag === "script" ||
+                    tag === "style" ||
+                    tag === "meta" ||
+                    tag === "link"
+                ) {
+
+                    return;
+
+                }
+
+                const selector =
+                    getSelector(element);
+
+                if (!selector)
+                    return;
+
+                /*
+                Existing id.
+                */
+
+                const id =
+                    "el_" +
+                    btoa(
+                        selector
+                    )
+                        .replace(/[^a-zA-Z0-9]/g, "")
+                        .slice(0, 35);
+
+                element.dataset.codenestId =
+                    id;
+
+            });
+
+        }
+
+
+        /* =========================================================
+           GET SELECTED ELEMENT
+           ========================================================= */
+
+        function getElementFromPoint(x, y) {
+
+            const doc =
+                frame.contentDocument;
+
+            if (!doc)
+                return null;
+
+            let element =
+                doc.elementFromPoint(
+                    x,
+                    y
+                );
+
+            if (!element)
+                return null;
+
+            /*
+            Find nearest element that
+            has our editor id.
+            */
+
+            while (
+                element &&
+                element !== doc.body
+            ) {
+
+                if (
+                    element.dataset &&
+                    element.dataset.codenestId
+                ) {
+
+                    return element;
+
+                }
+
+                element =
+                    element.parentElement;
+
+            }
+
+            return null;
+
+        }
+
+
+        /* =========================================================
+           GET OR CREATE SETTINGS
+           ========================================================= */
+
+        function getElementSettings(element) {
+
+            const id =
+                element.dataset.codenestId;
+
+            if (!id)
+                return null;
+
+            if (
+                !editor.elements[id]
+            ) {
+
+                editor.elements[id] = {
+
+                    selector:
+                        getSelector(element),
+
+                    text:
+                        element.innerHTML,
+
+                    color:
+                        getComputedStyle(
+                            element
+                        ).color,
+
+                    fontSize:
+                        parseFloat(
+                            getComputedStyle(
+                                element
+                            ).fontSize
+                        ),
+
+                    fontWeight:
+                        getComputedStyle(
+                            element
+                        ).fontWeight,
+
+                    textAlign:
+                        getComputedStyle(
+                            element
+                        ).textAlign,
+
+                    width:
+                        "",
+
+                    height:
+                        "",
+
+                    margin:
+                        "",
+
+                    padding:
+                        "",
+
+                    positions: {
+                        desktop: {
+                            x: 0,
+                            y: 0
+                        },
+
+                        tablet: {
+                            x: 0,
+                            y: 0
+                        },
+
+                        mobile: {
+                            x: 0,
+                            y: 0
+                        }
+                    },
+
+                    hidden: false
+
+                };
+
+            }
+
+            return editor.elements[id];
+
+        }
+
+
+        /* =========================================================
+           APPLY ONE ELEMENT
+           ========================================================= */
+
+        function applyElementSettings(
+            element,
+            settings
+        ) {
+
+            if (!element || !settings)
+                return;
+
+            /*
+            Don't touch protected functionality.
+            */
+
+            if (isProtected(element))
+                return;
+
+
+            /*
+            TEXT
+            */
+
+            if (
+                settings.text !== undefined
+            ) {
+
+                /*
+                For elements with HTML
+                preserve formatting.
+                */
+
+                element.innerHTML =
+                    settings.text;
+
+            }
+
+
+            /*
+            COLOR
+            */
+
+            if (settings.color) {
+
+                element.style.color =
+                    settings.color;
+
+            }
+
+
+            /*
+            FONT SIZE
+            */
+
+            if (
+                settings.fontSize !==
+                undefined &&
+                settings.fontSize !== ""
+            ) {
+
+                element.style.fontSize =
+                    settings.fontSize + "px";
+
+            }
+
+
+            /*
+            FONT WEIGHT
+            */
+
+            if (settings.fontWeight) {
+
+                element.style.fontWeight =
+                    settings.fontWeight;
+
+            }
+
+
+            /*
+            ALIGN
+            */
+
+            if (settings.textAlign) {
+
+                element.style.textAlign =
+                    settings.textAlign;
+
+            }
+
+
+            /*
+            WIDTH
+            */
+
+            if (settings.width) {
+
+                element.style.width =
+                    settings.width;
+
+            }
+
+
+            /*
+            HEIGHT
+            */
+
+            if (settings.height) {
+
+                element.style.height =
+                    settings.height;
+
+            }
+
+
+            /*
+            MARGIN
+            */
+
+            if (settings.margin) {
+
+                element.style.margin =
+                    settings.margin;
+
+            }
+
+
+            /*
+            PADDING
+            */
+
+            if (settings.padding) {
+
+                element.style.padding =
+                    settings.padding;
+
+            }
+
+
+            /*
+            HIDDEN
+            */
+
+            if (settings.hidden) {
+
+                element.style.display =
+                    "none";
+
+            }
+
+
+            /*
+            POSITION
+        
+            IMPORTANT:
+            We use translate instead
+            of transform so we don't
+            destroy existing transforms.
+            */
+
+            const position =
+                settings.positions?.[
+                currentDevice
+                ] || {
+                    x: 0,
+                    y: 0
+                };
+
+            element.style.translate =
+                `${position.x || 0}px ${position.y || 0}px`;
+
+        }
+
+
+        /* =========================================================
+           APPLY ALL SETTINGS
+           ========================================================= */
+
+        function applyEditor() {
+
+            const doc =
+                frame.contentDocument;
+
+            if (!doc)
+                return;
+
+            /*
+            First make sure IDs exist.
+            */
+
+            discoverPage();
+
+
+            /*
+            Existing elements
+            */
+
+            Object.entries(
+                editor.elements
+            ).forEach(
+                ([id, settings]) => {
+
+                    if (!settings.selector)
+                        return;
+
+                    let element;
+
+                    try {
+
+                        element =
+                            doc.querySelector(
+                                settings.selector
+                            );
+
+                    } catch {
+
+                        return;
+
+                    }
+
+                    if (!element)
+                        return;
+
+                    /*
+                    Reconnect ID.
+                    */
+
+                    element.dataset.codenestId =
+                        id;
+
+                    applyElementSettings(
+                        element,
+                        settings
+                    );
+
+                }
+            );
+
+
+            /*
+            Custom elements
+            */
+
+            doc
+                .querySelectorAll(
+                    "[data-codenest-custom]"
+                )
+                .forEach(
+                    x => x.remove()
+                );
+
+
+            editor.customElements
+                .forEach(item => {
+
+                    const element =
+                        doc.createElement(
+                            "div"
+                        );
+
+                    element.dataset
+                        .codenestCustom =
+                        "true";
+
+                    element.dataset
+                        .codenestId =
+                        item.id;
+
+                    element.innerHTML =
+                        item.html ??
+                        item.text ??
+                        "";
+
+
+                    element.style.position =
+                        "absolute";
+
+
+                    element.style.left =
+                        (item.x || 0) +
+                        "px";
+
+
+                    element.style.top =
+                        (item.y || 0) +
+                        "px";
+
+
+                    element.style.zIndex =
+                        "999999";
+
+
+                    element.style.color =
+                        item.color ||
+                        "#ffffff";
+
+
+                    element.style.fontSize =
+                        (item.fontSize || 18) +
+                        "px";
+
+
+                    element.style.fontWeight =
+                        item.fontWeight ||
+                        "normal";
+
+
+                    element.style.textAlign =
+                        item.textAlign ||
+                        "left";
+
+
+                    element.style.width =
+                        item.width ||
+                        "auto";
+
+
+                    element.style.height =
+                        item.height ||
+                        "auto";
+
+
+                    element.style.background =
+                        item.background ||
+                        "transparent";
+
+
+                    element.style.padding =
+                        item.padding ||
+                        "5px";
+
+
+                    if (item.hidden) {
+
+                        element.style.display =
+                            "none";
+
+                    }
+
+
+                    doc.body.appendChild(
+                        element
+                    );
+
+                });
+
+        }
+
+
+        /* =========================================================
+           FRAME SIZE
+           ========================================================= */
+
+        function setDevice(device) {
+
+            currentDevice =
+                device;
+
+            const size =
+                DEVICES[device];
+
+            frame.style.width =
+                size.width + "px";
+
+            frame.style.height =
+                size.height + "px";
+
+            canvas.style.width =
+                size.width + "px";
+
+            canvas.style.height =
+                size.height + "px";
+
+
+            document
+                .querySelectorAll(
+                    ".device"
+                )
+                .forEach(btn => {
+
+                    btn.classList.toggle(
+                        "active",
+                        btn.dataset.device ===
+                        device
+                    );
+
+                });
+
+
+            /*
+            Reapply because positions
+            are device-specific.
+            */
+
+            applyEditor();
+
+            requestAnimationFrame(
+                updateOverlay
+            );
+
+        }
+
+
+        /* =========================================================
+           SELECT ELEMENT
+           ========================================================= */
+
+        function selectElement(element) {
+
+            if (!element)
+                return;
+
+            if (isProtected(element))
+                return;
+
+            selectedElement =
+                element;
+
+            selectedData =
+                getElementSettings(
+                    element
+                );
+
+            if (!selectedData)
+                return;
+
+
+            overlay.style.display =
+                "block";
+
+
+            inspector.style.display =
+                "block";
+
+
+            inspector
+                .querySelector(
+                    ".inspector-title"
+                )
+                .textContent =
+                element.tagName.toLowerCase() +
+                (
+                    element.id
+                        ? " #" + element.id
+                        : ""
+                );
+
+
+            fillInspector();
+
+
+            updateOverlay();
+
+        }
+
+
+        /* =========================================================
+           OVERLAY POSITION
+           ========================================================= */
+
+        function updateOverlay() {
+
+            if (!selectedElement) {
+
+                overlay.style.display =
+                    "none";
+
+                return;
+
+            }
+
+            const rect =
+                selectedElement.getBoundingClientRect();
+
+            const canvasRect =
+                canvas.getBoundingClientRect();
+
+
+            /*
+            iframe content coordinates
+            are relative to iframe.
+            */
+
+            const scaleX =
+                frame.getBoundingClientRect().width /
+                frame.contentWindow.innerWidth;
+
+            const scaleY =
+                frame.getBoundingClientRect().height /
+                frame.contentWindow.innerHeight;
+
+
+            const x =
+                frame.offsetLeft +
+                rect.left *
+                scaleX;
+
+
+            const y =
+                frame.offsetTop +
+                rect.top *
+                scaleY;
+
+
+            overlay.style.left =
+                x + "px";
+
+
+            overlay.style.top =
+                y + "px";
+
+
+            overlay.style.width =
+                rect.width *
+                scaleX +
+                "px";
+
+
+            overlay.style.height =
+                rect.height *
+                scaleY +
+                "px";
+
+
+            overlayLabel.textContent =
+                selectedElement.tagName
+                    .toLowerCase() +
+                (
+                    selectedElement.id
+                        ? " #" +
+                        selectedElement.id
+                        : ""
+                );
+
+        }
+
+
+        /* =========================================================
+           INSPECTOR
+           ========================================================= */
+
+        function fillInspector() {
+
+            if (!selectedElement ||
+                !selectedData)
+                return;
+
+
+            document.getElementById(
+                "prop-text"
+            ).value =
+                selectedElement.innerHTML;
+
+
+            document.getElementById(
+                "prop-color"
+            ).value =
+                selectedData.color ||
+                "";
+
+
+            try {
+
+                document.getElementById(
+                    "prop-color-picker"
+                ).value =
+                    normalizeColor(
+                        selectedData.color ||
+                        "#ffffff"
+                    );
+
+            } catch { }
+
+
+            document.getElementById(
+                "prop-font-size"
+            ).value =
+                selectedData.fontSize ||
+                "";
+
+
+            document.getElementById(
+                "prop-font-weight"
+            ).value =
+                selectedData.fontWeight ||
+                "normal";
+
+
+            document.getElementById(
+                "prop-align"
+            ).value =
+                selectedData.textAlign ||
+                "left";
+
+
+            document.getElementById(
+                "prop-width"
+            ).value =
+                selectedData.width ||
+                "";
+
+
+            document.getElementById(
+                "prop-height"
+            ).value =
+                selectedData.height ||
+                "";
+
+
+            document.getElementById(
+                "prop-margin"
+            ).value =
+                selectedData.margin ||
+                "";
+
+
+            document.getElementById(
+                "prop-padding"
+            ).value =
+                selectedData.padding ||
+                "";
+
+
+            const pos =
+                selectedData.positions[
+                currentDevice
+                ];
+
+
+            document.getElementById(
+                "prop-x"
+            ).value =
+                pos?.x || 0;
+
+
+            document.getElementById(
+                "prop-y"
+            ).value =
+                pos?.y || 0;
+
+        }
+
+
+        function normalizeColor(color) {
+
+            if (!color)
+                return "#ffffff";
+
+            if (
+                color.startsWith("#")
+            )
+                return color;
+
+            const match =
+                color.match(
+                    /\d+/g
+                );
+
+            if (!match)
+                return "#ffffff";
+
+            const rgb =
+                match.slice(0, 3)
+                    .map(
+                        x =>
+                            parseInt(x)
+                                .toString(16)
+                                .padStart(2, "0")
+                    )
+                    .join("");
+
+            return "#" + rgb;
+
+        }
+
+
+        /* =========================================================
+           SAVE HISTORY
+           ========================================================= */
+
+        function saveHistory() {
+
+            const snapshot =
+                deepClone(editor);
+
+            history =
+                history.slice(
+                    0,
+                    historyIndex + 1
+                );
+
+            history.push(
+                snapshot
+            );
+
+            historyIndex =
+                history.length - 1;
+
+
+            /*
+            Keep memory reasonable.
+            */
+
+            if (history.length > 40) {
+
+                history.shift();
+
+                historyIndex--;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           UNDO
+           ========================================================= */
+
+        function undo() {
+
+            if (historyIndex <= 0)
+                return;
+
+            historyIndex--;
+
+            editor =
+                deepClone(
+                    history[
+                    historyIndex
+                    ]
+                );
+
+            applyEditor();
+
+            if (selectedElement) {
+
+                const selector =
+                    selectedData?.selector;
+
+                if (selector) {
+
+                    try {
+
+                        selectedElement =
+                            frame.contentDocument
+                                .querySelector(
+                                    selector
+                                );
+
+                    } catch {
+
+                        selectedElement =
+                            null;
+
+                    }
+
+                }
+
+            }
+
+            if (selectedElement) {
+
+                selectedData =
+                    getElementSettings(
+                        selectedElement
+                    );
+
+                fillInspector();
+
+            }
+
+            updateOverlay();
+
+            setStatus("Undo");
+
+        }
+
+
+        /* =========================================================
+           REDO
+           ========================================================= */
+
+        function redo() {
+
+            if (
+                historyIndex >=
+                history.length - 1
+            )
+                return;
+
+
+            historyIndex++;
+
+            editor =
+                deepClone(
+                    history[
+                    historyIndex
+                    ]
+                );
+
+
+            applyEditor();
+
+            updateOverlay();
+
+            setStatus("Redo");
+
+        }
+
+
+        /* =========================================================
+           PROPERTY CHANGE
+           ========================================================= */
+
+        function propertyChanged() {
+
+            if (
+                !selectedElement ||
+                !selectedData
+            )
+                return;
+
+
+            saveHistory();
+
+
+            selectedData.text =
+                document.getElementById(
+                    "prop-text"
+                ).value;
+
+
+            selectedData.color =
+                document.getElementById(
+                    "prop-color"
+                ).value;
+
+
+            selectedData.fontSize =
+                document.getElementById(
+                    "prop-font-size"
+                ).value;
+
+
+            selectedData.fontWeight =
+                document.getElementById(
+                    "prop-font-weight"
+                ).value;
+
+
+            selectedData.textAlign =
+                document.getElementById(
+                    "prop-align"
+                ).value;
+
+
+            selectedData.width =
+                document.getElementById(
+                    "prop-width"
+                ).value;
+
+
+            selectedData.height =
+                document.getElementById(
+                    "prop-height"
+                ).value;
+
+
+            selectedData.margin =
+                document.getElementById(
+                    "prop-margin"
+                ).value;
+
+
+            selectedData.padding =
+                document.getElementById(
+                    "prop-padding"
+                ).value;
+
+
+            selectedData.positions[
+                currentDevice
+            ].x =
+                Number(
+                    document.getElementById(
+                        "prop-x"
+                    ).value
+                ) || 0;
+
+
+            selectedData.positions[
+                currentDevice
+            ].y =
+                Number(
+                    document.getElementById(
+                        "prop-y"
+                    ).value
+                ) || 0;
+
+
+            applyElementSettings(
+                selectedElement,
+                selectedData
+            );
+
+
+            updateOverlay();
+
+            setStatus("Changed");
+
+        }
+
+
+        /* =========================================================
+           DRAG
+           ========================================================= */
+
+        function startDrag(event) {
+
+            if (!selectedElement)
+                return;
+
+            dragState = {
+
+                startX: event.clientX,
+
+                startY: event.clientY,
+
+                oldX:
+                    selectedData
+                        .positions[
+                        currentDevice
+                    ].x || 0,
+
+                oldY:
+                    selectedData
+                        .positions[
+                        currentDevice
+                    ].y || 0
+
+            };
+
+            saveHistory();
+
+        }
+
+
+        function dragMove(event) {
+
+            if (!dragState ||
+                !selectedElement)
+                return;
+
+
+            /*
+            Mouse movement is in admin
+            canvas pixels.
+        
+            Since iframe is not scaled,
+            this is exact.
+            */
+
+            const dx =
+                event.clientX -
+                dragState.startX;
+
+
+            const dy =
+                event.clientY -
+                dragState.startY;
+
+
+            const position =
+                selectedData
+                    .positions[
+                currentDevice
+                ];
+
+
+            position.x =
+                Math.round(
+                    dragState.oldX +
+                    dx
+                );
+
+
+            position.y =
+                Math.round(
+                    dragState.oldY +
+                    dy
+                );
+
+
+            applyElementSettings(
+                selectedElement,
+                selectedData
+            );
+
+
+            document.getElementById(
+                "prop-x"
+            ).value =
+                position.x;
+
+
+            document.getElementById(
+                "prop-y"
+            ).value =
+                position.y;
+
+
+            updateOverlay();
+
+        }
+
+
+        function endDrag() {
+
+            if (!dragState)
+                return;
+
+            dragState =
+                null;
+
+            setStatus("Moved");
+
+        }
+
+
+        /* =========================================================
+           FRAME MOUSE HANDLING
+           ========================================================= */
+
+        function frameClick(event) {
+
+            /*
+            If we're adding an element,
+            place it here.
+            */
+
+            if (addingType) {
+
+                addCustomElement(
+                    addingType,
+                    event
+                );
+
+                addingType =
+                    null;
+
+                addMenu.style.display =
+                    "none";
+
+                return;
+
+            }
+
+
+            const element =
+                getElementFromPoint(
+                    event.clientX,
+                    event.clientY
+                );
+
+
+            if (element) {
+
+                selectElement(
+                    element
+                );
+
+            }
+
+        }
+
+
+        /*
+        Because the iframe captures
+        mouse events, we listen to
+        its document directly.
+        */
+
+        function setupFrameEvents() {
+
+            const doc =
+                frame.contentDocument;
+
+            if (!doc)
+                return;
+
+
+            discoverPage();
+
+
+            doc.addEventListener(
+                "click",
+                frameClick,
+                true
+            );
+
+
+            doc.addEventListener(
+                "mousedown",
+                event => {
+
+                    const element =
+                        getElementFromPoint(
+                            event.clientX,
+                            event.clientY
+                        );
+
+                    if (
+                        element &&
+                        !isProtected(element)
+                    ) {
+
+                        selectElement(
+                            element
+                        );
+
+                        startDrag(
+                            event
+                        );
+
+                    }
+
+                },
+                true
+            );
+
+
+            doc.addEventListener(
+                "mousemove",
+                event => {
+
+                    if (dragState) {
+
+                        dragMove(
+                            event
+                        );
+
+                    }
+
+                },
+                true
+            );
+
+
+            doc.addEventListener(
+                "mouseup",
+                () => {
+
+                    endDrag();
+
+                },
+                true
+            );
+
+
+            /*
+            Double-click = edit text
+            */
+
+            doc.addEventListener(
+                "dblclick",
+                event => {
+
+                    const element =
+                        getElementFromPoint(
+                            event.clientX,
+                            event.clientY
+                        );
+
+                    if (
+                        element &&
+                        !isProtected(element)
+                    ) {
+
+                        selectElement(
+                            element
+                        );
+
+                        const textBox =
+                            document.getElementById(
+                                "prop-text"
+                            );
+
+                        textBox.focus();
+
+                        textBox.select();
+
+                    }
+
+                },
+                true
+            );
+
+        }
+
+
+        /* =========================================================
+           ADD CUSTOM ELEMENT
+           ========================================================= */
+
+        function addCustomElement(
+            type,
+            event
+        ) {
+
+            const doc =
+                frame.contentDocument;
+
+            if (!doc)
+                return;
+
+
+            const rect =
+                frame.getBoundingClientRect();
+
+
+            const x =
+                event.clientX;
+
+
+            const y =
+                event.clientY;
+
+
+            const id =
+                "custom_" +
+                Date.now();
+
+
+            let item = {
+
+                id,
+
+                type,
+
+                text: "New element",
+
+                html: "New element",
+
+                x,
+
+                y,
+
+                width: "auto",
+
+                height: "auto",
+
+                color: "#ffffff",
+
+                fontSize: 18,
+
+                fontWeight: "normal",
+
+                textAlign: "left",
+
+                background: "transparent",
+
+                padding: "8px",
+
+                hidden: false
+
+            };
+
+
+            if (type === "heading") {
+
+                item.text =
+                    "New Heading";
+
+                item.html =
+                    "<strong>New Heading</strong>";
+
+                item.fontSize =
+                    32;
+
+                item.fontWeight =
+                    "800";
+
+            }
+
+
+            if (type === "button") {
+
+                item.text =
+                    "Button";
+
+                item.html =
+                    "Button";
+
+                item.background =
+                    "#3268ff";
+
+                item.padding =
+                    "10px 18px";
+
+                item.fontWeight =
+                    "700";
+
+            }
+
+
+            if (type === "box") {
+
+                item.text =
+                    "Box";
+
+                item.html =
+                    "Box";
+
+                item.background =
+                    "#1e293b";
+
+                item.padding =
+                    "20px";
+
+                item.width =
+                    "250px";
+
+                item.height =
+                    "120px";
+
+            }
+
+
+            if (type === "divider") {
+
+                item.text =
+                    "";
+
+                item.html =
+                    "";
+
+                item.background =
+                    "#64748b";
+
+                item.width =
+                    "250px";
+
+                item.height =
+                    "2px";
+
+                item.padding =
+                    "0";
+
+            }
+
+
+            editor.customElements.push(
+                item
+            );
+
+
+            saveHistory();
+
+
+            applyEditor();
+
+            setStatus(
+                "Added new element"
+            );
+
+
+            /*
+            Select new element.
+            */
+
+            const newElement =
+                doc.querySelector(
+                    `[data-codenest-id="${id}"]`
+                );
+
+
+            if (newElement) {
+
+                selectElement(
+                    newElement
+                );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           LOAD DATABASE
+           ========================================================= */
+
+        async function loadEditor() {
+
+            setStatus(
+                "Loading settings..."
+            );
+
+
+            const result =
+                await supabaseClient
+                    .from("site_settings")
+                    .select(
+                        "id,editor_data"
+                    )
+                    .order(
+                        "id",
+                        {
+                            ascending: true
+                        }
+                    )
+                    .limit(1)
+                    .maybeSingle();
+
+
+            if (result.error) {
+
+                console.error(
+                    result.error
+                );
+
+                setStatus(
+                    "Database error"
+                );
+
+                return;
+
+            }
+
+
+            if (!result.data) {
+
+                setStatus(
+                    "No site_settings row"
+                );
+
+                return;
+
+            }
+
+
+            settingsId =
+                result.data.id;
+
+
+            if (
+                result.data.editor_data
+            ) {
+
+                editor =
+                    result.data.editor_data;
+
+            }
+
+
+            if (!editor.version) {
+
+                editor.version =
+                    3;
+
+            }
+
+
+            if (!editor.elements) {
+
+                editor.elements =
+                    {};
+
+            }
+
+
+            if (
+                !Array.isArray(
+                    editor.customElements
+                )
+            ) {
+
+                editor.customElements =
+                    [];
+
+            }
+
+
+            saveHistory();
+
+
+            /*
+            Wait for iframe.
+            */
+
+            if (
+                frame.contentDocument &&
+                frame.contentDocument.readyState !==
+                "loading"
+            ) {
+
+                discoverPage();
+
+                applyEditor();
+
+            }
+
+
+            setStatus(
+                "Ready"
+            );
+
+        }
+
+
+        /* =========================================================
+           SAVE DATABASE
+           ========================================================= */
+
+        async function saveEditor() {
+
+            if (!settingsId) {
+
+                setStatus(
+                    "No settings row"
+                );
+
+                return;
+
+            }
+
+
+            setStatus(
+                "Saving..."
+            );
+
+
+            const result =
+                await supabaseClient
+                    .from("site_settings")
+                    .update({
+
+                        editor_data:
+                            editor
+
+                    })
+                    .eq(
+                        "id",
+                        settingsId
+                    );
+
+
+            if (result.error) {
+
+                console.error(
+                    result.error
+                );
+
+                setStatus(
+                    "Save failed"
+                );
+
+                alert(
+                    "Save failed:\n" +
+                    result.error.message
+                );
+
+                return;
+
+            }
+
+
+            setStatus(
+                "Saved ✓"
+            );
+
+
+            setTimeout(
+                () =>
+                    setStatus("Ready"),
+                2000
+            );
+
+        }
+
+
+        /* =========================================================
+           LOGIN
+           ========================================================= */
+
+        async function checkLogin() {
+
+            const {
+                data
+            } =
+                await supabaseClient
+                    .auth
+                    .getSession();
+
+
+            if (data.session) {
+
+                document.getElementById(
+                    "login-screen"
+                ).style.display =
+                    "none";
+
+                await loadEditor();
+
+            }
+
+        }
+
+
+        async function login() {
+
+            const email =
+                document.getElementById(
+                    "email"
+                ).value.trim();
+
+
+            const password =
+                document.getElementById(
+                    "password"
+                ).value;
+
+
+            const error =
+                document.getElementById(
+                    "login-error"
+                );
+
+
+            error.textContent =
+                "";
+
+
+            if (!email || !password) {
+
+                error.textContent =
+                    "Email and password are required.";
+
+                return;
+
+            }
+
+
+            const result =
+                await supabaseClient
+                    .auth
+                    .signInWithPassword({
+
+                        email,
+
+                        password
+
+                    });
+
+
+            if (result.error) {
+
+                error.textContent =
+                    result.error.message;
+
+                return;
+
+            }
+
+
+            document.getElementById(
+                "login-screen"
+            ).style.display =
+                "none";
+
+
+            await loadEditor();
+
+        }
+
+
+        /* =========================================================
+           EVENTS
+           ========================================================= */
+
+        document.getElementById(
+            "login-btn"
+        ).addEventListener(
+            "click",
+            login
+        );
+
+
+        document.getElementById(
+            "password"
+        ).addEventListener(
+            "keydown",
+            event => {
+
+                if (event.key === "Enter")
+                    login();
+
+            }
+        );
+
+
+        document
+            .querySelectorAll(
+                ".device"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        setDevice(
+                            button.dataset.device
+                        );
+
+                    }
+                );
+
+            });
+
+
+        document.getElementById(
+            "save-btn"
+        ).addEventListener(
+            "click",
+            saveEditor
+        );
+
+
+        document.getElementById(
+            "undo-btn"
+        ).addEventListener(
+            "click",
+            undo
+        );
+
+
+        document.getElementById(
+            "redo-btn"
+        ).addEventListener(
+            "click",
+            redo
+        );
+
+
+        document.getElementById(
+            "close-inspector"
+        ).addEventListener(
+            "click",
+            () => {
+
+                selectedElement =
+                    null;
+
+                selectedData =
+                    null;
+
+                inspector.style.display =
+                    "none";
+
+                overlay.style.display =
+                    "none";
+
+            }
+        );
+
+
+        /*
+        Property inputs
+        */
+
+        [
+            "prop-text",
+            "prop-color",
+            "prop-font-size",
+            "prop-font-weight",
+            "prop-align",
+            "prop-width",
+            "prop-height",
+            "prop-margin",
+            "prop-padding",
+            "prop-x",
+            "prop-y"
+
+        ].forEach(id => {
+
+            const element =
+                document.getElementById(
+                    id
+                );
+
+            element.addEventListener(
+                "input",
+                propertyChanged
+            );
+
+            element.addEventListener(
+                "change",
+                propertyChanged
+            );
+
+        });
+
+
+        /*
+        Color picker
+        */
+
+        document.getElementById(
+            "prop-color-picker"
+        ).addEventListener(
+            "input",
+            event => {
+
+                document.getElementById(
+                    "prop-color"
+                ).value =
+                    event.target.value;
+
+                propertyChanged();
+
+            }
+        );
+
+
+        /*
+        Reset position
+        */
+
+        document.getElementById(
+            "reset-position"
+        ).addEventListener(
+            "click",
+            () => {
+
+                if (
+                    !selectedData
+                )
+                    return;
+
+
+                saveHistory();
+
+
+                selectedData.positions[
+                    currentDevice
+                ] = {
+
+                    x: 0,
+                    y: 0
+
+                };
+
+
+                applyElementSettings(
+                    selectedElement,
+                    selectedData
+                );
+
+
+                fillInspector();
+
+                updateOverlay();
+
+            }
+        );
+
+
+        /*
+        Hide
+        */
+
+        document.getElementById(
+            "hide-element"
+        ).addEventListener(
+            "click",
+            () => {
+
+                if (
+                    !selectedData
+                )
+                    return;
+
+
+                saveHistory();
+
+
+                selectedData.hidden =
+                    !selectedData.hidden;
+
+
+                applyElementSettings(
+                    selectedElement,
+                    selectedData
+                );
+
+
+                document.getElementById(
+                    "hide-element"
+                ).textContent =
+                    selectedData.hidden
+                        ? "Show element"
+                        : "Hide element";
+
+
+                updateOverlay();
+
+            }
+        );
+
+
+        /*
+        Add menu
+        */
+
+        document.getElementById(
+            "add-btn"
+        ).addEventListener(
+            "click",
+            event => {
+
+                event.stopPropagation();
+
+                addMenu.style.display =
+                    addMenu.style.display ===
+                        "block"
+                        ? "none"
+                        : "block";
+
+            }
+        );
+
+
+        document
+            .querySelectorAll(
+                ".add-item"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        addingType =
+                            button.dataset.add;
+
+                        addMenu.style.display =
+                            "none";
+
+                        setStatus(
+                            "Click on the page to place it"
+                        );
+
+                    }
+                );
+
+            });
+
+
+        /*
+        Language preview
+        */
+
+        document.getElementById(
+            "language-preview"
+        ).addEventListener(
+            "change",
+            event => {
+
+                const doc =
+                    frame.contentDocument;
+
+                if (!doc)
+                    return;
+
+
+                const select =
+                    doc.querySelector(
+                        "#language-select"
+                    );
+
+
+                if (select) {
+
+                    select.value =
+                        event.target.value;
+
+
+                    select.dispatchEvent(
+                        new Event(
+                            "change",
+                            {
+                                bubbles: true
+                            }
+                        )
+                    );
+
+                }
+
+
+                setTimeout(
+                    () => {
+
+                        discoverPage();
+
+                        applyEditor();
+
+                        updateOverlay();
+
+                    },
+                    300
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           IFRAME LOAD
+           ========================================================= */
+
+        frame.addEventListener(
+            "load",
+            async () => {
+
+                /*
+                Give original index.js
+                time to finish.
+                */
+
+                await wait(150);
+
+                discoverPage();
+
+                applyEditor();
+
+                setupFrameEvents();
+
+                setDevice(
+                    currentDevice
+                );
+
+                setStatus(
+                    "Ready"
+                );
+
+            }
+        );
+
+
+        /* =========================================================
+           RESIZE
+           ========================================================= */
+
+        window.addEventListener(
+            "resize",
+            () => {
+
+                updateOverlay();
+
+            }
+        );
+
+
+        scrollArea.addEventListener(
+            "scroll",
+            () => {
+
+                updateOverlay();
+
+            }
+        );
+
+
+        /* =========================================================
+           REALTIME
+           ========================================================= */
+
+        supabaseClient
+            .channel(
+                "codenest-editor-realtime"
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event: "UPDATE",
+                    schema: "public",
+                    table: "site_settings"
+                },
+                payload => {
+
+                    if (
+                        payload.new &&
+                        payload.new.editor_data
+                    ) {
+
+                        editor =
+                            payload.new.editor_data;
+
+                        applyEditor();
+
+                        updateOverlay();
+
+                        setStatus(
+                            "Updated from server"
+                        );
+
+                    }
+
+                }
+            )
+            .subscribe();
+
+
+        /* =========================================================
+           START
+           ========================================================= */
+
+        checkLogin();
+
+    </script>
+
+</body>
+
+</html>
