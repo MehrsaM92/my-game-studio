@@ -3590,220 +3590,400 @@
             "sb_publishable_vib0xKSHlp-04KNTM0Y1kg_hc-yjUK5"
         );
 
-        /* ================================
-                    CodeNest Visual Editor - FIX
-                    ================================ */
+        /* =========================================
+           CodeNest Visual Editor
+           ========================================= */
 
-        function applyCodeNestEditorSettings(editor) {
-            if (!editor) return;
+        function applyCodeNestEditorSettings(editorData) {
 
-            if (!editor.elements) {
-                editor.elements = {};
+            if (!editorData || typeof editorData !== "object") {
+                console.warn("CodeNest: invalid editor data");
+                return;
             }
 
-            Object.keys(editor.elements).forEach(function (id) {
-                const settings = editor.elements[id];
+            const elements = editorData.elements || {};
+
+            console.log(
+                "CodeNest: applying",
+                Object.keys(elements).length,
+                "elements"
+            );
+
+            Object.keys(elements).forEach(function (id) {
+
+                const settings = elements[id];
 
                 if (!settings) return;
 
                 let element = null;
 
+                /* اول selector ذخیره شده */
+
                 if (settings.selector) {
+
                     try {
-                        element = document.querySelector(settings.selector);
+
+                        element =
+                            document.querySelector(
+                                settings.selector
+                            );
+
                     } catch (error) {
+
                         console.warn(
                             "CodeNest: invalid selector:",
                             settings.selector
                         );
+
                     }
                 }
 
+                /* اگر پیدا نشد با ID داخلی امتحان کن */
+
                 if (!element) {
+
                     try {
-                        element = document.querySelector(
-                            `[data-codenest-id="${id}"]`
-                        );
-                    } catch (error) {
-                        // ignore
-                    }
+
+                        element =
+                            document.querySelector(
+                                `[data-codenest-id="${id}"]`
+                            );
+
+                    } catch (error) { }
+
                 }
 
                 if (!element) {
+
                     console.warn(
                         "CodeNest: element not found:",
                         settings.selector || id
                     );
+
                     return;
                 }
 
+                /* TEXT */
+
                 if (settings.text !== undefined) {
-                    element.innerHTML = settings.text;
+
+                    element.innerHTML =
+                        settings.text;
+
                 }
 
+                /* COLOR */
+
                 if (settings.color) {
-                    element.style.color = settings.color;
+
+                    element.style.color =
+                        settings.color;
+
                 }
+
+                /* FONT SIZE */
 
                 if (
                     settings.fontSize !== undefined &&
                     settings.fontSize !== null &&
                     settings.fontSize !== ""
                 ) {
+
                     element.style.fontSize =
                         Number(settings.fontSize) + "px";
+
                 }
+
+                /* FONT WEIGHT */
 
                 if (settings.fontWeight) {
-                    element.style.fontWeight = settings.fontWeight;
+
+                    element.style.fontWeight =
+                        settings.fontWeight;
+
                 }
+
+                /* TEXT ALIGN */
 
                 if (settings.textAlign) {
-                    element.style.textAlign = settings.textAlign;
+
+                    element.style.textAlign =
+                        settings.textAlign;
+
                 }
+
+                /* WIDTH */
 
                 if (settings.width) {
-                    element.style.width = settings.width;
+
+                    element.style.width =
+                        settings.width;
+
                 }
+
+                /* HEIGHT */
 
                 if (settings.height) {
-                    element.style.height = settings.height;
+
+                    element.style.height =
+                        settings.height;
+
                 }
+
+                /* MARGIN */
 
                 if (settings.margin) {
-                    element.style.margin = settings.margin;
+
+                    element.style.margin =
+                        settings.margin;
+
                 }
+
+                /* PADDING */
 
                 if (settings.padding) {
-                    element.style.padding = settings.padding;
+
+                    element.style.padding =
+                        settings.padding;
+
                 }
 
+                /* HIDDEN */
+
                 if (settings.hidden === true) {
+
                     element.style.display = "none";
+
                 } else if (settings.hidden === false) {
+
                     element.style.display = "";
+
                 }
+
+                /* POSITION */
 
                 if (
                     settings.positions &&
                     settings.positions.desktop
                 ) {
-                    const position = settings.positions.desktop;
+
+                    const position =
+                        settings.positions.desktop;
 
                     if (
                         position.x !== undefined &&
                         position.y !== undefined
                     ) {
+
                         element.style.transform =
                             `translate(${position.x}px, ${position.y}px)`;
+
                     }
+
                 }
 
-                if (!element.dataset.codenestId) {
-                    element.dataset.codenestId = id;
-                }
+                /* ذخیره ID روی خود عنصر */
+
+                element.dataset.codenestId = id;
+
             });
 
+
+            /* =========================================
+               Custom Elements
+               ========================================= */
+
             document
-                .querySelectorAll("[data-codenest-custom]")
+                .querySelectorAll(
+                    "[data-codenest-custom]"
+                )
                 .forEach(function (element) {
+
                     element.remove();
+
                 });
 
-            if (Array.isArray(editor.customElements)) {
-                editor.customElements.forEach(function (item) {
 
-                    const element = document.createElement("div");
+            if (
+                Array.isArray(
+                    editorData.customElements
+                )
+            ) {
 
-                    element.dataset.codenestCustom = "true";
+                editorData.customElements.forEach(
+                    function (item) {
 
-                    if (item.id) {
-                        element.dataset.codenestId = item.id;
+                        const element =
+                            document.createElement("div");
+
+                        element.dataset.codenestCustom =
+                            "true";
+
+                        if (item.id) {
+
+                            element.dataset.codenestId =
+                                item.id;
+
+                        }
+
+                        element.textContent =
+                            item.text || "";
+
+                        element.style.position =
+                            "absolute";
+
+                        element.style.left =
+                            (item.x || 0) + "px";
+
+                        element.style.top =
+                            (item.y || 0) + "px";
+
+                        element.style.zIndex =
+                            "999999";
+
+                        element.style.color =
+                            item.color || "#ffffff";
+
+                        element.style.fontSize =
+                            (item.fontSize || 18) + "px";
+
+                        element.style.fontWeight =
+                            item.fontWeight || "normal";
+
+                        element.style.textAlign =
+                            item.textAlign || "left";
+
+                        element.style.padding =
+                            "5px";
+
+                        document.body.appendChild(
+                            element
+                        );
+
                     }
+                );
 
-                    element.textContent = item.text || "";
-
-                    element.style.position = "absolute";
-
-                    element.style.left =
-                        (item.x || 0) + "px";
-
-                    element.style.top =
-                        (item.y || 0) + "px";
-
-                    element.style.zIndex = "999999";
-
-                    element.style.color =
-                        item.color || "#ffffff";
-
-                    element.style.fontSize =
-                        (item.fontSize || 18) + "px";
-
-                    element.style.fontWeight =
-                        item.fontWeight || "normal";
-
-                    element.style.textAlign =
-                        item.textAlign || "left";
-
-                    element.style.padding = "5px";
-
-                    document.body.appendChild(element);
-                });
             }
+
         }
 
 
-        /* ================================
-           Load editor from Supabase
-           ================================ */
+        /* =========================================
+        Load Editor From Supabase
+        ========================================= */
 
         async function loadCodeNestEditor() {
 
+            console.log(
+                "CodeNest: loading editor..."
+            );
+
             try {
 
-                const {
-                    data,
-                    error
-                } = await siteSettingsClient
-                    .from("site_settings")
-                    .select("site_title, editor_data")
-                    .limit(1)
-                    .single();
+                const result =
+                    await siteSettingsClient
+                        .from("site_settings")
+                        .select(
+                            "site_title, editor_data"
+                        )
+                        .order(
+                            "id",
+                            {
+                                ascending: true
+                            }
+                        )
+                        .limit(1)
+                        .maybeSingle();
 
-                if (error) {
+
+                if (result.error) {
+
                     console.error(
-                        "CodeNest editor error:",
-                        error
+                        "CodeNest editor load error:",
+                        result.error
                     );
+
                     return;
+
                 }
 
-                if (!data) return;
+
+                const data =
+                    result.data;
+
+                if (!data) {
+
+                    console.warn(
+                        "CodeNest: no site_settings row found"
+                    );
+
+                    return;
+
+                }
+
+
+                /* SITE TITLE */
 
                 if (data.site_title) {
-                    document.title = data.site_title;
+
+                    document.title =
+                        data.site_title;
+
                 }
 
-                let editor = data.editor_data;
 
-                if (!editor) return;
+                /* EDITOR DATA */
 
-                if (typeof editor === "string") {
+                let editorData =
+                    data.editor_data;
+
+
+                if (!editorData) {
+
+                    console.log(
+                        "CodeNest: editor_data is empty"
+                    );
+
+                    return;
+
+                }
+
+
+                if (
+                    typeof editorData === "string"
+                ) {
 
                     try {
-                        editor = JSON.parse(editor);
+
+                        editorData =
+                            JSON.parse(
+                                editorData
+                            );
+
                     } catch (error) {
 
                         console.error(
-                            "CodeNest: invalid editor_data:",
+                            "CodeNest: invalid JSON:",
                             error
                         );
 
                         return;
+
                     }
+
                 }
 
-                applyCodeNestEditorSettings(editor);
+
+                console.log(
+                    "CodeNest: editor loaded:",
+                    editorData
+                );
+
+
+                applyCodeNestEditorSettings(
+                    editorData
+                );
+
 
             } catch (error) {
 
@@ -3811,77 +3991,141 @@
                     "CodeNest editor error:",
                     error
                 );
+
             }
+
         }
 
 
-        /* ================================
-           Initial load
-           ================================ */
+        /* =========================================
+        INITIAL LOAD
+        ========================================= */
 
         loadCodeNestEditor();
 
 
-        /* ================================
-           REALTIME
-           ================================ */
+        /* =========================================
+        REALTIME
+        ========================================= */
 
-        siteSettingsClient
-            .channel("codenest-editor-realtime")
+        const codeNestEditorChannel =
+            siteSettingsClient
+                .channel(
+                    "codenest-editor-realtime-v2"
+                )
 
-            .on(
-                "postgres_changes",
-                {
-                    event: "UPDATE",
-                    schema: "public",
-                    table: "site_settings"
-                },
+                .on(
+                    "postgres_changes",
+                    {
+                        event: "UPDATE",
+                        schema: "public",
+                        table: "site_settings"
+                    },
 
-                function (payload) {
+                    function (payload) {
 
-                    if (
-                        !payload.new ||
-                        !payload.new.editor_data
-                    ) {
-                        return;
-                    }
+                        console.log(
+                            "CodeNest REALTIME UPDATE:",
+                            payload
+                        );
 
-                    let editor = payload.new.editor_data;
 
-                    if (typeof editor === "string") {
+                        if (
+                            !payload ||
+                            !payload.new
+                        ) {
 
-                        try {
-                            editor = JSON.parse(editor);
-                        } catch (error) {
-
-                            console.error(
-                                "CodeNest realtime: invalid editor_data:",
-                                error
+                            console.warn(
+                                "CodeNest: realtime payload is empty"
                             );
 
                             return;
+
                         }
+
+
+                        /* TITLE */
+
+                        if (
+                            payload.new.site_title
+                        ) {
+
+                            document.title =
+                                payload.new.site_title;
+
+                        }
+
+
+                        /* EDITOR */
+
+                        let editorData =
+                            payload.new.editor_data;
+
+
+                        if (!editorData) {
+
+                            console.warn(
+                                "CodeNest: realtime editor_data is empty"
+                            );
+
+                            return;
+
+                        }
+
+
+                        if (
+                            typeof editorData === "string"
+                        ) {
+
+                            try {
+
+                                editorData =
+                                    JSON.parse(
+                                        editorData
+                                    );
+
+                            } catch (error) {
+
+                                console.error(
+                                    "CodeNest realtime JSON error:",
+                                    error
+                                );
+
+                                return;
+
+                            }
+
+                        }
+
+
+                        console.log(
+                            "CodeNest: applying realtime editor:",
+                            editorData
+                        );
+
+
+                        applyCodeNestEditorSettings(
+                            editorData
+                        );
+
                     }
+                )
 
-                    applyCodeNestEditorSettings(editor);
+                .subscribe(
+                    function (status) {
 
-                    if (
-                        payload.new.site_title
-                    ) {
-                        document.title =
-                            payload.new.site_title;
+                        console.log(
+                            "CodeNest editor realtime status:",
+                            status
+                        );
+
                     }
-                }
-            )
-
-            .subscribe(function (status) {
-
-                console.log(
-                    "CodeNest realtime status:",
-                    status
                 );
 
-            });
+
+        /* =========================================
+        PROTECTED ELEMENTS
+        ========================================= */
 
         const PROTECTED_SELECTOR = [
             "#comments-section",
@@ -3908,13 +4152,16 @@
             "#comments-list"
         ].join(",");
 
+
         function isProtected(element) {
-            return !!element?.closest(PROTECTED_SELECTOR);
+
+            return !!element?.closest(
+                PROTECTED_SELECTOR
+            );
+
         }
+
     </script>
-
-
-
 
 </body>
 
