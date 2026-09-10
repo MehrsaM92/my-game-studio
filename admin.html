@@ -43,10 +43,6 @@
             flex-direction: column;
         }
 
-        /* =========================================================
-   TOP BAR
-   ========================================================= */
-
         #topbar {
             height: 62px;
             flex: none;
@@ -119,10 +115,6 @@
             white-space: nowrap;
         }
 
-        /* =========================================================
-   WORKSPACE
-   ========================================================= */
-
         #workspace {
             flex: 1;
             min-height: 0;
@@ -152,10 +144,6 @@
             border: 0;
             background: #fff;
         }
-
-        /* =========================================================
-   SELECTION OVERLAY
-   ========================================================= */
 
         #overlay {
             position: absolute;
@@ -193,10 +181,6 @@
             pointer-events: none;
         }
 
-        /* =========================================================
-   INSPECTOR
-   ========================================================= */
-
         #inspector {
             position: absolute;
             top: 12px;
@@ -218,7 +202,7 @@
             z-index: 2;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 6px;
             padding: 13px;
             background: #111827;
             border-bottom: 1px solid #293449;
@@ -226,10 +210,24 @@
 
         .inspector-title {
             font-weight: 700;
-            max-width: 240px;
+            max-width: 180px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            margin-right: auto;
+        }
+
+        #delete-element {
+            height: 30px;
+            padding: 0 10px;
+            border-radius: 7px;
+            background: #3a1720;
+            border: 1px solid #6b2535;
+            color: #fff;
+        }
+
+        #delete-element:hover {
+            background: #4b1d28;
         }
 
         .close-btn {
@@ -316,10 +314,6 @@
             background: #4b1d28;
         }
 
-        /* =========================================================
-   ADD MENU
-   ========================================================= */
-
         #add-menu {
             position: absolute;
             top: 58px;
@@ -346,10 +340,6 @@
         .add-item:hover {
             background: #1e293b;
         }
-
-        /* =========================================================
-   LOGIN
-   ========================================================= */
 
         #login-screen {
             position: fixed;
@@ -407,10 +397,6 @@
             min-height: 18px;
         }
 
-        /* =========================================================
-   MOBILE ADMIN
-   ========================================================= */
-
         @media(max-width:800px) {
 
             .logo {
@@ -461,7 +447,6 @@
         </div>
 
     </div>
-
 
     <div id="app">
 
@@ -522,7 +507,6 @@
 
         </div>
 
-
         <div id="workspace">
 
             <div id="canvas-scroll">
@@ -547,14 +531,17 @@
                 Click an element to select • Drag to move • Double-click text to edit
             </div>
 
-
             <div id="inspector">
 
                 <div class="inspector-head">
 
-                    <div class="inspector-title" id="inspector-title">
+                    <div class="inspector-title">
                         Element
                     </div>
+
+                    <button id="delete-element" type="button">
+                        Delete
+                    </button>
 
                     <button class="close-btn" id="close-inspector">
                         ×
@@ -574,6 +561,15 @@
 
                     </div>
 
+                    <div class="field" id="button-link-field" style="display:none;">
+
+                        <label>
+                            Button Link
+                        </label>
+
+                        <input id="prop-link" type="text" placeholder="https://example.com">
+
+                    </div>
 
                     <div class="field">
 
@@ -590,7 +586,6 @@
                         </div>
 
                     </div>
-
 
                     <div class="two">
 
@@ -642,7 +637,6 @@
 
                     </div>
 
-
                     <div class="field">
 
                         <label>
@@ -671,7 +665,6 @@
 
                     </div>
 
-
                     <div class="two">
 
                         <div class="field">
@@ -695,7 +688,6 @@
                         </div>
 
                     </div>
-
 
                     <div class="two">
 
@@ -721,7 +713,6 @@
 
                     </div>
 
-
                     <div class="field">
 
                         <label>
@@ -738,7 +729,6 @@
 
                     </div>
 
-
                     <div class="field">
 
                         <button class="small-btn" id="reset-position">
@@ -746,7 +736,6 @@
                         </button>
 
                     </div>
-
 
                     <div class="field">
 
@@ -759,7 +748,6 @@
                 </div>
 
             </div>
-
 
             <div id="add-menu">
 
@@ -789,12 +777,7 @@
 
     </div>
 
-
     <script>
-
-        /* =========================================================
-           SUPABASE
-           ========================================================= */
 
         const SUPABASE_URL =
             "https://iqmsaflqplvzfvmdyrwh.supabase.co";
@@ -808,10 +791,6 @@
                 SUPABASE_KEY
             );
 
-
-        /* =========================================================
-           ELEMENTS
-           ========================================================= */
 
         const frame =
             document.getElementById("site-frame");
@@ -837,10 +816,9 @@
         const addMenu =
             document.getElementById("add-menu");
 
+        const deleteButton =
+            document.getElementById("delete-element");
 
-        /* =========================================================
-           DEVICE SIZES
-           ========================================================= */
 
         const DEVICES = {
 
@@ -862,43 +840,18 @@
         };
 
 
-        /* =========================================================
-           PROTECTED AREAS
-           ========================================================= */
-
         const PROTECTED_SELECTOR = [
 
             "#leaderboard",
-
             "#comments-section",
-
             ".like-box",
-
             ".like-button",
-
             ".like-count",
-
             ".likes-text",
-
             ".review-popup"
 
         ].join(",");
 
-
-        function isProtected(element) {
-
-            if (!element) return true;
-
-            return !!element.closest(
-                PROTECTED_SELECTOR
-            );
-
-        }
-
-
-        /* =========================================================
-           STATE
-           ========================================================= */
 
         let currentDevice = "desktop";
 
@@ -916,55 +869,8 @@
 
         let historyIndex = -1;
 
+        let frameEventsReady = false;
 
-        /*
-        editor structure:
-        
-        {
-            version: 3,
-        
-            elements: {
-                id: {
-                    selector: "...",
-                    text: "...",
-                    color: "...",
-                    fontSize: 20,
-                    fontWeight: "700",
-                    textAlign: "center",
-                    width: "...",
-                    height: "...",
-                    margin: "...",
-                    padding: "...",
-        
-                    positions:{
-                        desktop:{x:0,y:0},
-                        tablet:{x:0,y:0},
-                        mobile:{x:0,y:0}
-                    },
-        
-                    hidden:false
-                }
-            },
-        
-            customElements:[
-                {
-                    id,
-                    type,
-                    text,
-                    x,
-                    y,
-                    width,
-                    height,
-                    color,
-                    fontSize,
-                    fontWeight,
-                    textAlign,
-                    background,
-                    padding
-                }
-            ]
-        }
-        */
 
         let editor = {
 
@@ -977,22 +883,32 @@
         };
 
 
-        /* =========================================================
-           HELPERS
-           ========================================================= */
-
         function setStatus(text) {
 
-            statusEl.textContent = text;
+            statusEl.textContent =
+                text;
 
         }
 
 
         function deepClone(value) {
 
-            return JSON.parse(
-                JSON.stringify(value)
-            );
+            try {
+
+                return JSON.parse(
+                    JSON.stringify(value)
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Deep clone error:",
+                    error
+                );
+
+                return null;
+
+            }
 
         }
 
@@ -1000,15 +916,56 @@
         function wait(ms) {
 
             return new Promise(
-                resolve => setTimeout(resolve, ms)
+                resolve =>
+                    setTimeout(
+                        resolve,
+                        ms
+                    )
             );
 
         }
 
 
-        /* =========================================================
-           STABLE SELECTOR
-           ========================================================= */
+        function ensureEditorStructure() {
+
+            if (
+                !editor ||
+                typeof editor !== "object" ||
+                Array.isArray(editor)
+            ) {
+
+                editor = {};
+
+            }
+
+            if (!editor.version) {
+
+                editor.version = 3;
+
+            }
+
+            if (
+                !editor.elements ||
+                typeof editor.elements !== "object" ||
+                Array.isArray(editor.elements)
+            ) {
+
+                editor.elements = {};
+
+            }
+
+            if (
+                !Array.isArray(
+                    editor.customElements
+                )
+            ) {
+
+                editor.customElements = [];
+
+            }
+
+        }
+
 
         function cssEscape(value) {
 
@@ -1021,15 +978,19 @@
 
             }
 
-            return String(value)
-                .replace(/([ !"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g, "\\$1");
+            return String(value).replace(
+                /([ !"#$%&'()*+,./:;<=>?@[\\\]^`{|}~])/g,
+                "\\$1"
+            );
 
         }
 
 
         function getSelector(element) {
 
-            if (!element) return null;
+            if (!element)
+                return null;
+
 
             if (element.id) {
 
@@ -1038,10 +999,9 @@
 
             }
 
+
             if (
-                element.hasAttribute(
-                    "data-id"
-                )
+                element.hasAttribute("data-id")
             ) {
 
                 return `[data-id="${cssEscape(
@@ -1050,9 +1010,12 @@
 
             }
 
+
             const parts = [];
 
-            let current = element;
+            let current =
+                element;
+
 
             while (
                 current &&
@@ -1063,24 +1026,31 @@
                 let part =
                     current.tagName.toLowerCase();
 
+
                 if (
                     current.classList &&
                     current.classList.length
                 ) {
 
                     const usefulClass =
-                        [...current.classList]
-                            .filter(c =>
-                                ![
-                                    "like-box",
-                                    "like-button",
-                                    "like-count",
-                                    "likes-text"
-                                ].includes(c)
+                        [
+                            ...current.classList
+                        ]
+                            .filter(
+                                c =>
+                                    ![
+                                        "like-box",
+                                        "like-button",
+                                        "like-count",
+                                        "likes-text"
+                                    ].includes(c)
                             )
                             .slice(0, 2);
 
-                    if (usefulClass.length) {
+
+                    if (
+                        usefulClass.length
+                    ) {
 
                         part += "." +
                             usefulClass
@@ -1091,20 +1061,27 @@
 
                 }
 
+
                 const parent =
                     current.parentElement;
+
 
                 if (parent) {
 
                     const same =
-                        [...parent.children]
+                        [
+                            ...parent.children
+                        ]
                             .filter(
                                 x =>
                                     x.tagName ===
                                     current.tagName
                             );
 
-                    if (same.length > 1) {
+
+                    if (
+                        same.length > 1
+                    ) {
 
                         const index =
                             same.indexOf(current) + 1;
@@ -1116,105 +1093,136 @@
 
                 }
 
+
                 parts.unshift(part);
 
-                current = parent;
+                current =
+                    parent;
 
             }
+
 
             return parts.join(" > ");
 
         }
 
 
-        /* =========================================================
-           DISCOVER REAL INDEX.HTML
-           ========================================================= */
+        function isProtected(element) {
+
+            if (!element)
+                return true;
+
+            try {
+
+                return !!element.closest(
+                    PROTECTED_SELECTOR
+                );
+
+            } catch {
+
+                return false;
+
+            }
+
+        }
+
 
         function discoverPage() {
 
             const doc =
                 frame.contentDocument;
 
-            if (!doc) return;
+
+            if (
+                !doc ||
+                !doc.body
+            )
+                return;
+
 
             const all =
-                [...doc.body.querySelectorAll("*")];
+                [
+                    ...doc.body.querySelectorAll("*")
+                ];
 
-            all.forEach(element => {
 
-                if (isProtected(element))
-                    return;
+            all.forEach(
+                element => {
 
-                /*
-                Don't select scripts/styles.
-                */
+                    if (
+                        isProtected(element)
+                    )
+                        return;
 
-                const tag =
-                    element.tagName.toLowerCase();
 
-                if (
-                    tag === "script" ||
-                    tag === "style" ||
-                    tag === "meta" ||
-                    tag === "link"
-                ) {
+                    if (
+                        element.hasAttribute(
+                            "data-codenest-custom"
+                        )
+                    )
+                        return;
 
-                    return;
+
+                    const tag =
+                        element.tagName.toLowerCase();
+
+
+                    if (
+                        tag === "script" ||
+                        tag === "style" ||
+                        tag === "meta" ||
+                        tag === "link"
+                    )
+                        return;
+
+
+                    const selector =
+                        getSelector(element);
+
+
+                    if (!selector)
+                        return;
+
+
+                    const encoded =
+                        btoa(selector)
+                            .replace(
+                                /[^a-zA-Z0-9]/g,
+                                ""
+                            )
+                            .slice(0, 35);
+
+
+                    const id =
+                        "el_" + encoded;
+
+
+                    element.dataset.codenestId =
+                        id;
 
                 }
-
-                const selector =
-                    getSelector(element);
-
-                if (!selector)
-                    return;
-
-                /*
-                Existing id.
-                */
-
-                const id =
-                    "el_" +
-                    btoa(
-                        selector
-                    )
-                        .replace(/[^a-zA-Z0-9]/g, "")
-                        .slice(0, 35);
-
-                element.dataset.codenestId =
-                    id;
-
-            });
+            );
 
         }
 
-
-        /* =========================================================
-           GET SELECTED ELEMENT
-           ========================================================= */
 
         function getElementFromPoint(x, y) {
 
             const doc =
                 frame.contentDocument;
 
+
             if (!doc)
                 return null;
 
+
             let element =
-                doc.elementFromPoint(
-                    x,
-                    y
-                );
+                doc.elementFromPoint(x, y);
+
 
             if (!element)
                 return null;
 
-            /*
-            Find nearest element that
-            has our editor id.
-            */
 
             while (
                 element &&
@@ -1230,134 +1238,189 @@
 
                 }
 
+
                 element =
                     element.parentElement;
 
             }
+
 
             return null;
 
         }
 
 
-        /* =========================================================
-           GET OR CREATE SETTINGS
-           ========================================================= */
+        function createDefaultSettings(element) {
+
+            const computed =
+                getComputedStyle(element);
+
+
+            return {
+
+                selector:
+                    getSelector(element),
+
+                text:
+                    element.innerHTML,
+
+                color:
+                    computed.color,
+
+                fontSize:
+                    parseFloat(
+                        computed.fontSize
+                    ) || 16,
+
+                fontWeight:
+                    computed.fontWeight,
+
+                textAlign:
+                    computed.textAlign,
+
+                width: "",
+
+                height: "",
+
+                margin: "",
+
+                padding: "",
+
+                positions: {
+
+                    desktop: {
+                        x: 0,
+                        y: 0
+                    },
+
+                    tablet: {
+                        x: 0,
+                        y: 0
+                    },
+
+                    mobile: {
+                        x: 0,
+                        y: 0
+                    }
+
+                },
+
+                hidden: false
+
+            };
+
+        }
+
 
         function getElementSettings(element) {
+
+            if (!element)
+                return null;
+
 
             const id =
                 element.dataset.codenestId;
 
+
             if (!id)
                 return null;
 
-            if (
-                !editor.elements[id]
-            ) {
 
-                editor.elements[id] = {
+            ensureEditorStructure();
 
-                    selector:
-                        getSelector(element),
 
-                    text:
-                        element.innerHTML,
+            if (!editor.elements[id]) {
 
-                    color:
-                        getComputedStyle(
-                            element
-                        ).color,
+                editor.elements[id] =
+                    createDefaultSettings(
+                        element
+                    );
 
-                    fontSize:
-                        parseFloat(
-                            getComputedStyle(
-                                element
-                            ).fontSize
-                        ),
+            }
 
-                    fontWeight:
-                        getComputedStyle(
-                            element
-                        ).fontWeight,
 
-                    textAlign:
-                        getComputedStyle(
-                            element
-                        ).textAlign,
+            const settings =
+                editor.elements[id];
 
-                    width:
-                        "",
 
-                    height:
-                        "",
+            if (!settings.selector) {
 
-                    margin:
-                        "",
+                settings.selector =
+                    getSelector(element);
 
-                    padding:
-                        "",
+            }
 
-                    positions: {
-                        desktop: {
-                            x: 0,
-                            y: 0
-                        },
 
-                        tablet: {
-                            x: 0,
-                            y: 0
-                        },
+            if (!settings.positions) {
 
-                        mobile: {
-                            x: 0,
-                            y: 0
-                        }
+                settings.positions = {
+
+                    desktop: {
+                        x: 0,
+                        y: 0
                     },
 
-                    hidden: false
+                    tablet: {
+                        x: 0,
+                        y: 0
+                    },
+
+                    mobile: {
+                        x: 0,
+                        y: 0
+                    }
 
                 };
 
             }
 
-            return editor.elements[id];
+
+            if (
+                !settings.positions[currentDevice]
+            ) {
+
+                settings.positions[currentDevice] = {
+                    x: 0,
+                    y: 0
+                };
+
+            }
+
+
+            return settings;
 
         }
 
-
-        /* =========================================================
-           APPLY ONE ELEMENT
-           ========================================================= */
 
         function applyElementSettings(
             element,
             settings
         ) {
 
-            if (!element || !settings)
-                return;
-
-            /*
-            Don't touch protected functionality.
-            */
-
-            if (isProtected(element))
+            if (
+                !element ||
+                !settings
+            )
                 return;
 
 
-            /*
-            TEXT
-            */
+            if (
+                isProtected(element)
+            )
+                return;
+
+
+            if (
+                element.hasAttribute(
+                    "data-codenest-custom"
+                )
+            )
+                return;
+
 
             if (
                 settings.text !== undefined
             ) {
-
-                /*
-                For elements with HTML
-                preserve formatting.
-                */
 
                 element.innerHTML =
                     settings.text;
@@ -1365,39 +1428,35 @@
             }
 
 
-            /*
-            COLOR
-            */
+            if (
+                settings.color
+            ) {
 
-            if (settings.color) {
-
-                element.style.color =
-                    settings.color;
+                element.style.setProperty(
+                    "color",
+                    settings.color,
+                    "important"
+                );
 
             }
 
 
-            /*
-            FONT SIZE
-            */
-
             if (
-                settings.fontSize !==
-                undefined &&
+                settings.fontSize !== undefined &&
+                settings.fontSize !== null &&
                 settings.fontSize !== ""
             ) {
 
                 element.style.fontSize =
-                    settings.fontSize + "px";
+                    Number(settings.fontSize) +
+                    "px";
 
             }
 
 
-            /*
-            FONT WEIGHT
-            */
-
-            if (settings.fontWeight) {
+            if (
+                settings.fontWeight
+            ) {
 
                 element.style.fontWeight =
                     settings.fontWeight;
@@ -1405,11 +1464,9 @@
             }
 
 
-            /*
-            ALIGN
-            */
-
-            if (settings.textAlign) {
+            if (
+                settings.textAlign
+            ) {
 
                 element.style.textAlign =
                     settings.textAlign;
@@ -1417,11 +1474,9 @@
             }
 
 
-            /*
-            WIDTH
-            */
-
-            if (settings.width) {
+            if (
+                settings.width
+            ) {
 
                 element.style.width =
                     settings.width;
@@ -1429,11 +1484,9 @@
             }
 
 
-            /*
-            HEIGHT
-            */
-
-            if (settings.height) {
+            if (
+                settings.height
+            ) {
 
                 element.style.height =
                     settings.height;
@@ -1441,11 +1494,9 @@
             }
 
 
-            /*
-            MARGIN
-            */
-
-            if (settings.margin) {
+            if (
+                settings.margin
+            ) {
 
                 element.style.margin =
                     settings.margin;
@@ -1453,11 +1504,9 @@
             }
 
 
-            /*
-            PADDING
-            */
-
-            if (settings.padding) {
+            if (
+                settings.padding
+            ) {
 
                 element.style.padding =
                     settings.padding;
@@ -1465,73 +1514,205 @@
             }
 
 
-            /*
-            HIDDEN
-            */
-
-            if (settings.hidden) {
+            if (
+                settings.hidden === true
+            ) {
 
                 element.style.display =
                     "none";
 
+            } else {
+
+                element.style.removeProperty(
+                    "display"
+                );
+
             }
 
 
-            /*
-            POSITION
-        
-            IMPORTANT:
-            We use translate instead
-            of transform so we don't
-            destroy existing transforms.
-            */
-
             const position =
-                settings.positions?.[
-                currentDevice
-                ] || {
+                settings.positions?.[currentDevice] || {
                     x: 0,
                     y: 0
                 };
 
+
             element.style.translate =
-                `${position.x || 0}px ${position.y || 0}px`;
+                `${Number(position.x) || 0}px ${Number(position.y) || 0}px`;
 
         }
 
 
-        /* =========================================================
-           APPLY ALL SETTINGS
-           ========================================================= */
+        function applyCustomElement(
+            element,
+            item
+        ) {
+
+            if (
+                !element ||
+                !item
+            )
+                return;
+
+
+            element.innerHTML =
+                item.html ??
+                item.text ??
+                "";
+
+
+            element.style.position =
+                "absolute";
+
+
+            element.style.left =
+                (Number(item.x) || 0) +
+                "px";
+
+
+            element.style.top =
+                (Number(item.y) || 0) +
+                "px";
+
+
+            element.style.zIndex =
+                "999999";
+
+
+            element.style.setProperty(
+                "color",
+                item.color || "#ffffff",
+                "important"
+            );
+
+
+            element.style.fontSize =
+                (Number(item.fontSize) || 18) +
+                "px";
+
+
+            element.style.fontWeight =
+                item.fontWeight ||
+                "normal";
+
+
+            element.style.textAlign =
+                item.textAlign ||
+                "left";
+
+
+            element.style.width =
+                item.width ||
+                "auto";
+
+
+            element.style.height =
+                item.height ||
+                "auto";
+
+
+            element.style.background =
+                item.background ||
+                "transparent";
+
+
+            element.style.padding =
+                item.padding ||
+                "5px";
+
+
+            element.style.margin =
+                item.margin ||
+                "";
+
+
+            element.style.cursor =
+                item.type === "button"
+                    ? "pointer"
+                    : "default";
+
+
+            if (item.hidden) {
+
+                element.style.display =
+                    "none";
+
+            } else {
+
+                element.style.removeProperty(
+                    "display"
+                );
+
+            }
+
+
+            if (
+                item.type === "button"
+            ) {
+
+                element.onclick =
+                    function (event) {
+
+                        if (
+                            item.link &&
+                            String(item.link).trim()
+                        ) {
+
+                            event.preventDefault();
+                            event.stopPropagation();
+
+                            window.open(
+                                String(item.link).trim(),
+                                "_blank",
+                                "noopener,noreferrer"
+                            );
+
+                        } else {
+
+                            event.preventDefault();
+
+                        }
+
+                    };
+
+            }
+
+        }
+
 
         function applyEditor() {
 
             const doc =
                 frame.contentDocument;
 
-            if (!doc)
+
+            if (
+                !doc ||
+                !doc.body
+            )
                 return;
 
-            /*
-            First make sure IDs exist.
-            */
+
+            ensureEditorStructure();
 
             discoverPage();
 
-
-            /*
-            Existing elements
-            */
 
             Object.entries(
                 editor.elements
             ).forEach(
                 ([id, settings]) => {
 
-                    if (!settings.selector)
+                    if (
+                        !settings ||
+                        !settings.selector
+                    )
                         return;
 
-                    let element;
+
+                    let element =
+                        null;
+
 
                     try {
 
@@ -1540,21 +1721,31 @@
                                 settings.selector
                             );
 
-                    } catch {
+                    } catch (error) {
+
+                        console.warn(
+                            "Invalid selector:",
+                            settings.selector
+                        );
 
                         return;
 
                     }
 
+
                     if (!element)
                         return;
 
-                    /*
-                    Reconnect ID.
-                    */
+
+                    if (
+                        isProtected(element)
+                    )
+                        return;
+
 
                     element.dataset.codenestId =
                         id;
+
 
                     applyElementSettings(
                         element,
@@ -1565,162 +1756,322 @@
             );
 
 
-            /*
-            Custom elements
-            */
-
             doc
                 .querySelectorAll(
                     "[data-codenest-custom]"
                 )
                 .forEach(
-                    x => x.remove()
+                    element => {
+                        element.remove();
+                    }
                 );
 
 
-            editor.customElements
-                .forEach(item => {
+            editor.customElements.forEach(
+                item => {
+
+                    if (
+                        !item ||
+                        !item.id
+                    )
+                        return;
+
 
                     const element =
-                        doc.createElement(
-                            "div"
-                        );
+                        doc.createElement("div");
 
-                    element.dataset
-                        .codenestCustom =
+
+                    element.dataset.codenestCustom =
                         "true";
 
-                    element.dataset
-                        .codenestId =
+
+                    element.dataset.codenestId =
                         item.id;
 
-                    element.innerHTML =
-                        item.html ??
-                        item.text ??
-                        "";
 
-
-                    element.style.position =
-                        "absolute";
-
-
-                    element.style.left =
-                        (item.x || 0) +
-                        "px";
-
-
-                    element.style.top =
-                        (item.y || 0) +
-                        "px";
-
-
-                    element.style.zIndex =
-                        "999999";
-
-
-                    element.style.color =
-                        item.color ||
-                        "#ffffff";
-
-
-                    element.style.fontSize =
-                        (item.fontSize || 18) +
-                        "px";
-
-
-                    element.style.fontWeight =
-                        item.fontWeight ||
-                        "normal";
-
-
-                    element.style.textAlign =
-                        item.textAlign ||
-                        "left";
-
-
-                    element.style.width =
-                        item.width ||
-                        "auto";
-
-
-                    element.style.height =
-                        item.height ||
-                        "auto";
-
-
-                    element.style.background =
-                        item.background ||
-                        "transparent";
-
-
-                    element.style.padding =
-                        item.padding ||
-                        "5px";
-
-
-                    if (item.hidden) {
-
-                        element.style.display =
-                            "none";
-
-                    }
+                    applyCustomElement(
+                        element,
+                        item
+                    );
 
 
                     doc.body.appendChild(
                         element
                     );
 
-                });
+                }
+            );
+
+
+            if (
+                selectedData &&
+                selectedData.id
+            ) {
+
+                const selectedId =
+                    selectedData.id;
+
+                const newSelected =
+                    doc.querySelector(
+                        `[data-codenest-custom="true"][data-codenest-id="${cssEscape(selectedId)}"]`
+                    );
+
+                if (newSelected) {
+
+                    selectedElement =
+                        newSelected;
+
+                    selectedData =
+                        editor.customElements.find(
+                            item =>
+                                item.id === selectedId
+                        ) || selectedData;
+
+                    overlay.style.display =
+                        "block";
+
+                    inspector.style.display =
+                        "block";
+
+                    fillInspector();
+
+                }
+
+            }
+
+
+            updateOverlay();
 
         }
 
 
-        /* =========================================================
-           FRAME SIZE
-           ========================================================= */
+        function syncEditorFromFrame() {
+
+            const doc =
+                frame.contentDocument;
+
+
+            if (
+                !doc ||
+                !doc.body
+            )
+                return;
+
+
+            ensureEditorStructure();
+
+            discoverPage();
+
+
+            const elements =
+                [
+                    ...doc.body.querySelectorAll(
+                        "[data-codenest-id]:not([data-codenest-custom])"
+                    )
+                ];
+
+
+            elements.forEach(
+                element => {
+
+                    if (
+                        isProtected(element)
+                    )
+                        return;
+
+
+                    const id =
+                        element.dataset.codenestId;
+
+
+                    if (!id)
+                        return;
+
+
+                    let settings =
+                        editor.elements[id];
+
+
+                    if (!settings) {
+
+                        settings =
+                            createDefaultSettings(
+                                element
+                            );
+
+                        editor.elements[id] =
+                            settings;
+
+                    }
+
+
+                    settings.selector =
+                        getSelector(element);
+
+
+                    settings.text =
+                        element.innerHTML;
+
+
+                    const computed =
+                        getComputedStyle(element);
+
+
+                    settings.color =
+                        element.style.color ||
+                        settings.color ||
+                        computed.color;
+
+
+                    settings.fontSize =
+                        parseFloat(
+                            element.style.fontSize
+                        ) ||
+                        Number(settings.fontSize) ||
+                        parseFloat(computed.fontSize) ||
+                        16;
+
+
+                    settings.fontWeight =
+                        element.style.fontWeight ||
+                        settings.fontWeight ||
+                        computed.fontWeight;
+
+
+                    settings.textAlign =
+                        element.style.textAlign ||
+                        settings.textAlign ||
+                        computed.textAlign;
+
+
+                    if (
+                        settings.width === undefined
+                    ) {
+
+                        settings.width = "";
+
+                    }
+
+
+                    if (
+                        settings.height === undefined
+                    ) {
+
+                        settings.height = "";
+
+                    }
+
+
+                    if (
+                        settings.margin === undefined
+                    ) {
+
+                        settings.margin = "";
+
+                    }
+
+
+                    if (
+                        settings.padding === undefined
+                    ) {
+
+                        settings.padding = "";
+
+                    }
+
+
+                    if (!settings.positions) {
+
+                        settings.positions = {
+
+                            desktop: {
+                                x: 0,
+                                y: 0
+                            },
+
+                            tablet: {
+                                x: 0,
+                                y: 0
+                            },
+
+                            mobile: {
+                                x: 0,
+                                y: 0
+                            }
+
+                        };
+
+                    }
+
+
+                    if (
+                        !settings.positions[currentDevice]
+                    ) {
+
+                        settings.positions[currentDevice] = {
+                            x: 0,
+                            y: 0
+                        };
+
+                    }
+
+                }
+            );
+
+
+            editor.version = 3;
+
+        }
+
 
         function setDevice(device) {
+
+            if (
+                !DEVICES[device]
+            )
+                return;
+
 
             currentDevice =
                 device;
 
+
             const size =
                 DEVICES[device];
+
 
             frame.style.width =
                 size.width + "px";
 
+
             frame.style.height =
                 size.height + "px";
 
+
             canvas.style.width =
                 size.width + "px";
+
 
             canvas.style.height =
                 size.height + "px";
 
 
             document
-                .querySelectorAll(
-                    ".device"
-                )
-                .forEach(btn => {
+                .querySelectorAll(".device")
+                .forEach(
+                    btn => {
 
-                    btn.classList.toggle(
-                        "active",
-                        btn.dataset.device ===
-                        device
-                    );
+                        btn.classList.toggle(
+                            "active",
+                            btn.dataset.device === device
+                        );
 
-                });
+                    }
+                );
 
-
-            /*
-            Reapply because positions
-            are device-specific.
-            */
 
             applyEditor();
+
 
             requestAnimationFrame(
                 updateOverlay
@@ -1729,28 +2080,54 @@
         }
 
 
-        /* =========================================================
-           SELECT ELEMENT
-           ========================================================= */
-
         function selectElement(element) {
 
             if (!element)
                 return;
 
-            if (isProtected(element))
-                return;
 
             selectedElement =
                 element;
 
-            selectedData =
-                getElementSettings(
-                    element
+
+            const isCustom =
+                element.hasAttribute(
+                    "data-codenest-custom"
                 );
+
+
+            if (isCustom) {
+
+                const id =
+                    element.dataset.codenestId;
+
+
+                selectedData =
+                    editor.customElements.find(
+                        item =>
+                            item.id === id
+                    );
+
+            } else {
+
+                selectedData =
+                    getElementSettings(
+                        element
+                    );
+
+            }
+
 
             if (!selectedData)
                 return;
+
+
+            if (isCustom && !selectedData.id) {
+
+                selectedData.id =
+                    element.dataset.codenestId;
+
+            }
 
 
             overlay.style.display =
@@ -1762,33 +2139,26 @@
 
 
             inspector
-                .querySelector(
-                    ".inspector-title"
-                )
+                .querySelector(".inspector-title")
                 .textContent =
-                element.tagName.toLowerCase() +
-                (
-                    element.id
-                        ? " #" + element.id
-                        : ""
-                );
+                isCustom
+                    ? "Custom Element"
+                    : "Element";
 
 
             fillInspector();
-
 
             updateOverlay();
 
         }
 
 
-        /* =========================================================
-           OVERLAY POSITION
-           ========================================================= */
-
         function updateOverlay() {
 
-            if (!selectedElement) {
+            if (
+                !selectedElement ||
+                !selectedElement.isConnected
+            ) {
 
                 overlay.style.display =
                     "none";
@@ -1797,37 +2167,43 @@
 
             }
 
+
             const rect =
                 selectedElement.getBoundingClientRect();
 
-            const canvasRect =
-                canvas.getBoundingClientRect();
+
+            const frameRect =
+                frame.getBoundingClientRect();
 
 
-            /*
-            iframe content coordinates
-            are relative to iframe.
-            */
+            const iframeWidth =
+                frame.contentWindow?.innerWidth ||
+                DEVICES[currentDevice].width;
+
+
+            const iframeHeight =
+                frame.contentWindow?.innerHeight ||
+                DEVICES[currentDevice].height;
+
 
             const scaleX =
-                frame.getBoundingClientRect().width /
-                frame.contentWindow.innerWidth;
+                frameRect.width /
+                iframeWidth;
+
 
             const scaleY =
-                frame.getBoundingClientRect().height /
-                frame.contentWindow.innerHeight;
+                frameRect.height /
+                iframeHeight;
 
 
             const x =
                 frame.offsetLeft +
-                rect.left *
-                scaleX;
+                rect.left * scaleX;
 
 
             const y =
                 frame.offsetTop +
-                rect.top *
-                scaleY;
+                rect.top * scaleY;
 
 
             overlay.style.left =
@@ -1851,8 +2227,7 @@
 
 
             overlayLabel.textContent =
-                selectedElement.tagName
-                    .toLowerCase() +
+                selectedElement.tagName.toLowerCase() +
                 (
                     selectedElement.id
                         ? " #" +
@@ -1863,41 +2238,165 @@
         }
 
 
-        /* =========================================================
-           INSPECTOR
-           ========================================================= */
+        function normalizeColor(color) {
+
+            if (!color)
+                return "#ffffff";
+
+
+            color =
+                String(color).trim();
+
+
+            if (
+                color.startsWith("#")
+            ) {
+
+                if (
+                    color.length === 4
+                ) {
+
+                    return "#" +
+                        color[1] +
+                        color[1] +
+                        color[2] +
+                        color[2] +
+                        color[3] +
+                        color[3];
+
+                }
+
+
+                if (
+                    /^#[0-9a-fA-F]{6}$/.test(color)
+                ) {
+
+                    return color;
+
+                }
+
+
+                return "#ffffff";
+
+            }
+
+
+            const match =
+                color.match(/\d+/g);
+
+
+            if (
+                !match ||
+                match.length < 3
+            )
+                return "#ffffff";
+
+
+            const rgb =
+                match
+                    .slice(0, 3)
+                    .map(
+                        value =>
+                            Math.max(
+                                0,
+                                Math.min(
+                                    255,
+                                    parseInt(value, 10)
+                                )
+                            )
+                                .toString(16)
+                                .padStart(2, "0")
+                    )
+                    .join("");
+
+
+            return "#" + rgb;
+
+        }
+
 
         function fillInspector() {
 
-            if (!selectedElement ||
-                !selectedData)
+            if (
+                !selectedElement ||
+                !selectedData
+            )
                 return;
+
+
+            const isCustom =
+                selectedElement.hasAttribute(
+                    "data-codenest-custom"
+                );
 
 
             document.getElementById(
                 "prop-text"
             ).value =
-                selectedElement.innerHTML;
+                isCustom
+                    ? (
+                        selectedData.text ||
+                        ""
+                    )
+                    : (
+                        selectedElement.innerHTML
+                    );
+
+
+            const linkField =
+                document.getElementById(
+                    "button-link-field"
+                );
+
+
+            const linkInput =
+                document.getElementById(
+                    "prop-link"
+                );
+
+
+            if (
+                isCustom &&
+                selectedData.type === "button"
+            ) {
+
+                linkField.style.display =
+                    "block";
+
+                linkInput.value =
+                    selectedData.link ||
+                    "";
+
+            } else {
+
+                linkField.style.display =
+                    "none";
+
+                linkInput.value =
+                    "";
+
+            }
+
+
+            const color =
+                normalizeColor(
+                    selectedData.color ||
+                    getComputedStyle(
+                        selectedElement
+                    ).color
+                );
+
+
+            document.getElementById(
+                "prop-color-picker"
+            ).value =
+                color;
 
 
             document.getElementById(
                 "prop-color"
             ).value =
-                selectedData.color ||
-                "";
-
-
-            try {
-
-                document.getElementById(
-                    "prop-color-picker"
-                ).value =
-                    normalizeColor(
-                        selectedData.color ||
-                        "#ffffff"
-                    );
-
-            } catch { }
+                color;
 
 
             document.getElementById(
@@ -1949,67 +2448,96 @@
                 "";
 
 
-            const pos =
-                selectedData.positions[
-                currentDevice
-                ];
+            if (isCustom) {
+
+                document.getElementById(
+                    "prop-x"
+                ).value =
+                    Number(selectedData.x) ||
+                    0;
+
+
+                document.getElementById(
+                    "prop-y"
+                ).value =
+                    Number(selectedData.y) ||
+                    0;
+
+            } else {
+
+                if (
+                    !selectedData.positions
+                ) {
+
+                    selectedData.positions = {
+
+                        desktop: {
+                            x: 0,
+                            y: 0
+                        },
+
+                        tablet: {
+                            x: 0,
+                            y: 0
+                        },
+
+                        mobile: {
+                            x: 0,
+                            y: 0
+                        }
+
+                    };
+
+                }
+
+
+                const pos =
+                    selectedData.positions[
+                    currentDevice
+                    ] || {
+                        x: 0,
+                        y: 0
+                    };
+
+
+                document.getElementById(
+                    "prop-x"
+                ).value =
+                    Number(pos.x) ||
+                    0;
+
+
+                document.getElementById(
+                    "prop-y"
+                ).value =
+                    Number(pos.y) ||
+                    0;
+
+            }
 
 
             document.getElementById(
-                "prop-x"
-            ).value =
-                pos?.x || 0;
-
-
-            document.getElementById(
-                "prop-y"
-            ).value =
-                pos?.y || 0;
+                "hide-element"
+            ).textContent =
+                selectedData.hidden
+                    ? "Show element"
+                    : "Hide element";
 
         }
 
-
-        function normalizeColor(color) {
-
-            if (!color)
-                return "#ffffff";
-
-            if (
-                color.startsWith("#")
-            )
-                return color;
-
-            const match =
-                color.match(
-                    /\d+/g
-                );
-
-            if (!match)
-                return "#ffffff";
-
-            const rgb =
-                match.slice(0, 3)
-                    .map(
-                        x =>
-                            parseInt(x)
-                                .toString(16)
-                                .padStart(2, "0")
-                    )
-                    .join("");
-
-            return "#" + rgb;
-
-        }
-
-
-        /* =========================================================
-           SAVE HISTORY
-           ========================================================= */
 
         function saveHistory() {
 
+            ensureEditorStructure();
+
+
             const snapshot =
                 deepClone(editor);
+
+
+            if (!snapshot)
+                return;
+
 
             history =
                 history.slice(
@@ -2017,19 +2545,17 @@
                     historyIndex + 1
                 );
 
-            history.push(
-                snapshot
-            );
+
+            history.push(snapshot);
+
 
             historyIndex =
                 history.length - 1;
 
 
-            /*
-            Keep memory reasonable.
-            */
-
-            if (history.length > 40) {
+            if (
+                history.length > 40
+            ) {
 
                 history.shift();
 
@@ -2040,45 +2566,136 @@
         }
 
 
-        /* =========================================================
-           UNDO
-           ========================================================= */
+        function restoreSelectedAfterApply() {
+
+            if (
+                !selectedData
+            )
+                return;
+
+
+            const selectedId =
+                selectedData.id;
+
+
+            if (
+                !selectedId
+            )
+                return;
+
+
+            const custom =
+                editor.customElements.find(
+                    item =>
+                        item.id === selectedId
+                );
+
+
+            if (custom) {
+
+                const element =
+                    frame.contentDocument?.querySelector(
+                        `[data-codenest-custom="true"][data-codenest-id="${cssEscape(selectedId)}"]`
+                    );
+
+
+                if (element) {
+
+                    selectedElement =
+                        element;
+
+                    selectedData =
+                        custom;
+
+                    fillInspector();
+
+                    updateOverlay();
+
+                }
+
+            }
+
+        }
+
 
         function undo() {
 
-            if (historyIndex <= 0)
+            if (
+                historyIndex <= 0
+            )
                 return;
+
+
+            const oldSelectedId =
+                selectedData?.id ||
+                selectedElement?.dataset?.codenestId ||
+                null;
+
 
             historyIndex--;
 
+
             editor =
                 deepClone(
-                    history[
-                    historyIndex
-                    ]
+                    history[historyIndex]
                 );
+
+
+            ensureEditorStructure();
+
 
             applyEditor();
 
-            if (selectedElement) {
 
-                const selector =
-                    selectedData?.selector;
+            if (oldSelectedId) {
 
-                if (selector) {
+                const custom =
+                    editor.customElements.find(
+                        item =>
+                            item.id === oldSelectedId
+                    );
 
-                    try {
 
-                        selectedElement =
-                            frame.contentDocument
-                                .querySelector(
-                                    selector
+                if (custom) {
+
+                    selectedElement =
+                        frame.contentDocument?.querySelector(
+                            `[data-codenest-custom="true"][data-codenest-id="${cssEscape(oldSelectedId)}"]`
+                        ) || null;
+
+
+                    selectedData =
+                        custom;
+
+                } else {
+
+                    const settings =
+                        editor.elements[
+                        oldSelectedId
+                        ];
+
+
+                    if (
+                        settings?.selector
+                    ) {
+
+                        try {
+
+                            selectedElement =
+                                frame.contentDocument.querySelector(
+                                    settings.selector
                                 );
 
-                    } catch {
+                        } catch {
 
-                        selectedElement =
-                            null;
+                            selectedElement =
+                                null;
+
+                        }
+
+
+                        selectedData =
+                            settings;
 
                     }
 
@@ -2086,16 +2703,19 @@
 
             }
 
+
             if (selectedElement) {
 
-                selectedData =
-                    getElementSettings(
-                        selectedElement
-                    );
+                inspector.style.display =
+                    "block";
+
+                overlay.style.display =
+                    "block";
 
                 fillInspector();
 
             }
+
 
             updateOverlay();
 
@@ -2103,10 +2723,6 @@
 
         }
 
-
-        /* =========================================================
-           REDO
-           ========================================================= */
 
         function redo() {
 
@@ -2117,17 +2733,95 @@
                 return;
 
 
+            const oldSelectedId =
+                selectedData?.id ||
+                selectedElement?.dataset?.codenestId ||
+                null;
+
+
             historyIndex++;
+
 
             editor =
                 deepClone(
-                    history[
-                    historyIndex
-                    ]
+                    history[historyIndex]
                 );
 
 
+            ensureEditorStructure();
+
+
             applyEditor();
+
+
+            if (oldSelectedId) {
+
+                const custom =
+                    editor.customElements.find(
+                        item =>
+                            item.id === oldSelectedId
+                    );
+
+
+                if (custom) {
+
+                    selectedElement =
+                        frame.contentDocument?.querySelector(
+                            `[data-codenest-custom="true"][data-codenest-id="${cssEscape(oldSelectedId)}"]`
+                        ) || null;
+
+                    selectedData =
+                        custom;
+
+                } else {
+
+                    const settings =
+                        editor.elements[
+                        oldSelectedId
+                        ];
+
+
+                    if (
+                        settings?.selector
+                    ) {
+
+                        try {
+
+                            selectedElement =
+                                frame.contentDocument.querySelector(
+                                    settings.selector
+                                );
+
+                        } catch {
+
+                            selectedElement =
+                                null;
+
+                        }
+
+
+                        selectedData =
+                            settings;
+
+                    }
+
+                }
+
+            }
+
+
+            if (selectedElement) {
+
+                inspector.style.display =
+                    "block";
+
+                overlay.style.display =
+                    "block";
+
+                fillInspector();
+
+            }
+
 
             updateOverlay();
 
@@ -2136,11 +2830,337 @@
         }
 
 
-        /* =========================================================
-           PROPERTY CHANGE
-           ========================================================= */
+        function propertyChanged(event) {
 
-        function propertyChanged() {
+            if (
+                !selectedElement ||
+                !selectedData ||
+                !event ||
+                !event.target
+            )
+                return;
+
+
+            const id =
+                event.target.id;
+
+
+            let value =
+                event.target.value;
+
+
+            let property =
+                "";
+
+
+            if (id === "prop-text") {
+
+                property = "text";
+
+            } else if (
+                id === "prop-link"
+            ) {
+
+                property = "link";
+
+            } else if (
+                id === "prop-color"
+            ) {
+
+                property = "color";
+
+            } else if (
+                id === "prop-font-size"
+            ) {
+
+                property = "fontSize";
+
+            } else if (
+                id === "prop-font-weight"
+            ) {
+
+                property = "fontWeight";
+
+            } else if (
+                id === "prop-align"
+            ) {
+
+                property = "textAlign";
+
+            } else if (
+                id === "prop-width"
+            ) {
+
+                property = "width";
+
+            } else if (
+                id === "prop-height"
+            ) {
+
+                property = "height";
+
+            } else if (
+                id === "prop-margin"
+            ) {
+
+                property = "margin";
+
+            } else if (
+                id === "prop-padding"
+            ) {
+
+                property = "padding";
+
+            } else if (
+                id === "prop-x"
+            ) {
+
+                property = "x";
+
+            } else if (
+                id === "prop-y"
+            ) {
+
+                property = "y";
+
+            }
+
+
+            if (!property)
+                return;
+
+
+            const isCustom =
+                selectedElement.hasAttribute(
+                    "data-codenest-custom"
+                );
+
+
+            if (isCustom) {
+
+                saveHistory();
+
+
+                if (
+                    property === "text"
+                ) {
+
+                    selectedData.text =
+                        value;
+
+                    selectedData.html =
+                        value;
+
+                    selectedElement.innerHTML =
+                        value;
+
+                }
+
+
+                else if (
+                    property === "link"
+                ) {
+
+                    selectedData.link =
+                        value.trim();
+
+                    applyCustomElement(
+                        selectedElement,
+                        selectedData
+                    );
+
+                }
+
+
+                else if (
+                    property === "color"
+                ) {
+
+                    value =
+                        normalizeColor(value);
+
+                    selectedData.color =
+                        value;
+
+                    selectedElement.style.setProperty(
+                        "color",
+                        value,
+                        "important"
+                    );
+
+                }
+
+
+                else if (
+                    property === "fontSize"
+                ) {
+
+                    selectedData.fontSize =
+                        Number(value) || 18;
+
+                    selectedElement.style.fontSize =
+                        (
+                            Number(value) ||
+                            18
+                        ) + "px";
+
+                }
+
+
+                else if (
+                    property === "fontWeight"
+                ) {
+
+                    selectedData.fontWeight =
+                        value;
+
+                    selectedElement.style.fontWeight =
+                        value;
+
+                }
+
+
+                else if (
+                    property === "textAlign"
+                ) {
+
+                    selectedData.textAlign =
+                        value;
+
+                    selectedElement.style.textAlign =
+                        value;
+
+                }
+
+
+                else if (
+                    property === "width"
+                ) {
+
+                    selectedData.width =
+                        value;
+
+                    selectedElement.style.width =
+                        value ||
+                        "auto";
+
+                }
+
+
+                else if (
+                    property === "height"
+                ) {
+
+                    selectedData.height =
+                        value;
+
+                    selectedElement.style.height =
+                        value ||
+                        "auto";
+
+                }
+
+
+                else if (
+                    property === "padding"
+                ) {
+
+                    selectedData.padding =
+                        value;
+
+                    selectedElement.style.padding =
+                        value;
+
+                }
+
+
+                else if (
+                    property === "margin"
+                ) {
+
+                    selectedData.margin =
+                        value;
+
+                    selectedElement.style.margin =
+                        value;
+
+                }
+
+
+                else if (
+                    property === "x"
+                ) {
+
+                    selectedData.x =
+                        Number(value) || 0;
+
+                    selectedElement.style.left =
+                        selectedData.x +
+                        "px";
+
+                }
+
+
+                else if (
+                    property === "y"
+                ) {
+
+                    selectedData.y =
+                        Number(value) || 0;
+
+                    selectedElement.style.top =
+                        selectedData.y +
+                        "px";
+
+                }
+
+
+                updateOverlay();
+
+                return;
+
+            }
+
+
+            saveHistory();
+
+
+            selectedData[property] =
+                value;
+
+
+            if (
+                property === "fontSize"
+            ) {
+
+                selectedData.fontSize =
+                    Number(value) || 16;
+
+            }
+
+
+            if (
+                property === "color"
+            ) {
+
+                selectedData.color =
+                    normalizeColor(value);
+
+            }
+
+
+            applyElementSettings(
+                selectedElement,
+                selectedData
+            );
+
+
+            updateOverlay();
+
+        }
+
+
+        function startDrag(event) {
 
             if (
                 !selectedElement ||
@@ -2152,141 +3172,93 @@
             saveHistory();
 
 
-            selectedData.text =
-                document.getElementById(
-                    "prop-text"
-                ).value;
-
-
-            selectedData.color =
-                document.getElementById(
-                    "prop-color"
-                ).value;
-
-
-            selectedData.fontSize =
-                document.getElementById(
-                    "prop-font-size"
-                ).value;
-
-
-            selectedData.fontWeight =
-                document.getElementById(
-                    "prop-font-weight"
-                ).value;
-
-
-            selectedData.textAlign =
-                document.getElementById(
-                    "prop-align"
-                ).value;
-
-
-            selectedData.width =
-                document.getElementById(
-                    "prop-width"
-                ).value;
-
-
-            selectedData.height =
-                document.getElementById(
-                    "prop-height"
-                ).value;
-
-
-            selectedData.margin =
-                document.getElementById(
-                    "prop-margin"
-                ).value;
-
-
-            selectedData.padding =
-                document.getElementById(
-                    "prop-padding"
-                ).value;
-
-
-            selectedData.positions[
-                currentDevice
-            ].x =
-                Number(
-                    document.getElementById(
-                        "prop-x"
-                    ).value
-                ) || 0;
-
-
-            selectedData.positions[
-                currentDevice
-            ].y =
-                Number(
-                    document.getElementById(
-                        "prop-y"
-                    ).value
-                ) || 0;
-
-
-            applyElementSettings(
-                selectedElement,
-                selectedData
-            );
-
-
-            updateOverlay();
-
-            setStatus("Changed");
-
-        }
-
-
-        /* =========================================================
-           DRAG
-           ========================================================= */
-
-        function startDrag(event) {
-
-            if (!selectedElement)
-                return;
-
             dragState = {
 
-                startX: event.clientX,
+                dragging: true,
 
-                startY: event.clientY,
+                startX:
+                    event.clientX,
 
-                oldX:
-                    selectedData
-                        .positions[
-                        currentDevice
-                    ].x || 0,
+                startY:
+                    event.clientY,
 
-                oldY:
-                    selectedData
-                        .positions[
-                        currentDevice
-                    ].y || 0
+                oldX: 0,
+
+                oldY: 0
 
             };
 
-            saveHistory();
+
+            if (
+                selectedElement.hasAttribute(
+                    "data-codenest-custom"
+                )
+            ) {
+
+                dragState.oldX =
+                    Number(
+                        selectedData.x
+                    ) || 0;
+
+                dragState.oldY =
+                    Number(
+                        selectedData.y
+                    ) || 0;
+
+            } else {
+
+                if (
+                    !selectedData.positions
+                ) {
+
+                    selectedData.positions = {};
+
+                }
+
+
+                if (
+                    !selectedData.positions[
+                    currentDevice
+                    ]
+                ) {
+
+                    selectedData.positions[
+                        currentDevice
+                    ] = {
+                        x: 0,
+                        y: 0
+                    };
+
+                }
+
+
+                const position =
+                    selectedData.positions[
+                    currentDevice
+                    ];
+
+
+                dragState.oldX =
+                    Number(position.x) || 0;
+
+                dragState.oldY =
+                    Number(position.y) || 0;
+
+            }
 
         }
 
 
         function dragMove(event) {
 
-            if (!dragState ||
-                !selectedElement)
+            if (
+                !dragState ||
+                !dragState.dragging ||
+                !selectedElement ||
+                !selectedData
+            )
                 return;
 
-
-            /*
-            Mouse movement is in admin
-            canvas pixels.
-        
-            Since iframe is not scaled,
-            this is exact.
-            */
 
             const dx =
                 event.clientX -
@@ -2298,43 +3270,59 @@
                 dragState.startY;
 
 
-            const position =
-                selectedData
-                    .positions[
-                currentDevice
-                ];
+            const newX =
+                dragState.oldX +
+                dx;
 
 
-            position.x =
-                Math.round(
-                    dragState.oldX +
-                    dx
+            const newY =
+                dragState.oldY +
+                dy;
+
+
+            if (
+                selectedElement.hasAttribute(
+                    "data-codenest-custom"
+                )
+            ) {
+
+                selectedData.x =
+                    Math.round(newX);
+
+                selectedData.y =
+                    Math.round(newY);
+
+
+                selectedElement.style.left =
+                    selectedData.x +
+                    "px";
+
+
+                selectedElement.style.top =
+                    selectedData.y +
+                    "px";
+
+            } else {
+
+                selectedData.positions[
+                    currentDevice
+                ] = {
+
+                    x:
+                        Math.round(newX),
+
+                    y:
+                        Math.round(newY)
+
+                };
+
+
+                applyElementSettings(
+                    selectedElement,
+                    selectedData
                 );
 
-
-            position.y =
-                Math.round(
-                    dragState.oldY +
-                    dy
-                );
-
-
-            applyElementSettings(
-                selectedElement,
-                selectedData
-            );
-
-
-            document.getElementById(
-                "prop-x"
-            ).value =
-                position.x;
-
-
-            document.getElementById(
-                "prop-y"
-            ).value =
-                position.y;
+            }
 
 
             updateOverlay();
@@ -2347,24 +3335,266 @@
             if (!dragState)
                 return;
 
+
             dragState =
                 null;
+
 
             setStatus("Moved");
 
         }
 
 
-        /* =========================================================
-           FRAME MOUSE HANDLING
-           ========================================================= */
+        function addCustomElement(
+            type,
+            event
+        ) {
+
+            const doc =
+                frame.contentDocument;
+
+
+            if (!doc)
+                return;
+
+
+            const frameRect =
+                frame.getBoundingClientRect();
+
+
+            const x =
+                Math.round(
+                    event.clientX -
+                    frameRect.left
+                );
+
+
+            const y =
+                Math.round(
+                    event.clientY -
+                    frameRect.top
+                );
+
+
+            const id =
+                "custom_" +
+                Date.now();
+
+
+            let item = {
+
+                id,
+
+                type,
+
+                text:
+                    "New element",
+
+                html:
+                    "New element",
+
+                link:
+                    "",
+
+                x,
+
+                y,
+
+                width:
+                    "auto",
+
+                height:
+                    "auto",
+
+                color:
+                    "#ffffff",
+
+                fontSize:
+                    18,
+
+                fontWeight:
+                    "normal",
+
+                textAlign:
+                    "left",
+
+                background:
+                    "transparent",
+
+                padding:
+                    "8px",
+
+                margin:
+                    "",
+
+                hidden:
+                    false
+
+            };
+
+
+            if (
+                type === "heading"
+            ) {
+
+                item.text =
+                    "New Heading";
+
+                item.html =
+                    "<strong>New Heading</strong>";
+
+                item.fontSize =
+                    32;
+
+                item.fontWeight =
+                    "800";
+
+            }
+
+
+            if (
+                type === "button"
+            ) {
+
+                item.text =
+                    "Button";
+
+                item.html =
+                    "Button";
+
+                item.link =
+                    "";
+
+                item.background =
+                    "#3268ff";
+
+                item.padding =
+                    "10px 18px";
+
+                item.fontWeight =
+                    "700";
+
+            }
+
+
+            if (
+                type === "box"
+            ) {
+
+                item.text =
+                    "Box";
+
+                item.html =
+                    "Box";
+
+                item.background =
+                    "#1e293b";
+
+                item.padding =
+                    "20px";
+
+                item.width =
+                    "250px";
+
+                item.height =
+                    "120px";
+
+            }
+
+
+            if (
+                type === "divider"
+            ) {
+
+                item.text =
+                    "";
+
+                item.html =
+                    "";
+
+                item.background =
+                    "#64748b";
+
+                item.width =
+                    "250px";
+
+                item.height =
+                    "2px";
+
+                item.padding =
+                    "0";
+
+            }
+
+
+            ensureEditorStructure();
+
+
+            saveHistory();
+
+
+            editor.customElements.push(
+                item
+            );
+
+
+            const element =
+                doc.createElement("div");
+
+
+            element.dataset.codenestCustom =
+                "true";
+
+
+            element.dataset.codenestId =
+                id;
+
+
+            applyCustomElement(
+                element,
+                item
+            );
+
+
+            doc.body.appendChild(
+                element
+            );
+
+
+            selectedElement =
+                element;
+
+
+            selectedData =
+                item;
+
+
+            overlay.style.display =
+                "block";
+
+
+            inspector.style.display =
+                "block";
+
+
+            inspector
+                .querySelector(".inspector-title")
+                .textContent =
+                "Custom Element";
+
+
+            fillInspector();
+
+            updateOverlay();
+
+            setStatus(
+                "Added new element"
+            );
+
+        }
+
 
         function frameClick(event) {
-
-            /*
-            If we're adding an element,
-            place it here.
-            */
 
             if (addingType) {
 
@@ -2373,11 +3603,14 @@
                     event
                 );
 
+
                 addingType =
                     null;
 
+
                 addMenu.style.display =
                     "none";
+
 
                 return;
 
@@ -2402,19 +3635,22 @@
         }
 
 
-        /*
-        Because the iframe captures
-        mouse events, we listen to
-        its document directly.
-        */
-
         function setupFrameEvents() {
 
             const doc =
                 frame.contentDocument;
 
+
             if (!doc)
                 return;
+
+
+            if (frameEventsReady)
+                return;
+
+
+            frameEventsReady =
+                true;
 
 
             discoverPage();
@@ -2437,6 +3673,7 @@
                             event.clientY
                         );
 
+
                     if (
                         element &&
                         !isProtected(element)
@@ -2445,6 +3682,7 @@
                         selectElement(
                             element
                         );
+
 
                         startDrag(
                             event
@@ -2485,10 +3723,6 @@
             );
 
 
-            /*
-            Double-click = edit text
-            */
-
             doc.addEventListener(
                 "dblclick",
                 event => {
@@ -2499,6 +3733,7 @@
                             event.clientY
                         );
 
+
                     if (
                         element &&
                         !isProtected(element)
@@ -2508,10 +3743,12 @@
                             element
                         );
 
+
                         const textBox =
                             document.getElementById(
                                 "prop-text"
                             );
+
 
                         textBox.focus();
 
@@ -2526,197 +3763,6 @@
         }
 
 
-        /* =========================================================
-           ADD CUSTOM ELEMENT
-           ========================================================= */
-
-        function addCustomElement(
-            type,
-            event
-        ) {
-
-            const doc =
-                frame.contentDocument;
-
-            if (!doc)
-                return;
-
-
-            const rect =
-                frame.getBoundingClientRect();
-
-
-            const x =
-                event.clientX;
-
-
-            const y =
-                event.clientY;
-
-
-            const id =
-                "custom_" +
-                Date.now();
-
-
-            let item = {
-
-                id,
-
-                type,
-
-                text: "New element",
-
-                html: "New element",
-
-                x,
-
-                y,
-
-                width: "auto",
-
-                height: "auto",
-
-                color: "#ffffff",
-
-                fontSize: 18,
-
-                fontWeight: "normal",
-
-                textAlign: "left",
-
-                background: "transparent",
-
-                padding: "8px",
-
-                hidden: false
-
-            };
-
-
-            if (type === "heading") {
-
-                item.text =
-                    "New Heading";
-
-                item.html =
-                    "<strong>New Heading</strong>";
-
-                item.fontSize =
-                    32;
-
-                item.fontWeight =
-                    "800";
-
-            }
-
-
-            if (type === "button") {
-
-                item.text =
-                    "Button";
-
-                item.html =
-                    "Button";
-
-                item.background =
-                    "#3268ff";
-
-                item.padding =
-                    "10px 18px";
-
-                item.fontWeight =
-                    "700";
-
-            }
-
-
-            if (type === "box") {
-
-                item.text =
-                    "Box";
-
-                item.html =
-                    "Box";
-
-                item.background =
-                    "#1e293b";
-
-                item.padding =
-                    "20px";
-
-                item.width =
-                    "250px";
-
-                item.height =
-                    "120px";
-
-            }
-
-
-            if (type === "divider") {
-
-                item.text =
-                    "";
-
-                item.html =
-                    "";
-
-                item.background =
-                    "#64748b";
-
-                item.width =
-                    "250px";
-
-                item.height =
-                    "2px";
-
-                item.padding =
-                    "0";
-
-            }
-
-
-            editor.customElements.push(
-                item
-            );
-
-
-            saveHistory();
-
-
-            applyEditor();
-
-            setStatus(
-                "Added new element"
-            );
-
-
-            /*
-            Select new element.
-            */
-
-            const newElement =
-                doc.querySelector(
-                    `[data-codenest-id="${id}"]`
-                );
-
-
-            if (newElement) {
-
-                selectElement(
-                    newElement
-                );
-
-            }
-
-        }
-
-
-        /* =========================================================
-           LOAD DATABASE
-           ========================================================= */
-
         async function loadEditor() {
 
             setStatus(
@@ -2724,120 +3770,153 @@
             );
 
 
-            const result =
-                await supabaseClient
-                    .from("site_settings")
-                    .select(
-                        "id,editor_data"
-                    )
-                    .order(
-                        "id",
-                        {
-                            ascending: true
-                        }
-                    )
-                    .limit(1)
-                    .maybeSingle();
+            try {
+
+                const result =
+                    await supabaseClient
+                        .from("site_settings")
+                        .select(
+                            "id,editor_data"
+                        )
+                        .order(
+                            "id",
+                            {
+                                ascending: true
+                            }
+                        )
+                        .limit(1)
+                        .maybeSingle();
 
 
-            if (result.error) {
+                if (result.error) {
+
+                    console.error(
+                        "Load error:",
+                        result.error
+                    );
+
+
+                    setStatus(
+                        "Database error"
+                    );
+
+
+                    return;
+
+                }
+
+
+                if (!result.data) {
+
+                    setStatus(
+                        "No site_settings row"
+                    );
+
+
+                    return;
+
+                }
+
+
+                settingsId =
+                    result.data.id;
+
+
+                let savedEditor =
+                    result.data.editor_data;
+
+
+                if (
+                    typeof savedEditor ===
+                    "string"
+                ) {
+
+                    try {
+
+                        savedEditor =
+                            JSON.parse(
+                                savedEditor
+                            );
+
+                    } catch {
+
+                        savedEditor = {};
+
+                    }
+
+                }
+
+
+                if (
+                    savedEditor &&
+                    typeof savedEditor === "object" &&
+                    !Array.isArray(savedEditor)
+                ) {
+
+                    editor =
+                        savedEditor;
+
+                } else {
+
+                    editor = {
+
+                        version: 3,
+
+                        elements: {},
+
+                        customElements: []
+
+                    };
+
+                }
+
+
+                ensureEditorStructure();
+
+
+                saveHistory();
+
+
+                if (
+                    frame.contentDocument &&
+                    frame.contentDocument.readyState !== "loading"
+                ) {
+
+                    discoverPage();
+
+                    applyEditor();
+
+                }
+
+
+                setStatus(
+                    "Ready"
+                );
+
+
+            } catch (error) {
 
                 console.error(
-                    result.error
+                    "Load editor exception:",
+                    error
                 );
+
 
                 setStatus(
                     "Database error"
                 );
 
-                return;
-
             }
-
-
-            if (!result.data) {
-
-                setStatus(
-                    "No site_settings row"
-                );
-
-                return;
-
-            }
-
-
-            settingsId =
-                result.data.id;
-
-
-            if (
-                result.data.editor_data
-            ) {
-
-                editor =
-                    result.data.editor_data;
-
-            }
-
-
-            if (!editor.version) {
-
-                editor.version =
-                    3;
-
-            }
-
-
-            if (!editor.elements) {
-
-                editor.elements =
-                    {};
-
-            }
-
-
-            if (
-                !Array.isArray(
-                    editor.customElements
-                )
-            ) {
-
-                editor.customElements =
-                    [];
-
-            }
-
-
-            saveHistory();
-
-
-            /*
-            Wait for iframe.
-            */
-
-            if (
-                frame.contentDocument &&
-                frame.contentDocument.readyState !==
-                "loading"
-            ) {
-
-                discoverPage();
-
-                applyEditor();
-
-            }
-
-
-            setStatus(
-                "Ready"
-            );
 
         }
 
 
-        /* =========================================================
-           SAVE DATABASE
-           ========================================================= */
+        function ensureEditorShape() {
+
+            ensureEditorStructure();
+
+        }
+
 
         async function saveEditor() {
 
@@ -2847,9 +3926,123 @@
                     "No settings row"
                 );
 
+                console.error(
+                    "CodeNest: settingsId is missing"
+                );
+
                 return;
 
             }
+
+
+            setStatus(
+                "Collecting changes..."
+            );
+
+
+            ensureEditorShape();
+
+
+            discoverPage();
+
+
+            const doc =
+                frame.contentDocument;
+
+
+            if (
+                !doc ||
+                !doc.body
+            ) {
+
+                setStatus(
+                    "Frame not ready"
+                );
+
+                return;
+
+            }
+
+
+            const elements =
+                doc.body.querySelectorAll(
+                    "[data-codenest-id]:not([data-codenest-custom])"
+                );
+
+
+            elements.forEach(
+                element => {
+
+                    if (
+                        isProtected(element)
+                    )
+                        return;
+
+
+                    const id =
+                        element.dataset.codenestId;
+
+
+                    if (!id)
+                        return;
+
+
+                    if (
+                        !editor.elements[id]
+                    ) {
+
+                        editor.elements[id] =
+                            createDefaultSettings(
+                                element
+                            );
+
+                    }
+
+                }
+            );
+
+
+            ensureEditorShape();
+
+
+            const dataToSave =
+                deepClone(editor);
+
+
+            if (!dataToSave) {
+
+                setStatus(
+                    "Save failed"
+                );
+
+                return;
+
+            }
+
+
+            const elementCount =
+                Object.keys(
+                    dataToSave.elements || {}
+                ).length;
+
+
+            console.log(
+                "CodeNest: settingsId =",
+                settingsId
+            );
+
+
+            console.log(
+                "CodeNest: saving",
+                elementCount,
+                "elements"
+            );
+
+
+            console.log(
+                "CodeNest: custom elements =",
+                dataToSave.customElements
+            );
 
 
             setStatus(
@@ -2861,35 +4054,75 @@
                 await supabaseClient
                     .from("site_settings")
                     .update({
-
                         editor_data:
-                            editor
-
+                            dataToSave
                     })
                     .eq(
                         "id",
                         settingsId
+                    )
+                    .select(
+                        "id, editor_data"
                     );
+
+
+            console.log(
+                "CodeNest: UPDATE result =",
+                result
+            );
 
 
             if (result.error) {
 
                 console.error(
+                    "CodeNest Save Error:",
                     result.error
                 );
+
 
                 setStatus(
                     "Save failed"
                 );
+
 
                 alert(
                     "Save failed:\n" +
                     result.error.message
                 );
 
+
                 return;
 
             }
+
+
+            if (
+                !result.data ||
+                result.data.length === 0
+            ) {
+
+                console.error(
+                    "CodeNest: UPDATE matched 0 rows!"
+                );
+
+
+                setStatus(
+                    "Nothing was updated"
+                );
+
+
+                alert(
+                    "No database row was updated."
+                );
+
+
+                return;
+
+            }
+
+
+            editor =
+                dataToSave;
 
 
             setStatus(
@@ -2898,36 +4131,65 @@
 
 
             setTimeout(
-                () =>
-                    setStatus("Ready"),
+                () => {
+
+                    setStatus(
+                        "Ready"
+                    );
+
+                },
                 2000
             );
 
         }
 
 
-        /* =========================================================
-           LOGIN
-           ========================================================= */
-
         async function checkLogin() {
 
-            const {
-                data
-            } =
-                await supabaseClient
-                    .auth
-                    .getSession();
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient
+                        .auth
+                        .getSession();
 
 
-            if (data.session) {
+                if (error) {
 
-                document.getElementById(
-                    "login-screen"
-                ).style.display =
-                    "none";
+                    console.error(
+                        "Session error:",
+                        error
+                    );
 
-                await loadEditor();
+                    return;
+
+                }
+
+
+                if (
+                    data &&
+                    data.session
+                ) {
+
+                    document.getElementById(
+                        "login-screen"
+                    ).style.display =
+                        "none";
+
+
+                    await loadEditor();
+
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Check login error:",
+                    error
+                );
 
             }
 
@@ -2948,19 +4210,22 @@
                 ).value;
 
 
-            const error =
+            const errorEl =
                 document.getElementById(
                     "login-error"
                 );
 
 
-            error.textContent =
+            errorEl.textContent =
                 "";
 
 
-            if (!email || !password) {
+            if (
+                !email ||
+                !password
+            ) {
 
-                error.textContent =
+                errorEl.textContent =
                     "Email and password are required.";
 
                 return;
@@ -2968,42 +4233,127 @@
             }
 
 
-            const result =
-                await supabaseClient
-                    .auth
-                    .signInWithPassword({
+            try {
 
-                        email,
+                const result =
+                    await supabaseClient
+                        .auth
+                        .signInWithPassword({
 
-                        password
+                            email,
 
-                    });
+                            password
+
+                        });
 
 
-            if (result.error) {
+                if (
+                    result.error
+                ) {
 
-                error.textContent =
-                    result.error.message;
+                    errorEl.textContent =
+                        result.error.message;
 
-                return;
+                    return;
+
+                }
+
+
+                document.getElementById(
+                    "login-screen"
+                ).style.display =
+                    "none";
+
+
+                await loadEditor();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Login error:",
+                    error
+                );
+
+
+                errorEl.textContent =
+                    error.message ||
+                    "Login failed.";
 
             }
-
-
-            document.getElementById(
-                "login-screen"
-            ).style.display =
-                "none";
-
-
-            await loadEditor();
 
         }
 
 
-        /* =========================================================
-           EVENTS
-           ========================================================= */
+        deleteButton.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    !selectedElement ||
+                    !selectedData
+                )
+                    return;
+
+
+                saveHistory();
+
+
+                const isCustom =
+                    selectedElement.hasAttribute(
+                        "data-codenest-custom"
+                    );
+
+
+                if (isCustom) {
+
+                    const id =
+                        selectedElement.dataset.codenestId;
+
+
+                    editor.customElements =
+                        editor.customElements.filter(
+                            item =>
+                                item.id !== id
+                        );
+
+                } else {
+
+                    const id =
+                        selectedElement.dataset.codenestId;
+
+
+                    delete editor.elements[id];
+
+                }
+
+
+                selectedElement.remove();
+
+
+                selectedElement =
+                    null;
+
+
+                selectedData =
+                    null;
+
+
+                overlay.style.display =
+                    "none";
+
+
+                inspector.style.display =
+                    "none";
+
+
+                setStatus(
+                    "Element deleted"
+                );
+
+            }
+        );
+
 
         document.getElementById(
             "login-btn"
@@ -3019,31 +4369,36 @@
             "keydown",
             event => {
 
-                if (event.key === "Enter")
+                if (
+                    event.key === "Enter"
+                ) {
+
                     login();
+
+                }
 
             }
         );
 
 
         document
-            .querySelectorAll(
-                ".device"
-            )
-            .forEach(button => {
+            .querySelectorAll(".device")
+            .forEach(
+                button => {
 
-                button.addEventListener(
-                    "click",
-                    () => {
+                    button.addEventListener(
+                        "click",
+                        () => {
 
-                        setDevice(
-                            button.dataset.device
-                        );
+                            setDevice(
+                                button.dataset.device
+                            );
 
-                    }
-                );
+                        }
+                    );
 
-            });
+                }
+            );
 
 
         document.getElementById(
@@ -3079,11 +4434,14 @@
                 selectedElement =
                     null;
 
+
                 selectedData =
                     null;
 
+
                 inspector.style.display =
                     "none";
+
 
                 overlay.style.display =
                     "none";
@@ -3092,12 +4450,9 @@
         );
 
 
-        /*
-        Property inputs
-        */
-
         [
             "prop-text",
+            "prop-link",
             "prop-color",
             "prop-font-size",
             "prop-font-weight",
@@ -3108,30 +4463,31 @@
             "prop-padding",
             "prop-x",
             "prop-y"
+        ].forEach(
+            id => {
 
-        ].forEach(id => {
+                const element =
+                    document.getElementById(id);
 
-            const element =
-                document.getElementById(
-                    id
+
+                element.addEventListener(
+                    "input",
+                    event => {
+                        propertyChanged(event);
+                    }
                 );
 
-            element.addEventListener(
-                "input",
-                propertyChanged
-            );
 
-            element.addEventListener(
-                "change",
-                propertyChanged
-            );
+                element.addEventListener(
+                    "change",
+                    event => {
+                        propertyChanged(event);
+                    }
+                );
 
-        });
+            }
+        );
 
-
-        /*
-        Color picker
-        */
 
         document.getElementById(
             "prop-color-picker"
@@ -3139,20 +4495,28 @@
             "input",
             event => {
 
+                const color =
+                    normalizeColor(
+                        event.target.value
+                    );
+
+
                 document.getElementById(
                     "prop-color"
                 ).value =
-                    event.target.value;
+                    color;
 
-                propertyChanged();
+
+                propertyChanged({
+                    target: {
+                        id: "prop-color",
+                        value: color
+                    }
+                });
 
             }
         );
 
-
-        /*
-        Reset position
-        */
 
         document.getElementById(
             "reset-position"
@@ -3161,7 +4525,8 @@
             () => {
 
                 if (
-                    !selectedData
+                    !selectedData ||
+                    !selectedElement
                 )
                     return;
 
@@ -3169,33 +4534,69 @@
                 saveHistory();
 
 
-                selectedData.positions[
-                    currentDevice
-                ] = {
-
-                    x: 0,
-                    y: 0
-
-                };
+                const isCustom =
+                    selectedElement.hasAttribute(
+                        "data-codenest-custom"
+                    );
 
 
-                applyElementSettings(
-                    selectedElement,
-                    selectedData
-                );
+                if (isCustom) {
+
+                    selectedData.x =
+                        0;
+
+                    selectedData.y =
+                        0;
+
+
+                    selectedElement.style.left =
+                        "0px";
+
+
+                    selectedElement.style.top =
+                        "0px";
+
+                } else {
+
+                    if (
+                        !selectedData.positions
+                    ) {
+
+                        selectedData.positions = {};
+
+                    }
+
+
+                    selectedData.positions[
+                        currentDevice
+                    ] = {
+
+                        x: 0,
+
+                        y: 0
+
+                    };
+
+
+                    applyElementSettings(
+                        selectedElement,
+                        selectedData
+                    );
+
+                }
 
 
                 fillInspector();
 
                 updateOverlay();
 
+                setStatus(
+                    "Position reset"
+                );
+
             }
         );
 
-
-        /*
-        Hide
-        */
 
         document.getElementById(
             "hide-element"
@@ -3204,7 +4605,8 @@
             () => {
 
                 if (
-                    !selectedData
+                    !selectedData ||
+                    !selectedElement
                 )
                     return;
 
@@ -3216,10 +4618,35 @@
                     !selectedData.hidden;
 
 
-                applyElementSettings(
-                    selectedElement,
-                    selectedData
-                );
+                if (
+                    selectedElement.hasAttribute(
+                        "data-codenest-custom"
+                    )
+                ) {
+
+                    if (
+                        selectedData.hidden
+                    ) {
+
+                        selectedElement.style.display =
+                            "none";
+
+                    } else {
+
+                        selectedElement.style.removeProperty(
+                            "display"
+                        );
+
+                    }
+
+                } else {
+
+                    applyElementSettings(
+                        selectedElement,
+                        selectedData
+                    );
+
+                }
 
 
                 document.getElementById(
@@ -3232,13 +4659,16 @@
 
                 updateOverlay();
 
+
+                setStatus(
+                    selectedData.hidden
+                        ? "Element hidden"
+                        : "Element shown"
+                );
+
             }
         );
 
-
-        /*
-        Add menu
-        */
 
         document.getElementById(
             "add-btn"
@@ -3247,6 +4677,7 @@
             event => {
 
                 event.stopPropagation();
+
 
                 addMenu.style.display =
                     addMenu.style.display ===
@@ -3259,34 +4690,32 @@
 
 
         document
-            .querySelectorAll(
-                ".add-item"
-            )
-            .forEach(button => {
+            .querySelectorAll(".add-item")
+            .forEach(
+                button => {
 
-                button.addEventListener(
-                    "click",
-                    () => {
+                    button.addEventListener(
+                        "click",
+                        () => {
 
-                        addingType =
-                            button.dataset.add;
-
-                        addMenu.style.display =
-                            "none";
-
-                        setStatus(
-                            "Click on the page to place it"
-                        );
-
-                    }
-                );
-
-            });
+                            addingType =
+                                button.dataset.add;
 
 
-        /*
-        Language preview
-        */
+                            addMenu.style.display =
+                                "none";
+
+
+                            setStatus(
+                                "Click on the page to place it"
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
 
         document.getElementById(
             "language-preview"
@@ -3296,6 +4725,7 @@
 
                 const doc =
                     frame.contentDocument;
+
 
                 if (!doc)
                     return;
@@ -3342,42 +4772,52 @@
         );
 
 
-        /* =========================================================
-           IFRAME LOAD
-           ========================================================= */
-
         frame.addEventListener(
             "load",
             async () => {
 
-                /*
-                Give original index.js
-                time to finish.
-                */
+                try {
 
-                await wait(150);
+                    await wait(150);
 
-                discoverPage();
 
-                applyEditor();
+                    frameEventsReady =
+                        false;
 
-                setupFrameEvents();
 
-                setDevice(
-                    currentDevice
-                );
+                    discoverPage();
 
-                setStatus(
-                    "Ready"
-                );
+                    applyEditor();
+
+                    setupFrameEvents();
+
+                    setDevice(
+                        currentDevice
+                    );
+
+
+                    setStatus(
+                        "Ready"
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Iframe load error:",
+                        error
+                    );
+
+
+                    setStatus(
+                        "Editor ready"
+                    );
+
+                }
 
             }
         );
 
-
-        /* =========================================================
-           RESIZE
-           ========================================================= */
 
         window.addEventListener(
             "resize",
@@ -3399,13 +4839,99 @@
         );
 
 
-        /* =========================================================
-           REALTIME
-           ========================================================= */
+        let inspectorDragging =
+            false;
+
+        let inspectorOffsetX =
+            0;
+
+        let inspectorOffsetY =
+            0;
+
+
+        const inspectorTitle =
+            inspector.querySelector(
+                ".inspector-title"
+            );
+
+
+        inspectorTitle.style.cursor =
+            "move";
+
+
+        inspectorTitle.addEventListener(
+            "mousedown",
+            event => {
+
+                inspectorDragging =
+                    true;
+
+
+                const rect =
+                    inspector.getBoundingClientRect();
+
+
+                inspectorOffsetX =
+                    event.clientX -
+                    rect.left;
+
+
+                inspectorOffsetY =
+                    event.clientY -
+                    rect.top;
+
+
+                event.preventDefault();
+
+            }
+        );
+
+
+        document.addEventListener(
+            "mousemove",
+            event => {
+
+                if (
+                    !inspectorDragging
+                )
+                    return;
+
+
+                inspector.style.left =
+                    (
+                        event.clientX -
+                        inspectorOffsetX
+                    ) + "px";
+
+
+                inspector.style.top =
+                    (
+                        event.clientY -
+                        inspectorOffsetY
+                    ) + "px";
+
+
+                inspector.style.right =
+                    "auto";
+
+            }
+        );
+
+
+        document.addEventListener(
+            "mouseup",
+            () => {
+
+                inspectorDragging =
+                    false;
+
+            }
+        );
+
 
         supabaseClient
             .channel(
-                "codenest-editor-realtime"
+                "codenest-admin-editor-realtime"
             )
             .on(
                 "postgres_changes",
@@ -3417,31 +4943,163 @@
                 payload => {
 
                     if (
-                        payload.new &&
-                        payload.new.editor_data
+                        !payload ||
+                        !payload.new
+                    )
+                        return;
+
+
+                    if (
+                        settingsId &&
+                        payload.new.id !==
+                        settingsId
+                    )
+                        return;
+
+
+                    let incoming =
+                        payload.new.editor_data;
+
+
+                    if (
+                        typeof incoming ===
+                        "string"
                     ) {
 
-                        editor =
-                            payload.new.editor_data;
+                        try {
 
-                        applyEditor();
+                            incoming =
+                                JSON.parse(
+                                    incoming
+                                );
 
-                        updateOverlay();
+                        } catch {
 
-                        setStatus(
-                            "Updated from server"
-                        );
+                            return;
+
+                        }
+
+                    }
+
+
+                    if (
+                        !incoming ||
+                        typeof incoming !==
+                        "object"
+                    )
+                        return;
+
+
+                    const oldSelectedId =
+                        selectedData?.id ||
+                        selectedElement?.dataset?.codenestId ||
+                        null;
+
+
+                    editor =
+                        incoming;
+
+
+                    ensureEditorStructure();
+
+
+                    applyEditor();
+
+
+                    if (oldSelectedId) {
+
+                        const custom =
+                            editor.customElements.find(
+                                item =>
+                                    item.id ===
+                                    oldSelectedId
+                            );
+
+
+                        if (custom) {
+
+                            selectedElement =
+                                frame.contentDocument?.querySelector(
+                                    `[data-codenest-custom="true"][data-codenest-id="${cssEscape(oldSelectedId)}"]`
+                                ) || null;
+
+
+                            selectedData =
+                                custom;
+
+                        }
+
+                    }
+
+
+                    if (selectedElement) {
+
+                        fillInspector();
+
+                    }
+
+
+                    updateOverlay();
+
+
+                    setStatus(
+                        "Updated from server"
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            setStatus(
+                                "Ready"
+                            );
+
+                        },
+                        1800
+                    );
+
+                }
+            )
+            .subscribe(
+                status => {
+
+                    console.log(
+                        "CodeNest Realtime:",
+                        status
+                    );
+
+                }
+            );
+
+
+        supabaseClient
+            .auth
+            .onAuthStateChange(
+                async (
+                    event,
+                    session
+                ) => {
+
+                    if (
+                        session &&
+                        (
+                            event ===
+                            "SIGNED_IN" ||
+                            event ===
+                            "INITIAL_SESSION"
+                        )
+                    ) {
+
+                        document.getElementById(
+                            "login-screen"
+                        ).style.display =
+                            "none";
 
                     }
 
                 }
-            )
-            .subscribe();
+            );
 
-
-        /* =========================================================
-           START
-           ========================================================= */
 
         checkLogin();
 
