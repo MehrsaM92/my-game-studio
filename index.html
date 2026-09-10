@@ -3829,7 +3829,7 @@
                 const {
                     data,
                     error
-                } = await codenestSettingsClient
+                } = await siteSettingsClient
                     .from("site_settings")
                     .select(
                         "site_title, background_color, text_color, accent_color, editor_data"
@@ -4089,7 +4089,7 @@
            REALTIME
            ===================================================== */
 
-        codenestSettingsClient
+        siteSettingsClient
             .channel(
                 "codenest-editor-realtime"
             )
