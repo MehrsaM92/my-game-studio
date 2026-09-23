@@ -24,6 +24,7 @@ The project is continuously being improved, and new websites and features will b
 - HTML
 - CSS
 - JavaScript
+- Sapabase (Database)
 
 ## 🚧 Status
 
