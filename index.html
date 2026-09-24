@@ -23,8 +23,8 @@
 
         #language-select {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 140px;
+            right: 20px;
 
             width: 160px;
             height: 50px;
@@ -142,7 +142,7 @@
 
         #dark-mode {
             position: fixed;
-            top: 78px;
+            top: 15px;
             right: 20px;
             z-index: 1000;
             padding: 10px;
@@ -196,14 +196,14 @@
 
         #search-box {
             position: fixed;
-            top: -2px;
+            top: 60px;
             right: 20px;
             z-index: 1000;
         }
 
         #search-button {
             position: fixed;
-            top: 48px;
+            top: 110px;
             right: 20px;
             z-index: 1000;
             cursor: pointer;
@@ -866,6 +866,7 @@
         <button class="category" data-category="seo" data-i18n="seo">SEO</button>
         <button class="category" data-category="productivity" data-i18n="productivity">Productivity</button>
         <button class="category" data-category="comments" data-i18n="comments">Comments</button>
+        <button class="category" data-category="news" data-i18n="news">News</button>
     </div>
 
     <div id="sort-box">
@@ -894,27 +895,27 @@
 
         <p>
             <span data-i18n="totalWebsites">Total websites</span>:
-            <span id="website-count">26</span>
+            <span id="website-count">0</span>
         </p>
 
         <p>
             <span data-i18n="totalCategories">Total categories</span>:
-            <span id="category-count">9</span>
+            <span id="category-count">0</span>
         </p>
 
         <p>
             <span data-i18n="totalComments">Total comments</span>:
-            <span id="comment-count">1</span>
+            <span id="comment-count">0</span>
         </p>
 
         <p>
             <span data-i18n="totalLikes">Total likes</span>:
-            <span id="like-count-total">2</span>
+            <span id="like-count-total">0</span>
         </p>
 
         <p>
             <span data-i18n="totalVisits">Total visits</span>:
-            <span id="visit-count">7</span>
+            <span id="visit-count">0</span>
         </p>
 
     </div>
@@ -1699,8 +1700,37 @@
 
             <hr>
         </div>
-    </div>
 
+        <div class="website" data-id="27"
+            data-search="reuters news world news breaking news business politics technology science markets"
+            data-ca="News">
+
+            <a id="reuters" href="https://www.reuters.com/" target="_blank" rel="noopener noreferrer">
+                27. Reuters
+            </a>
+
+            <p id="reuters-a">
+                A popular platform for <strong><em>reliable world news and journalism</em></strong>.
+            </p>
+
+            <p id="reuters-a2">
+                Stay informed with breaking news, global events, business, markets, technology,
+                science, and in-depth reporting from around the world.
+                (News)
+            </p>
+
+            <p class="website-date">📅 Added: Sep 7, 2026</p>
+
+            <div class="like-box">
+                <button class="like-button">❤️ Like</button>
+                <span class="like-count">0</span>
+                <span class="likes-text">Likes</span>
+            </div>
+
+            <hr>
+        </div>
+
+    </div>
 
     <div id="review-popup" class="review-popup">
 
@@ -1710,7 +1740,8 @@
 
         <h3 data-i18n="reviewTitle">What do you think about CodeNest Flappy bird?</h3>
 
-        <p data-i18n="reviewText">You&#39;ve been here for a while and play the game. We&#39;d love to hear your opinion!</p>
+        <p data-i18n="reviewText">You&#39;ve been here for a while and play the game. We&#39;d love to hear your
+            opinion!</p>
 
         <div class="review-popup-buttons">
 
@@ -2964,6 +2995,7 @@
                 seo: "SEO",
                 productivity: "Productivity",
                 comments: "Comments",
+                news: "News",
 
                 lowHigh: "Low → High",
                 highLow: "High → Low",
@@ -3049,11 +3081,12 @@
                 seo: "سئو",
                 productivity: "بهره‌وری",
                 comments: "نظرات",
+                news: "اخبار",
 
-                lowHigh: "کم → زیاد",
-                highLow: "زیاد → کم",
-                likesLowHigh: "لایک: کم → زیاد",
-                likesHighLow: "لایک: زیاد → کم",
+                lowHigh: "زیاد → کم",
+                highLow: "کم → زیاد",
+                likesLowHigh: "لایک: زیاد → کم",
+                likesHighLow: "لایک: کم → زیاد",
                 newest: "🆕 جدیدترین → قدیمی‌ترین",
                 oldest: "📅 قدیمی‌ترین → جدیدترین",
                 likedOnly: "❤️ سایت‌های لایک‌شده",
@@ -3144,6 +3177,7 @@
                 seo: "SEO",
                 productivity: "效率",
                 comments: "评论",
+                news: "消息",
 
                 lowHigh: "低 → 高",
                 highLow: "高 → 低",
@@ -3246,6 +3280,7 @@
                 seo: "تحسين محركات البحث",
                 productivity: "الإنتاجية",
                 comments: "التعليقات",
+                news: "أخبار",
 
                 lowHigh: "من الأقل → الأعلى",
                 highLow: "من الأعلى → الأقل",
