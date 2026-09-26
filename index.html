@@ -1730,6 +1730,35 @@
             <hr>
         </div>
 
+        <div class="website" data-id="28"
+            data-search="reuters news world news breaking news business politics technology science markets"
+            data-ca="News">
+
+            <a id="reuters" href="https://edition.cnn.com/" target="_blank" rel="noopener noreferrer">
+                28. CNN
+            </a>
+
+            <p id="reuters-a">
+                View the latest news and breaking news today for U.S., world, weather, entertainment, politics and
+                health at <strong><em>CNN</em></strong>.
+            </p>
+
+            <p id="reuters-a2">
+                Stay informed with breaking news, global events, business, markets, technology,
+                science, and in-depth reporting from around the world.
+                (News)
+            </p>
+
+            <p class="website-date">📅 Added: Sep 7, 2026</p>
+
+            <div class="like-box">
+                <button class="like-button">❤️ Like</button>
+                <span class="like-count">0</span>
+                <span class="likes-text">Likes</span>
+            </div>
+
+            <hr>
+        </div>
     </div>
 
     <div id="review-popup" class="review-popup">
@@ -2612,6 +2641,20 @@
                     search_message.style.display = "none";
                 }, 3000);
             }
+
+            if (found === true) {
+
+                search_message.textContent =
+                    window.t
+                        ? window.t("Websitef")
+                        : "Website found!";
+
+                search_message.style.display = "block";
+
+                setTimeout(function () {
+                    search_message.style.display = "none";
+                }, 3000);
+            }
         });
 
 
@@ -3024,6 +3067,7 @@
 
                 noSearch: "Please write something to search!",
                 noWebsite: "No website found!",
+                Websitef: "Website found!",
 
                 reviewTitle: "What do you think about CodeNest?",
                 reviewText: "You've been here for a while. We'd love to hear your opinion!",
@@ -3110,6 +3154,7 @@
 
                 noSearch: "لطفاً چیزی برای جستجو بنویسید!",
                 noWebsite: "هیچ سایتی پیدا نشد!",
+                Websitef: "سایت پیدا شد!",
 
                 reviewTitle: "نظرت درباره ی سایت ما چیه؟",
 
@@ -3206,6 +3251,7 @@
 
                 noSearch: "请输入搜索内容！",
                 noWebsite: "没有找到网站！",
+                Websitef: "该地点已被发现！",
 
                 reviewTitle:
                     "你觉得 CodeNest 怎么样？",
@@ -3312,6 +3358,9 @@
 
                 noWebsite:
                     "لم يتم العثور على أي موقع!",
+
+                Websitef:
+                    "لقد تم العثور على الموقع!",
 
                 reviewTitle:
                     "ما رأيك في CodeNest؟",
